@@ -1,10 +1,10 @@
-package nz.ac.vuw.ecs.swen225.gp20.application.monkey;
+package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BonoboTest {
+class PersistenceTest {
 
     @BeforeEach
     void setUp() {

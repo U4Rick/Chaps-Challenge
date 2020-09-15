@@ -1,10 +1,10 @@
-package nz.ac.vuw.ecs.swen225.gp20.application.maze;
+package nz.ac.vuw.ecs.swen225.gp20.monkey;
 
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TileTest {
+class BonoboTest {
 
     @BeforeEach
     void setUp() {
