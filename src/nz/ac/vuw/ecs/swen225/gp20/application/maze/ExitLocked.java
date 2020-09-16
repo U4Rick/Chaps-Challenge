@@ -1,0 +1,3 @@
+class ExitLocked extends Inaccessible {
+
+}

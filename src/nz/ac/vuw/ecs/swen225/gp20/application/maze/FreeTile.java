@@ -1,0 +1,3 @@
+class FreeTile extends Accessible {
+
+}

@@ -1,0 +1,3 @@
+class LockedDoor extends Inaccessible {
+
+}

@@ -1,0 +1,3 @@
+class InfoField extends Accessible {
+
+}
