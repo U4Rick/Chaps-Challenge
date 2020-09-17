@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.application.maze;
+package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 //importing libraries needed
 import java.awt.Point;

@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.application.maze;
+package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 class LockedDoor extends Inaccessible {
   int doorColour; //the colour of the door, 0 for red, 1 for blue, 2 for yellow
