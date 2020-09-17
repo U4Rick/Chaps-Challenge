@@ -1,4 +1,4 @@
-package src.src.nz.ac.vuw.ecs.swen225.gp20.application.maze;
+package nz.ac.vuw.ecs.swen225.gp20.application.maze;
 
 //importing libraries needed
 import java.awt.Point;
@@ -21,9 +21,7 @@ class Map {
     board = new ArrayList<>();
   }
 
-  public void unlockExit() {
-    ;
-  }
+  public void unlockExit() { ; }
 
   public void unlockDoor() {
     ;
