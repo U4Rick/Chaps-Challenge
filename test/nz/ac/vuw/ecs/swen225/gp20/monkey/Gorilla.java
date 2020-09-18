@@ -9,6 +9,6 @@ public class Gorilla extends MonkeyAI {
      * Instantiates a new Gorilla model MonkeyAI with preset reward weightings.
      */
     public Gorilla() {
-        super(20, 100, 0, 0, 100, 10);
+        super(50, 100, 0, 0, 0, 100, 0);
     }
 }
