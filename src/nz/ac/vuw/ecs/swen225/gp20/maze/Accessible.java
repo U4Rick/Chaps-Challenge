@@ -28,4 +28,5 @@ abstract class Accessible implements Tile {
   public void setEntityHere(Entity entity) {
     entityHere = entity;
   }
+  public Entity getEntityHere() { return entityHere; }
 }

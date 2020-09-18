@@ -7,13 +7,14 @@ import java.awt.*;
  *
  * @author Vic
  */
-public class Item extends Entity {
+abstract public class Item extends Entity {
 
   public Item(Point position) {
     super(position);
   }
 
-  public boolean canBePickedUp() {
-    return true;
-  }
+  abstract public boolean canBeAddedToInve();
+
+  @Override
+  public boolean canBePickedUp() { return true; }
 }

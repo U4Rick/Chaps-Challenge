@@ -6,4 +6,7 @@ public class Treasure extends Item {
   public Treasure(Point treasurePos) {
     super(treasurePos);
   }
+
+  @Override
+  public boolean canBeAddedToInve() { return false; }
 }

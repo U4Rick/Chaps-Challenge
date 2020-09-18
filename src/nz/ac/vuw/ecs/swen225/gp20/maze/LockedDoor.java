@@ -6,4 +6,7 @@ class LockedDoor extends Inaccessible {
   LockedDoor(int doorColour) {
     this.doorColour = doorColour;
   }
+
+  @Override
+  public boolean isLockedDoor() { return true; }
 }

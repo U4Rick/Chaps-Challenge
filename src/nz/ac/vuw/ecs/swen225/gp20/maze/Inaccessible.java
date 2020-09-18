@@ -6,11 +6,8 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  * @author Vic
  */
 abstract class Inaccessible implements Tile {
-  /**
-   * Checks if the player can walk onto this tile.
-   * @return false This is always false.
-   */
-  public boolean isAccessible() {
-    return false;
-  }
+  abstract public boolean isLockedDoor();
+
+  @Override
+  public boolean isAccessible() { return false; }
 }

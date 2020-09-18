@@ -11,11 +11,22 @@ import java.util.HashSet;
  * @author Vic
  */
 class Chap extends Entity {
-  private Set<Entity> inventory; //stores the objects that Chap has
+  private Set<Item> inventory; //stores the objects that Chap has
 
   public Chap(Point chapsLocation) {
     super(chapsLocation);
-    inventory = new HashSet<Entity>();
+    inventory = new HashSet<Item>();
+  }
+
+  /**
+   * Checks if
+   * @param door
+   */
+  public void unlockDoor(Tile door) {
+    //check if have correct key for door
+    for(Item item : inventory) {
+      //TO DO: SEARCH INVENTORY FOR KEY
+    }
   }
 
   /**
@@ -33,10 +44,11 @@ class Chap extends Entity {
    * Adds an item to the inventory
    * @param item
    */
-  public void pickUpItem(Item item) {
+  public void addToInven(Item item) {
     inventory.add(item);
   }
 
+  @Override
   public boolean canBePickedUp() {
     return false;
   }

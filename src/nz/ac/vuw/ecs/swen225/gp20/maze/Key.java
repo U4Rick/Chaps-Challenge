@@ -10,4 +10,6 @@ public class Key extends Item {
     this.keyColour = keyColour;
   }
 
+  @Override
+  public boolean canBeAddedToInve() { return true; }
 }
