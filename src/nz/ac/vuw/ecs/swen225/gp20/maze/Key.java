@@ -12,4 +12,6 @@ public class Key extends Item {
 
   @Override
   public boolean canBeAddedToInve() { return true; }
+
+  public int getKeyColour() { return keyColour; }
 }

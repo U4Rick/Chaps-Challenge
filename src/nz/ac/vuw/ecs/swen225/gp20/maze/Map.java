@@ -11,6 +11,10 @@ import java.util.ArrayList;
  * @author Vic
  */
 class Map {
+  public enum Direction {
+    UP, DOWN, LEFT, RIGHT;
+  }
+
   private List<List<Tile>> board; //2d array of tiles,
   private Point exitLocation; //where exit is located at on the map
   private Chap chap;  //it's Chap!
@@ -28,13 +32,35 @@ class Map {
   }
 
   /**
-   * Moves Chap into the new position on the board.
+   * Moves Chap in the direction stated by one tile on the board.
    *
-   * TO ADD: adds enum for direction instead point for parameter
-   *
-   * @param position  Represents the new position to move Chap to.
+   * @param direction Represents the direction to move Chap
+   * @throws ArrayIndexOutOfBoundsException if going to new direction will cause Chap to go out of bounds, will throw an ArrayIndexOutOfBoundsException.
    */
-  public void moveChap(Point position) {
+  public void moveChap(Direction direction) throws ArrayIndexOutOfBoundsException {
+    Point chapLocation = chap.getEntityPosition();
+    //get new position to move Chap to
+    Point position;
+    switch(direction) {
+      case UP:
+        position = new Point(chapLocation.x, chapLocation.y-1);
+        break;
+      case DOWN:
+        position = new Point(chapLocation.x, chapLocation.y+1);
+        break;
+      case LEFT:
+        position = new Point(chapLocation.x-1, chapLocation.y);
+        break;
+      default:  //move right
+        position = new Point(chapLocation.x+1, chapLocation.y);
+    }
+
+    //check that new position is in the bounds of the board, if not throw exception
+    if(position.x >= board.size() || position.y >= board.get(0).size()) {
+      throw new ArrayIndexOutOfBoundsException();
+    }
+
+
     if(!chap.canMove(board.get(position.x).get(position.y))) {
       Inaccessible tile = (Inaccessible)board.get(position.x).get(position.y);
       if(tile.isLockedDoor()) { //check that tile is a locked door
@@ -44,7 +70,6 @@ class Map {
 
     else {    //if Chap can move onto tile
       Accessible accessibleTile = (Accessible)board.get(position.x).get(position.y);
-      Point chapLocation = chap.getEntityPosition();
 
       //pick up item on free tile if item exists
       pickUpItem(accessibleTile);

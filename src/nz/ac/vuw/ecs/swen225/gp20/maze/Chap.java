@@ -19,13 +19,17 @@ class Chap extends Entity {
   }
 
   /**
-   * Checks if
-   * @param door
+   * Checks if door can be unlocked by Chap and if so unlocks the door
+   * @param door  Door that is unlocked
    */
   public void unlockDoor(Tile door) {
     //check if have correct key for door
     for(Item item : inventory) {
       //TO DO: SEARCH INVENTORY FOR KEY
+      if(((Key)item).getKeyColour() == ((LockedDoor)(Inaccessible) door).getDoorColour()) {
+        //unlock door
+        door = new FreeTile();
+      }
     }
   }
 
