@@ -22,6 +22,12 @@ abstract class Accessible implements Tile {
   }
 
   /**
+   * Checks if the free tile contains an item that can be picked up
+   * @return true if is an item, false if not
+   */
+  abstract boolean isItem();
+
+  /**
    * Moves an entity to this tile
    * @param entity
    */

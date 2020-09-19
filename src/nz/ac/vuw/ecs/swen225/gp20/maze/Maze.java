@@ -71,8 +71,10 @@ public class Maze {
     else {    //if Chap can move onto tile
       Accessible accessibleTile = (Accessible)board.get(position.x).get(position.y);
 
-      //pick up item on free tile if item exists
-      pickUpItem(accessibleTile);
+      //pick up item on tile if is an item tile
+      if(accessibleTile.isItem()) {
+        pickUpItem(accessibleTile);
+      }
 
       //reassign Chap to new tile
       ((Accessible)board.get(chapLocation.x).get(chapLocation.y)).setEntityHere(null);
