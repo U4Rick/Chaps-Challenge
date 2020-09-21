@@ -15,7 +15,7 @@ public class Maze {
     UP, DOWN, LEFT, RIGHT;
   }
 
-  private List<List<Tile>> board; //2d array of tiles,
+  private Tile board[][]; //2d array of tiles,
   private Point exitLocation; //where exit is located at on the map
   private Chap chap;  //it's Chap!
 
@@ -25,10 +25,10 @@ public class Maze {
   /**
    * Constructs new map, parameter is the data parsed from the level files
    */
-  public Maze(Point exitLocation, int treasuresNum) {
+  public Maze(Point exitLocation, int treasuresNum, Tile[][] board) {
     this.exitLocation = exitLocation;
     TREASURES_NUM = treasuresNum;
-    board = new ArrayList<>();
+    this.board = board;
   }
 
   /**
@@ -56,20 +56,20 @@ public class Maze {
     }
 
     //check that new position is in the bounds of the board, if not throw exception
-    if(position.x >= board.size() || position.y >= board.get(0).size()) {
+    if(position.x >= board.length || position.y >= board[0].length) {
       throw new ArrayIndexOutOfBoundsException();
     }
 
 
-    if(!chap.canMove(board.get(position.x).get(position.y))) {
-      Inaccessible tile = (Inaccessible)board.get(position.x).get(position.y);
+    if(!chap.canMove(board[position.x][position.y])) {
+      Inaccessible tile = (Inaccessible)board[position.x][position.y];
       if(tile.isLockedDoor()) { //check that tile is a locked door
         chap.unlockDoor(tile);
       }
     }
 
     else {    //if Chap can move onto tile
-      Accessible accessibleTile = (Accessible)board.get(position.x).get(position.y);
+      Accessible accessibleTile = (Accessible)board[position.x][position.y];
 
       //pick up item on tile if is an item tile
       if(accessibleTile.isItem()) {
@@ -77,7 +77,7 @@ public class Maze {
       }
 
       //reassign Chap to new tile
-      ((Accessible)board.get(chapLocation.x).get(chapLocation.y)).setEntityHere(null);
+      ((Accessible)board[chapLocation.x][chapLocation.y]).setEntityHere(null);
       (accessibleTile).setEntityHere(chap);
       chap.setEntityPosition(new Point(position));  //to keep track of Chap's location
     }
@@ -97,7 +97,7 @@ public class Maze {
         } else {  //if can't be added to inventory then is treasure
           treasuresPickedUp++;
           if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit
-            board.get(exitLocation.x).set(exitLocation.y, new Exit());
+            board[exitLocation.x][exitLocation.y] = new Exit();
           }
         }
         accessibleTile.setEntityHere(null); //set tile's item to null since item is picked up
@@ -107,11 +107,11 @@ public class Maze {
 
   //getters and setters
 
-  public List<List<Tile>> getBoard() {
+  public Tile[][] getBoard() {
     return board;
   }
 
-  public void setBoard(List<List<Tile>> board) {
+  public void setBoard(Tile[][] board) {
     this.board = board;
   }
 
