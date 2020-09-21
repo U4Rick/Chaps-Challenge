@@ -10,7 +10,7 @@ import java.util.HashSet;
  *
  * @author Vic
  */
-class Chap extends Entity {
+public class Chap extends Entity {
   private Set<Item> inventory; //stores the objects that Chap has
 
   public Chap(Point chapsLocation) {

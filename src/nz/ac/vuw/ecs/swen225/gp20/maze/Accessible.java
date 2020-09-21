@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  * @author Vic
  */
-abstract class Accessible implements Tile {
+abstract public class Accessible implements Tile {
 
   private Entity entityHere = null; //entity that is on this tile, is null if no entity is on this tile
 
@@ -25,7 +25,7 @@ abstract class Accessible implements Tile {
    * Checks if the free tile contains an item that can be picked up
    * @return true if is an item, false if not
    */
-  abstract boolean isItem();
+  abstract public boolean isItem();
 
   /**
    * Moves an entity to this tile

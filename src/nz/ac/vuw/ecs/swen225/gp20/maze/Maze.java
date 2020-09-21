@@ -87,7 +87,7 @@ public class Maze {
    * For dealing with logic of picking up an item
    * @param accessibleTile
    */
-  private void pickUpItem(Accessible accessibleTile) {
+  public void pickUpItem(Accessible accessibleTile) {
     Entity item = accessibleTile.getEntityHere();
     if(item != null) {
       if(item.canBePickedUp()) {  //check if can be picked up
@@ -104,5 +104,21 @@ public class Maze {
       }
     }
   }
+
+  //getters and setters
+
+  public List<List<Tile>> getBoard() {
+    return board;
+  }
+
+  public void setBoard(List<List<Tile>> board) {
+    this.board = board;
+  }
+
+  public Chap getChap() {
+    return chap;
+  }
+
+  public int getTreasuresPickedUp() { return treasuresPickedUp; }
 
 }

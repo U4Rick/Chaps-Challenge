@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  * @author Vic
  */
-abstract class Inaccessible implements Tile {
+abstract public class Inaccessible implements Tile {
   abstract public boolean isLockedDoor();
 
   @Override

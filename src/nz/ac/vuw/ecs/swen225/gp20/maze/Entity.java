@@ -7,7 +7,7 @@ import java.awt.*;
  *
  * @author Vic
  */
-abstract class Entity {
+abstract public class Entity {
   Point entityPosition; //the position of the entity on the board, to avoid having to search through the board to find a specific entity
 
   public Entity(Point entityPosition) {
