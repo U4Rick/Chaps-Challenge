@@ -2,7 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 //importing libraries needed
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccesibleTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.LockedDoorTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
@@ -20,7 +20,7 @@ public class Chap extends Entity {
 
   public Chap(Point chapsLocation) {
     super(chapsLocation);
-    inventory = new HashSet<Item>();
+    inventory = new HashSet<>();
   }
 
   /**
@@ -30,8 +30,7 @@ public class Chap extends Entity {
   public void unlockDoor(Tile door) {
     //check if have correct key for door
     for(Item item : inventory) {
-      //TO DO: SEARCH INVENTORY FOR KEY
-      if(((Key)item).getKeyColour() == ((LockedDoor)(Inaccessible) door).getDoorColour()) {
+      if(((Key)item).getKeyColour() == ((LockedDoorTile)door).getDoorColour()) {
         //unlock door
         door = new FreeTile();
       }
@@ -43,15 +42,12 @@ public class Chap extends Entity {
    * @param tile The tile to check if Chap can move into.
    */
   public boolean canMove(Tile tile) {
-    if(tile.isAccessible()) {
-      return true;
-    }
-    return false;
+    return tile.isAccessible();
   }
 
   /**
    * Adds an item to the inventory
-   * @param item
+   * @param item Item to add to inventory.
    */
   public void addToInven(Item item) {
     inventory.add(item);

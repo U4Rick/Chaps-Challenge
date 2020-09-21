@@ -1,11 +1,11 @@
-package nz.ac.vuw.ecs.swen225.gp20.maze;
+package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccesibleTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 public class LockedDoorTile extends InaccessibleTile {
-  private int doorColour; //the colour of the door, 0 for red, 1 for blue, 2 for yellow
+  private Maze.Colours doorColour; //the colour of the door, 0 for red, 1 for blue, 2 for yellow
 
-  public LockedDoor(Maze.Colours doorColour) {
+  public LockedDoorTile(Maze.Colours doorColour) {
     this.doorColour = doorColour;
   }
 

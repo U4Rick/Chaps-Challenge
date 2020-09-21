@@ -6,6 +6,22 @@ public class InfoTile extends AccessibleTile {
 
   String information; //information that stored in the infoField tile
 
+  /**
+   * Constructor for the InfoField object.
+   * @param information The information that is stored in this tile.
+   */
+  public InfoTile(String information) {
+    this.information = information;
+  }
+
+  /**
+   * Gets the information stored in this tile.
+   * @return The information stored in this tile.
+   */
+  public String getInformation() {
+    return information;
+  }
+
   @Override
   public boolean isItem() {
     return false;

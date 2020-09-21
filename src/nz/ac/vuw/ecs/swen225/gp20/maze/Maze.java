@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 //importing libraries needed
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccesibleTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import java.awt.Point;
@@ -18,17 +18,17 @@ public class Maze {
    * Used to represent the direction for the movement of Chap
    */
   public enum Direction {
-    UP, DOWN, LEFT, RIGHT;
+    UP, DOWN, LEFT, RIGHT
   }
 
   /**
    * Used to represent the colours of the keys and the doors
    */
   public enum Colours {
-    RED, YELLOW, GREEN, BLUE;
+    RED, YELLOW, GREEN, BLUE
   }
 
-  private Tile board[][]; //2d array of tiles,
+  private Tile[][] board; //2d array of tiles,
   private Point exitLocation; //where exit is located at on the map
   private Chap chap;  //it's Chap!
 
@@ -80,7 +80,7 @@ public class Maze {
 
 
     if(!chap.canMove(board[position.x][position.y])) {
-      InaccesibleTile tile = (InaccesibleTile)board[position.x][position.y];
+      InaccessibleTile tile = (InaccessibleTile)board[position.x][position.y];
       if(tile.isLockedDoor()) { //check that tile is a locked door
         chap.unlockDoor(tile);
       }
@@ -103,7 +103,7 @@ public class Maze {
 
   /**
    * For dealing with logic of picking up an item
-   * @param accessibleTile
+   * @param accessibleTile The tile to pick the item from.
    */
   public void pickUpItem(AccessibleTile accessibleTile) {
     Entity item = accessibleTile.getEntityHere();
