@@ -1,9 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -59,15 +58,16 @@ public abstract class MonkeyAI {
     public int utilityFunction(Tile tile){
         int reward = 0;
 
-/*        if (tile instanceof AccessibleTile) {
+        if (tile instanceof AccessibleTile) {
             reward = accessibleReward;
-        } else if (tile instanceof InaccessibleTile) {
+        } else if (tile instanceof InaccesibleTile) {
             reward = inaccessibleReward;
         } else if (tile instanceof TreasureTile) {
             reward = treasureReward;
         } else if (tile instanceof KeyTile) {
             reward = keyReward;
         } else if (tile instanceof LockedDoorTile) {
+            boolean hasKey = true;
             if (hasKey) {
                 reward = lockAndKeyReward;
             } else {
@@ -75,7 +75,7 @@ public abstract class MonkeyAI {
             }
         } else if (tile instanceof ExitTile) {
             reward = exitReward;
-        }*/
+        }
 
         int variance = new Random().nextInt(VARIANCE);  //Calculate variance between 0 and VARIANCE
 
@@ -120,7 +120,7 @@ public abstract class MonkeyAI {
      * @return Destination tile.
      */
     private Tile getDestinationTile(Maze maze, Direction direction) {
-        /*Point chapPosition = maze.getChapPosition();
+/*        Point chapPosition = maze.getChapPosition();
 
         //TODO add checks for out of bounds
         switch (direction) {

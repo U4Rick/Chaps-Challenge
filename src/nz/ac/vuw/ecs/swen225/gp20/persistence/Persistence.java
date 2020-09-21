@@ -10,7 +10,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 public class Persistence {
   public void readLevel(File levelFile) {
