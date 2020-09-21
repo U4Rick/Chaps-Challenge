@@ -1,9 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-/**
- * Represents the infofield tile in the level, this tile stores tips which is displayed when Chap walks onto the tile
- */
-public class InfoField extends Accessible {
+public class InfoField extends AccessibleTile {
 
   String information; //information that stored in the infoField tile
 

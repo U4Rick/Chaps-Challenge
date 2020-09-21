@@ -1,9 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 //importing libraries needed
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccesibleTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
+
 import java.awt.Point;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Represents the map used in the game for each level.
@@ -77,14 +80,14 @@ public class Maze {
 
 
     if(!chap.canMove(board[position.x][position.y])) {
-      Inaccessible tile = (Inaccessible)board[position.x][position.y];
+      InaccesibleTile tile = (InaccesibleTile)board[position.x][position.y];
       if(tile.isLockedDoor()) { //check that tile is a locked door
         chap.unlockDoor(tile);
       }
     }
 
     else {    //if Chap can move onto tile
-      Accessible accessibleTile = (Accessible)board[position.x][position.y];
+      AccessibleTile accessibleTile = (AccessibleTile)board[position.x][position.y];
 
       //pick up item on tile if is an item tile
       if(accessibleTile.isItem()) {
@@ -92,7 +95,7 @@ public class Maze {
       }
 
       //reassign Chap to new tile
-      ((Accessible)board[chapLocation.x][chapLocation.y]).setEntityHere(null);
+      ((AccessibleTile)board[chapLocation.x][chapLocation.y]).setEntityHere(null);
       (accessibleTile).setEntityHere(chap);
       chap.setEntityPosition(new Point(position));  //to keep track of Chap's location
     }
@@ -102,7 +105,7 @@ public class Maze {
    * For dealing with logic of picking up an item
    * @param accessibleTile
    */
-  public void pickUpItem(Accessible accessibleTile) {
+  public void pickUpItem(AccessibleTile accessibleTile) {
     Entity item = accessibleTile.getEntityHere();
     if(item != null) {
       if(item.canBePickedUp()) {  //check if can be picked up
@@ -112,7 +115,7 @@ public class Maze {
         } else {  //if can't be added to inventory then is treasure
           treasuresPickedUp++;
           if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit
-            board[exitLocation.x][exitLocation.y] = new Exit();
+            board[exitLocation.x][exitLocation.y] = new ExitTile();
           }
         }
         accessibleTile.setEntityHere(null); //set tile's item to null since item is picked up

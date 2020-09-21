@@ -1,6 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 //importing libraries needed
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccesibleTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.LockedDoorTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
+
 import java.awt.Point;
 import java.util.Set;
 import java.util.HashSet;
@@ -25,8 +30,10 @@ public class Chap extends Entity {
   public void unlockDoor(Tile door) {
     //check if have correct key for door
     for(Item item : inventory) {
+      //TO DO: SEARCH INVENTORY FOR KEY
       if(((Key)item).getKeyColour() == ((LockedDoor)(Inaccessible) door).getDoorColour()) {
-        door = new FreeTile();  //unlock door
+        //unlock door
+        door = new FreeTile();
       }
     }
   }
@@ -43,8 +50,8 @@ public class Chap extends Entity {
   }
 
   /**
-   * Adds an item to the inventory.
-   * @param item The item to be added to the inventory.
+   * Adds an item to the inventory
+   * @param item
    */
   public void addToInven(Item item) {
     inventory.add(item);

@@ -5,7 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  * @author Vic
  */
-public class KeyTile extends Accessible  {
+public class KeyTile extends AccessibleTile  {
   private Maze.Colours keyColour;
 
   @Override
