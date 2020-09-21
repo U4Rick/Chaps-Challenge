@@ -15,6 +15,10 @@ public class Maze {
     UP, DOWN, LEFT, RIGHT;
   }
 
+  public enum Colours {
+    RED, YELLOW, GREEN, BLUE;
+  }
+
   private Tile board[][]; //2d array of tiles,
   private Point exitLocation; //where exit is located at on the map
   private Chap chap;  //it's Chap!
