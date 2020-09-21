@@ -25,10 +25,8 @@ public class Chap extends Entity {
   public void unlockDoor(Tile door) {
     //check if have correct key for door
     for(Item item : inventory) {
-      //TO DO: SEARCH INVENTORY FOR KEY
       if(((Key)item).getKeyColour() == ((LockedDoor)(Inaccessible) door).getDoorColour()) {
-        //unlock door
-        door = new FreeTile();
+        door = new FreeTile();  //unlock door
       }
     }
   }
@@ -45,8 +43,8 @@ public class Chap extends Entity {
   }
 
   /**
-   * Adds an item to the inventory
-   * @param item
+   * Adds an item to the inventory.
+   * @param item The item to be added to the inventory.
    */
   public void addToInven(Item item) {
     inventory.add(item);

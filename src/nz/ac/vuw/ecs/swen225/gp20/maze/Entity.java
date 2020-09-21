@@ -10,6 +10,10 @@ import java.awt.*;
 abstract public class Entity {
   Point entityPosition; //the position of the entity on the board, to avoid having to search through the board to find a specific entity
 
+  /**
+   * Constructor for entity
+   * @param entityPosition
+   */
   public Entity(Point entityPosition) {
     this.entityPosition = entityPosition;
   }

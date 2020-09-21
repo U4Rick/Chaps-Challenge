@@ -13,10 +13,7 @@ abstract public class Accessible implements Tile {
     ;
   }
 
-  /**
-   * Checks if the player can walk onto this tile.
-   * @return true This is always true.
-   */
+  @Override
   public boolean isAccessible() {
     return true;
   }

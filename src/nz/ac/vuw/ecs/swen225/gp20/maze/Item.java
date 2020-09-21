@@ -9,10 +9,18 @@ import java.awt.*;
  */
 abstract public class Item extends Entity {
 
+  /**
+   * Constructor for the Item object.
+   * @param position The x,y coordinates of the item
+   */
   public Item(Point position) {
     super(position);
   }
 
+  /**
+   * Checks that the item can be added to Chap's inventory.
+   * @return true if item can be added to Chap's inventory.
+   */
   abstract public boolean canBeAddedToInve();
 
   @Override

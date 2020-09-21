@@ -11,10 +11,16 @@ import java.util.ArrayList;
  * @author Vic
  */
 public class Maze {
+  /**
+   * Used to represent the direction for the movement of Chap
+   */
   public enum Direction {
     UP, DOWN, LEFT, RIGHT;
   }
 
+  /**
+   * Used to represent the colours of the keys and the doors
+   */
   public enum Colours {
     RED, YELLOW, GREEN, BLUE;
   }
@@ -27,9 +33,14 @@ public class Maze {
   private int treasuresPickedUp = 0;
 
   /**
-   * Constructs new map, parameter is the data parsed from the level files
+   * Constructs the level for the game based from the level data files.
+   * @param chapLocation  The initial location of Chap.
+   * @param exitLocation  The location of the exit in the level.
+   * @param treasuresNum  Number of treasures in the level.
+   * @param board The 2d array that represents the board for the level.
    */
-  public Maze(Point exitLocation, int treasuresNum, Tile[][] board) {
+  public Maze(Point chapLocation, Point exitLocation, int treasuresNum, Tile[][] board) {
+    this.chap = new Chap(chapLocation);
     this.exitLocation = exitLocation;
     TREASURES_NUM = treasuresNum;
     this.board = board;
