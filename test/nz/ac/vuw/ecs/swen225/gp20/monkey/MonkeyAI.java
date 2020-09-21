@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.monkey;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,13 +15,15 @@ import static nz.ac.vuw.ecs.swen225.gp20.maze.Maze.*;
 public abstract class MonkeyAI {
 
     //Reward given by the utilityFunction for different types of tiles.
-    private final int accessibleReward;
-    private final int inaccessibleReward;
-    private final int treasureReward;
+    private final int freeReward;
     private final int keyReward;
+    private final int treasureReward;
+    private final int infoReward;
+    private final int exitReward;
+    private final int wallReward;
+    private final int exitLockReward;
     private final int lockAndKeyReward;
     private final int lockNoKeyReward;
-    private final int exitReward;
 
     //Variance to prevent AI actions from being deterministic
     static final int VARIANCE = 20;
@@ -29,57 +32,29 @@ public abstract class MonkeyAI {
     ArrayList<Tile> blacklistedTiles;
 
     /**
-     * Instantiates a new MonkeyAI using passed reward weightings.
+     * Instantiates a new Monkey ai.
      *
-     * @param accessibleReward   the accessible reward.
-     * @param inaccessibleReward the inaccessible reward.
-     * @param treasureReward     the treasure reward.
-     * @param keyReward          the key reward.
-     * @param lockAndKeyReward   the lock and key reward.
-     * @param lockNoKeyReward    the lock and no key reward.
-     * @param exitReward         the exit reward.
+     * @param freeReward       the free reward.
+     * @param keyReward        the key reward.
+     * @param treasureReward   the treasure reward.
+     * @param infoReward       the info reward.
+     * @param exitReward       the exit reward.
+     * @param wallReward       the wall reward.
+     * @param exitLockReward   the exit lock reward.
+     * @param lockAndKeyReward the lock and key reward.
+     * @param lockNoKeyReward  the lock no key reward.
      */
-    public MonkeyAI(int accessibleReward, int inaccessibleReward, int treasureReward, int keyReward, int lockAndKeyReward, int lockNoKeyReward, int exitReward) {
-        this.accessibleReward = accessibleReward;
-        this.inaccessibleReward = inaccessibleReward;
-        this.treasureReward = treasureReward;
+    public MonkeyAI(int freeReward, int keyReward, int treasureReward, int infoReward, int exitReward,
+                    int wallReward, int exitLockReward, int lockAndKeyReward, int lockNoKeyReward) {
+        this.freeReward = freeReward;
         this.keyReward = keyReward;
+        this.treasureReward = treasureReward;
+        this.infoReward = infoReward;
+        this.exitReward = exitReward;
+        this.wallReward = wallReward;
+        this.exitLockReward = exitLockReward;
         this.lockAndKeyReward = lockAndKeyReward;
         this.lockNoKeyReward = lockNoKeyReward;
-        this.exitReward = exitReward;
-    }
-
-    /**
-     * Assigns an numeric value to the proposed tile.
-     *
-     * @param tile Proposed Tile.
-     * @return Expected Value of Tile.
-     */
-    public int utilityFunction(Tile tile){
-        int reward = 0;
-
-        if (tile instanceof AccessibleTile) {
-            reward = accessibleReward;
-        } else if (tile instanceof InaccesibleTile) {
-            reward = inaccessibleReward;
-        } else if (tile instanceof TreasureTile) {
-            reward = treasureReward;
-        } else if (tile instanceof KeyTile) {
-            reward = keyReward;
-        } else if (tile instanceof LockedDoorTile) {
-            boolean hasKey = true;
-            if (hasKey) {
-                reward = lockAndKeyReward;
-            } else {
-                reward = lockNoKeyReward;
-            }
-        } else if (tile instanceof ExitTile) {
-            reward = exitReward;
-        }
-
-        int variance = new Random().nextInt(VARIANCE);  //Calculate variance between 0 and VARIANCE
-
-        return reward + variance;
     }
 
     /**
@@ -101,7 +76,7 @@ public abstract class MonkeyAI {
             if (tile != null) {
 
                 //Calculate EV of this tile
-                int tileEV = utilityFunction(tile);
+                int tileEV = utilityFunction(maze.getChap(), tile);
 
                 //If tileEV is better set bestDirection and bestEV
                 if (tileEV > bestEV) {
@@ -134,5 +109,57 @@ public abstract class MonkeyAI {
                 return maze.getTileAt(chapPosition.x + 1, chapPosition.y);
         }*/
         return null;
+    }
+
+    /**
+     * Assigns an numeric value to the proposed tile.
+     *
+     * @param tile Proposed Tile.
+     * @return Expected Value of Tile.
+     */
+    public int utilityFunction(Chap chap, Tile tile) {
+        int reward = 0;
+
+        //Typically a code smell, however there is no way to use polymorphism instead as this is not production code.
+        if (tile instanceof FreeTile) {
+            reward = freeReward;
+        } else if (tile instanceof KeyTile) {
+            reward = keyReward;
+        } else if (tile instanceof TreasureTile) {
+            reward = treasureReward;
+        } else if (tile instanceof InfoTile) {
+            reward = infoReward;
+        } else if (tile instanceof ExitTile) {
+            reward = exitReward;
+        } else if (tile instanceof WallTile) {
+            reward = wallReward;
+        } else if (tile instanceof ExitLockTile) {
+            reward = exitLockReward;
+        } else if (tile instanceof LockedDoorTile) {
+
+            LockedDoorTile doorTile = (LockedDoorTile) tile;
+            boolean hasKey = checkMatchingKey(chap, doorTile);
+
+            if (hasKey) {
+                reward = lockAndKeyReward;
+            } else {
+                reward = lockNoKeyReward;
+            }
+        }
+
+        int variance = new Random().nextInt(VARIANCE);  //Calculate variance between 0 and VARIANCE
+
+        return reward + variance;
+    }
+
+    /**
+     * Check if Chap has the key matching the colour of passed door.
+     *
+     * @param doorTile
+     * @return True if Chap has matching key, otherwise False.
+     */
+    private boolean checkMatchingKey(Chap chap, LockedDoorTile doorTile) {
+
+        return false;
     }
 }

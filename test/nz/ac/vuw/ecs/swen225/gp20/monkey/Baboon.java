@@ -15,7 +15,7 @@ public class Baboon extends MonkeyAI {
      * Instantiates a new Baboon model AI with preset reward weightings.
      */
     public Baboon() {
-        super(0, 0, 0, 0, 0, 0, 0);
+        super(0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
     @Override
