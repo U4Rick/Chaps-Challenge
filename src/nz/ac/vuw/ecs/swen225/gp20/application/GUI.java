@@ -5,140 +5,157 @@ import javax.swing.*;
 
 public abstract class GUI {
 
-  JFrame window = new JFrame();
+	JFrame window = new JFrame();
 
-  public final Dimension counterLabelDim = new Dimension(100, 40);
-  public final Dimension gamePanelDim = new Dimension(500, 500);
-  public final Dimension controllerPanelDim = new Dimension(200, 500);
-  public final Insets controllerPanelStandardInsets = new Insets(5, 50, 5, 50);
+	public final Dimension counterLabelDim = new Dimension(100, 40);
+	public final Dimension gamePanelDim = new Dimension(500, 500);
+	public final Dimension controllerPanelDim = new Dimension(200, 500);
+	public final Insets controllerPanelStandardInsets = new Insets(5, 50, 5, 50);
 
-  public final Font controllerElementsFont = new Font("Helvetica", Font.PLAIN, 15);
+	public final Font controllerElementsFont = new Font("Helvetica", Font.PLAIN, 15);
 
-  public GUI() {
-    aMethod();
-  }
+	public GUI() {
+		aMethod();
+	}
 
-  public void aMethod() {
+	public void aMethod() {
 
-    JMenuBar menu = new JMenuBar();
-    menu.setBackground(Color.MAGENTA);
-    menu.setOpaque(true);
+		JMenuBar menu = new JMenuBar();
+		menu.setBackground(Color.MAGENTA);
+		menu.setOpaque(true);
 
-    JMenuItem gameItem = new JMenuItem("Game");
-    JMenuItem gameStartItem = new JMenuItem("Start");
-    JMenuItem gameLoadItem = new JMenuItem("Load");
-    JMenuItem gameSaveItem = new JMenuItem("Save");
+		JMenu gameMenu = new JMenu("Game");
+		JMenu gameStart = new JMenu("Start");
+		JMenu gameLoad = new JMenu("Load");
+		JMenu gameSave = new JMenu("Save");
 
-    gameItem.add(gameStartItem);
-    gameItem.add(gameLoadItem);
-    gameItem.add(gameSaveItem);
+		gameMenu.add(gameStart);
+		gameMenu.add(gameLoad);
+		gameMenu.add(gameSave);
 
-    JMenuItem pauseItem = new JMenuItem("Pause");
+		JMenu pauseMenu = new JMenu("Pause");
 
-    JMenuItem quitItem = new JMenuItem("Quit");
+		JMenu quitMenu = new JMenu("Quit");
 
-    JMenuItem replayItem = new JMenuItem("Replay");
-    JMenuItem replayStartItem = new JMenuItem("Start");
-    JMenuItem replayLoadItem = new JMenuItem("Load");
+		JMenu replayMenu = new JMenu("Replay");
+		JMenu replayStart = new JMenu("Start");
+		JMenu replayLoad = new JMenu("Load");
 
-    replayItem.add(replayStartItem);
-    replayItem.add(replayLoadItem);
+		replayMenu.add(replayStart);
+		replayMenu.add(replayLoad);
 
-    JMenuItem helpItem = new JMenuItem();
-    JMenuItem helpStartLoadItem = new JMenuItem();
-    JMenuItem helpGameplayItem = new JMenuItem();
-    JMenuItem helpReplayItem = new JMenuItem();
+		JMenu helpMenu = new JMenu("Help");
+		JMenu helpStartLoad = new JMenu("Start/Load");
+		JMenu helpGameplay = new JMenu("Gameplay");
+		JMenu helpReplay = new JMenu("Replay");
 
-    helpItem.add(helpStartLoadItem);
-    helpItem.add(helpGameplayItem);
-    helpItem.add(helpReplayItem);
+		helpMenu.add(helpStartLoad);
+		helpMenu.add(helpGameplay);
+		helpMenu.add(helpReplay);
 
-    menu.add(gameItem);
-    menu.add(pauseItem);
-    menu.add(quitItem);
-    menu.add(replayItem);
-    menu.add(helpItem);
+		menu.setLayout(new GridBagLayout());
+		GridBagConstraints menuConstraints = new GridBagConstraints();
+		menuConstraints.gridy = 0;
+		menuConstraints.gridx = 0;
+		menuConstraints.anchor = GridBagConstraints.LINE_START;
+		menu.add(gameMenu, menuConstraints);
+
+		menuConstraints.gridx++;
+		menu.add(pauseMenu, menuConstraints);
+
+		menuConstraints.gridx++;
+		menu.add(quitMenu, menuConstraints);
+
+		menuConstraints.gridx++;
+		menuConstraints.insets = new Insets(0, 360, 0,130);
+		menu.add(replayMenu, menuConstraints);
+
+		menuConstraints.gridx++;
+		menuConstraints.gridwidth = 10;
+		menuConstraints.insets = new Insets(0, 0, 0,0);
+		menuConstraints.anchor = GridBagConstraints.LINE_END;
+		menu.add(helpMenu, menuConstraints);
 
 
-    JPanel game = new JPanel(); // = new Renderer();
-    game.setPreferredSize(gamePanelDim);
-    game.setBackground(Color.BLUE);
+		JPanel game = new JPanel(); // = new Renderer();
+		game.setPreferredSize(gamePanelDim);
+		game.setBackground(Color.BLUE);
 
-    JPanel controller = new JPanel();
-    controller.setPreferredSize(controllerPanelDim);
-    controller.setBackground(Color.GREEN);
+		JPanel controller = new JPanel();
+		controller.setPreferredSize(controllerPanelDim);
+		controller.setBackground(Color.GREEN);
 
-    JLabel timeLabel = new JLabel("Time");
-    setControllerElementDetails(timeLabel);
+		JLabel timeLabel = new JLabel("Time");
+		setControllerElementDetails(timeLabel);
 
-    JLabel timeCounter = new JLabel("1200");
-    setControllerElementDetails(timeCounter);
+		JLabel timeCounter = new JLabel("1200");
+		setControllerElementDetails(timeCounter);
 
-    JLabel levelLabel = new JLabel("Level");
-    setControllerElementDetails(levelLabel);
+		JLabel levelLabel = new JLabel("Level");
+		setControllerElementDetails(levelLabel);
 
-    JLabel levelCounter = new JLabel("1");
-    setControllerElementDetails(levelCounter);
+		JLabel levelCounter = new JLabel("1");
+		setControllerElementDetails(levelCounter);
 
-    JLabel keysLabel = new JLabel("Keys");
-    setControllerElementDetails(keysLabel);
+		JLabel keysLabel = new JLabel("Keys");
+		setControllerElementDetails(keysLabel);
 
-    JLabel keysCounter = new JLabel("4");
-    setControllerElementDetails(keysCounter);
+		JLabel keysCounter = new JLabel("4");
+		setControllerElementDetails(keysCounter);
 
-    JLabel treasuresLabel = new JLabel("Treasures Left");
-    setControllerElementDetails(treasuresLabel);
+		JLabel treasuresLabel = new JLabel("Treasures Left");
+		setControllerElementDetails(treasuresLabel);
 
-    JLabel treasuresCounter = new JLabel("3");
-    setControllerElementDetails(treasuresCounter);
+		JLabel treasuresCounter = new JLabel("3");
+		setControllerElementDetails(treasuresCounter);
 
-    controller.setLayout(new GridBagLayout());
-    GridBagConstraints constraints = new GridBagConstraints();
+		controller.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
 
-    constraints.gridx = 1;
-    constraints.gridy = 1;
-    constraints.insets = controllerPanelStandardInsets;
-    controller.add(timeLabel, constraints);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.insets = controllerPanelStandardInsets;
+		controller.add(timeLabel, constraints);
 
-    constraints.gridy++;
-    controller.add(timeCounter, constraints);
+		constraints.gridy++;
+		controller.add(timeCounter, constraints);
 
-    constraints.gridy++;
-    controller.add(levelLabel, constraints);
+		constraints.gridy++;
+		controller.add(levelLabel, constraints);
 
-    constraints.gridy++;
-    controller.add(levelCounter, constraints);
+		constraints.gridy++;
+		controller.add(levelCounter, constraints);
 
-    constraints.gridy++;
-    controller.add(keysLabel, constraints);
+		constraints.gridy++;
+		controller.add(keysLabel, constraints);
 
-    constraints.gridy++;
-    controller.add(keysCounter, constraints);
+		constraints.gridy++;
+		controller.add(keysCounter, constraints);
 
-    constraints.gridy++;
-    controller.add(treasuresLabel, constraints);
+		constraints.gridy++;
+		controller.add(treasuresLabel, constraints);
 
-    constraints.gridy++;
-    constraints.insets = new Insets(5, 50, 50, 50);
-    controller.add(treasuresCounter, constraints);
+		constraints.gridy++;
+		constraints.insets = new Insets(5, 50, 50, 50);
+		controller.add(treasuresCounter, constraints);
 
-    window.setLayout(new FlowLayout());
-    window.add(game);
-    window.add(controller);
+		window.setLayout(new FlowLayout());
+		window.add(game);
+		window.add(controller);
 
-    window.setJMenuBar(menu);
-    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    window.pack();
-    window.setLocationRelativeTo(null);
-    window.setVisible(true);
-  }
+		window.setJMenuBar(menu);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.pack();
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
+	}
 
-  private void setControllerElementDetails(JLabel label) {
-    label.setPreferredSize(counterLabelDim);
-    label.setFont(controllerElementsFont);
-    label.setHorizontalAlignment(SwingConstants.CENTER);
-    //set colour
+	private void setControllerElementDetails(JLabel label) {
+		label.setPreferredSize(counterLabelDim);
+		label.setFont(controllerElementsFont);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		//set colour
 
-  }
+	}
 
 }
