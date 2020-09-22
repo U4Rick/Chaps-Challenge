@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public abstract class GUI {
@@ -10,9 +12,14 @@ public abstract class GUI {
 	public final Dimension counterLabelDim = new Dimension(100, 40);
 	public final Dimension gamePanelDim = new Dimension(500, 500);
 	public final Dimension controllerPanelDim = new Dimension(200, 500);
-	public final Insets controllerPanelStandardInsets = new Insets(5, 50, 5, 50);
+	public final Insets controllerPanelStandardInsets = new Insets(5, 0, 5, 0);
 
-	public final Font controllerElementsFont = new Font("Helvetica", Font.PLAIN, 15);
+	public final Color mainColor =  new Color(76, 175, 80);
+	public final Color textColorNormal = new Color(255, 255, 255);
+	public final Color barColorNormal = new Color(139, 195, 74);
+	public final Color barColorHover = new Color(76, 175, 80);
+
+	public final Font controllerElementsFont = new Font("Calibri", Font.BOLD, 16);
 
 	public GUI() {
 		aMethod();
@@ -21,33 +28,87 @@ public abstract class GUI {
 	public void aMethod() {
 
 		JMenuBar menu = new JMenuBar();
-		menu.setBackground(Color.MAGENTA);
+		menu.setBackground(barColorNormal);
 		menu.setOpaque(true);
 
 		JMenu gameMenu = new JMenu("Game");
+		setMenuDetails(gameMenu);
 		JMenu gameStart = new JMenu("Start");
+		setMenuDetails(gameStart);
+		gameStart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
 		JMenu gameLoad = new JMenu("Load");
+		setMenuDetails(gameLoad);
+		gameLoad.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
 		JMenu gameSave = new JMenu("Save");
+		setMenuDetails(gameSave);
+		gameSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
 
 		gameMenu.add(gameStart);
 		gameMenu.add(gameLoad);
 		gameMenu.add(gameSave);
 
 		JMenu pauseMenu = new JMenu("Pause");
+		setMenuDetails(pauseMenu);
+		pauseMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 
+			}
+		});
 		JMenu quitMenu = new JMenu("Quit");
+		setMenuDetails(quitMenu);
+		quitMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 
 		JMenu replayMenu = new JMenu("Replay");
+		setMenuDetails(replayMenu);
 		JMenu replayStart = new JMenu("Start");
+		setMenuDetails(replayStart);
+		replayStart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
 		JMenu replayLoad = new JMenu("Load");
+		setMenuDetails(replayLoad);
+		replayLoad.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
 
 		replayMenu.add(replayStart);
 		replayMenu.add(replayLoad);
 
 		JMenu helpMenu = new JMenu("Help");
+		setMenuDetails(helpMenu);
 		JMenu helpStartLoad = new JMenu("Start/Load");
+		setMenuDetails(helpStartLoad);
 		JMenu helpGameplay = new JMenu("Gameplay");
+		setMenuDetails(helpGameplay);
 		JMenu helpReplay = new JMenu("Replay");
+		setMenuDetails(helpReplay);
 
 		helpMenu.add(helpStartLoad);
 		helpMenu.add(helpGameplay);
@@ -79,11 +140,11 @@ public abstract class GUI {
 
 		JPanel game = new JPanel(); // = new Renderer();
 		game.setPreferredSize(gamePanelDim);
-		game.setBackground(Color.BLUE);
+		game.setBackground(Color.BLACK);
 
 		JPanel controller = new JPanel();
 		controller.setPreferredSize(controllerPanelDim);
-		controller.setBackground(Color.GREEN);
+		controller.setBackground(mainColor);
 
 		JLabel timeLabel = new JLabel("Time");
 		setControllerElementDetails(timeLabel);
@@ -144,7 +205,9 @@ public abstract class GUI {
 		window.add(controller);
 
 		window.setJMenuBar(menu);
+		window.getContentPane().setBackground(mainColor);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setResizable(false);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
@@ -154,8 +217,14 @@ public abstract class GUI {
 		label.setPreferredSize(counterLabelDim);
 		label.setFont(controllerElementsFont);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
-		//set colour
+		label.setForeground(textColorNormal);
+	}
 
+	private void setMenuDetails (JMenu menu) {
+		menu.setForeground(textColorNormal);
+		menu.setBackground(barColorNormal);
+		menu.setFont(controllerElementsFont);
+		menu.setOpaque(true);
 	}
 
 }
