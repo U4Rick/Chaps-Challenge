@@ -124,6 +124,9 @@ public class Maze {
   }
 
   //getters and setters
+  public Tile getTile(int x, int y) { return board[x][y]; }
+
+  public Point getChapPosition() { return chap.entityPosition; }
 
   public Tile[][] getBoard() {
     return board;

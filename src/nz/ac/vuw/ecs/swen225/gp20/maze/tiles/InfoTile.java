@@ -2,6 +2,11 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 
+/**
+ * Represents a tile that displays information when the player walks onto it
+ *
+ * @author Vic
+ */
 public class InfoTile extends AccessibleTile {
 
   String information; //information that stored in the infoField tile

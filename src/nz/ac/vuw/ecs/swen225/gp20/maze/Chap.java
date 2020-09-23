@@ -7,6 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.LockedDoorTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import java.awt.Point;
+import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -18,6 +19,10 @@ import java.util.HashSet;
 public class Chap extends Entity {
   private Set<Item> inventory; //stores the objects that Chap has
 
+  /**
+   * Constructor for the Chap object.
+   * @param chapsLocation Where Chap is located on the board.
+   */
   public Chap(Point chapsLocation) {
     super(chapsLocation);
     inventory = new HashSet<>();
@@ -57,4 +62,6 @@ public class Chap extends Entity {
   public boolean canBePickedUp() {
     return false;
   }
+
+  public Set<Item> getInventory() { return Collections.unmodifiableSet(inventory);  }
 }
