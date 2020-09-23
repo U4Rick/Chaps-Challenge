@@ -3,7 +3,11 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 public abstract class GUI {
 
@@ -35,25 +39,55 @@ public abstract class GUI {
 		setMenuDetails(gameMenu);
 		JMenu gameStart = new JMenu("Start");
 		setMenuDetails(gameStart);
-		gameStart.addActionListener(new ActionListener() {
+		gameStart.addMenuListener(new MenuListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void menuSelected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
 
 			}
 		});
 		JMenu gameLoad = new JMenu("Load");
 		setMenuDetails(gameLoad);
-		gameLoad.addActionListener(new ActionListener() {
+		gameLoad.addMenuListener(new MenuListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void menuSelected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
 
 			}
 		});
 		JMenu gameSave = new JMenu("Save");
 		setMenuDetails(gameSave);
-		gameSave.addActionListener(new ActionListener() {
+		gameSave.addMenuListener(new MenuListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void menuSelected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
 
 			}
 		});
@@ -64,36 +98,72 @@ public abstract class GUI {
 
 		JMenu pauseMenu = new JMenu("Pause");
 		setMenuDetails(pauseMenu);
-		pauseMenu.addActionListener(new ActionListener() {
+		pauseMenu.addMenuListener(new MenuListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void menuSelected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
 
 			}
 		});
 		JMenu quitMenu = new JMenu("Quit");
 		setMenuDetails(quitMenu);
-		quitMenu.addActionListener(new ActionListener() {
+		quitMenu.addMenuListener(new MenuListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void menuSelected(MenuEvent e) {
 				System.exit(0);
 			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) { }
+
+			@Override
+			public void menuCanceled(MenuEvent e) { }
 		});
 
 		JMenu replayMenu = new JMenu("Replay");
 		setMenuDetails(replayMenu);
 		JMenu replayStart = new JMenu("Start");
 		setMenuDetails(replayStart);
-		replayStart.addActionListener(new ActionListener() {
+		replayStart.addMenuListener(new MenuListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void menuSelected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
 
 			}
 		});
 		JMenu replayLoad = new JMenu("Load");
 		setMenuDetails(replayLoad);
-		replayLoad.addActionListener(new ActionListener() {
+		replayLoad.addMenuListener(new MenuListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void menuSelected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {
 
 			}
 		});
@@ -141,6 +211,22 @@ public abstract class GUI {
 		JPanel game = new JPanel(); // = new Renderer();
 		game.setPreferredSize(gamePanelDim);
 		game.setBackground(Color.BLACK);
+		game.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+		});
 
 		JPanel controller = new JPanel();
 		controller.setPreferredSize(controllerPanelDim);
