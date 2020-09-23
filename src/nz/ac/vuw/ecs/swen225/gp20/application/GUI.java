@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -214,7 +216,9 @@ public abstract class GUI {
 		game.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-
+				if (e.getKeyCode() == (KeyEvent.VK_LEFT) || e.getKeyCode() == (KeyEvent.VK_RIGHT) || e.getKeyCode() == (KeyEvent.VK_UP) || e.getKeyCode() == (KeyEvent.VK_DOWN)) {
+					movePlayer(e);
+				}
 			}
 
 			@Override
@@ -298,6 +302,25 @@ public abstract class GUI {
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 	}
+
+	public void movePlayer(KeyEvent e) {
+		Maze.Direction d = null;
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			d = Maze.Direction.LEFT;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			d = Maze.Direction.RIGHT;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			d = Maze.Direction.UP;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			d = Maze.Direction.DOWN;
+		}
+		getMaze().moveChap(d);
+	}
+
+	public abstract Maze getMaze();
 
 	private void setControllerElementDetails(JLabel label) {
 		label.setPreferredSize(counterLabelDim);
