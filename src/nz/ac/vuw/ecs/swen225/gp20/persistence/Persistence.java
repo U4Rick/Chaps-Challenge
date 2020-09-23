@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.InputMismatchException;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -12,7 +13,16 @@ import javax.json.JsonReader;
 import javax.json.JsonValue;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Colours;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitLockTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InfoTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.KeyTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.LockedDoorTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.TreasureTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.WallTile;
 
 public class Persistence {
 
@@ -60,8 +70,10 @@ public class Persistence {
 
         int doorX = door.getInt("x");
         int doorY = door.getInt("y");
+        
+        Colours colour = getColourFromString(door.getString("colour"));
 
-        levelArray[doorX][doorY] = new LockedDoorTile(0);
+        levelArray[doorX][doorY] = new LockedDoorTile(colour);
       }
 
       //load keys
@@ -72,8 +84,8 @@ public class Persistence {
 
         int keyX = key.getInt("x");
         int keyY = key.getInt("y");
-
-        Point keyPos = new Point(keyX, keyY);
+        
+        Colours colour = getColourFromString(key.getString("colour"));
 
         levelArray[keyX][keyY] = new KeyTile();
       }
@@ -105,18 +117,41 @@ public class Persistence {
 
       //load info tile
       JsonObject infoTile = level.getJsonObject("info");
-      levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile();
+      levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile("");
 
       //make maze
       //Maze maze = new Maze(chapPos, exitPos, treasureTiles.size(), levelArray);
       return null;
     } catch (FileNotFoundException e) {
       // file was not found - maybe display something to user?
-    } catch (ClassCastException | NullPointerException e) {
+    } catch (ClassCastException | NullPointerException | InputMismatchException e) {
       //error in the file
     }
     //if error, return null
     return null;
+  }
+  
+  /**
+   * Gets the colour from the string provided.
+   * @param colour The string representing the name of the colour.
+   * @return The colour obtained.
+   */
+  private static Colours getColourFromString(String colour) {
+	  
+	  switch (colour) {
+	  	case "red":
+	  	  return Colours.RED;
+	  	case "yellow":
+	  	  return Colours.YELLOW;
+	  	case "green":
+	      return Colours.GREEN;
+	  	case "blue":
+	  	  return Colours.BLUE;
+	  }
+	  
+	  //invalid colour, throw error
+	  throw new InputMismatchException("Invalid colour");
+	  
   }
 
   /**

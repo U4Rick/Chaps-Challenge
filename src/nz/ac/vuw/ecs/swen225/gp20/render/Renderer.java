@@ -1,8 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Accessible;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -27,7 +28,7 @@ public class Renderer extends JPanel {
 //                g.drawImage(/*image to draw*/tile.getIcon(), col * TILE_SIZE, row * TILE_SIZE, null);
 
                 if(tile.isAccessible()){
-                    Accessible accessibleTile = (Accessible)tile;
+                    AccessibleTile accessibleTile = (AccessibleTile) tile;
                     if(accessibleTile.getEntityHere() != null){
 //                        g.drawImage(/*image to draw*/accessibleTile.getEntityHere().getIcon(), col * TILE_SIZE, row * TILE_SIZE, null);
                     }

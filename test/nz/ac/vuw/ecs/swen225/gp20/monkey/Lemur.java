@@ -9,6 +9,6 @@ public class Lemur extends MonkeyAI {
      * Instantiates a new Lemur model MonkeyAI with preset reward weightings.
      */
     public Lemur() {
-        super(20, 0, 0, 0, 0, 100, 100);
+        super(50, 0, 0, 20, 100, 0, 80, 0, 90);
     }
 }
