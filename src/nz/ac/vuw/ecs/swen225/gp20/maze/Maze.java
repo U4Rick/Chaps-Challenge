@@ -69,8 +69,11 @@ public class Maze {
       case LEFT:
         position = new Point(chapLocation.x-1, chapLocation.y);
         break;
-      default:  //move right
+      case RIGHT:
         position = new Point(chapLocation.x+1, chapLocation.y);
+        break;
+      default:  //don't move, if not any of the directions
+        position = new Point(chapLocation.x, chapLocation.y);
     }
 
     //check that new position is in the bounds of the board, if not throw exception
