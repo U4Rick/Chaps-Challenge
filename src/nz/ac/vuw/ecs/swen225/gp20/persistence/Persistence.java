@@ -11,7 +11,6 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
@@ -196,8 +195,8 @@ public class Persistence {
 	
 	for (int i=0;i<board.length;i++) {
 		for (int j=0;j<board[i].length;j++) {
-			if (board[i][j] instanceof LockedDoorTile) {
-				LockedDoorTile lockedDoor = (LockedDoorTile)board[i][j];
+			if (board[i][j] instanceof DoorTile) {
+				DoorTile lockedDoor = (DoorTile)board[i][j];
 				
 				JsonObject lockedDoorJson = Json.createObjectBuilder()
 						.add("x", i)
@@ -216,8 +215,6 @@ public class Persistence {
 				
 				keysBuilder.add(keyJson);
 			} else if (board[i][j] instanceof TreasureTile) {
-				TreasureTile treasure = (TreasureTile)board[i][j];
-				
 				JsonObject treasureJson = Json.createObjectBuilder()
 						.add("x", i)
 						.add("y", j)
@@ -255,7 +252,7 @@ public class Persistence {
 			.build();
 	  
     JsonObject level = Json.createObjectBuilder()
-        .add("levelname", "level1")
+        .add("level_name", "level1")
         .add("locked_doors", lockedDoorsBuilder.build())
         .add("keys", keysBuilder.build())
         .add("treasures", treasuresBuilder.build())
@@ -266,9 +263,34 @@ public class Persistence {
 		PrintWriter writer = new PrintWriter(file);
 		
 		writer.write(level.toString());
+		
+		writer.close();
 	} catch (FileNotFoundException e) {
 		//invalid file
 	}
-
+  }
+  
+  /**
+   * Loads a game state from a file
+   * @param gameStateFile the state file to load
+   * @return 
+   */
+  public static Maze loadGameState(File gameStateFile) {
+	try {
+		JsonReader reader = Json.createReader(new FileReader(gameStateFile));
+		
+		JsonObject levelState = reader.readObject();
+		
+		String levelName = levelState.getString("level_name");
+		
+		File levelFile = new File(levelName);
+		
+		Maze baseLevelMaze = readLevel(levelFile);
+		
+		//change maze as required
+	} catch (FileNotFoundException e) {
+		//error reading file
+	}
+	return null;
   }
 }
