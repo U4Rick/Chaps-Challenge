@@ -10,9 +10,10 @@ import java.util.List;
 public class Replay {
 
     private List<String> recordedMoves;
+    private List<String> recordedItems;
     private int playbackDelay;
 
-    public void getRecordedMoves(){
+    public void getRecordedMoves() {
         for (String move : recordedMoves) {
             switch (move) {
                 case "up":
@@ -29,9 +30,20 @@ public class Replay {
         }
     }
 
+    public void getRecordedItems() {
+        for (String item : recordedItems) {
+            switch (item) {
+                case "key":
+                    item = "key";
+                case "treasure":
+                    item = "treasure";
+                default:
+                    break;
+            }
+        }
+    }
 
-
-    public void loadFile(String jsonString){
+    public void loadFile(String jsonString) {
         JFileChooser jfc = new JFileChooser();
         jfc.showSaveDialog(null);
 
