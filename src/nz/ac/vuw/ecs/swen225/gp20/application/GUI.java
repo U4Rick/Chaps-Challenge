@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -217,7 +218,8 @@ public abstract class GUI {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyCode() == (KeyEvent.VK_LEFT) || e.getKeyCode() == (KeyEvent.VK_RIGHT) || e.getKeyCode() == (KeyEvent.VK_UP) || e.getKeyCode() == (KeyEvent.VK_DOWN)) {
-					movePlayer(e);
+					Direction direction = getDirectionFromKey(e);
+					movePlayer(direction);
 				}
 			}
 
@@ -303,21 +305,25 @@ public abstract class GUI {
 		window.setVisible(true);
 	}
 
-	public void movePlayer(KeyEvent e) {
-		Maze.Direction d = null;
+	public Direction getDirectionFromKey(KeyEvent e) {
+		Direction direction = null;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			d = Maze.Direction.LEFT;
+			direction = Direction.LEFT;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			d = Maze.Direction.RIGHT;
+			direction = Direction.RIGHT;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			d = Maze.Direction.UP;
+			direction = Direction.UP;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			d = Maze.Direction.DOWN;
+			direction = Direction.DOWN;
 		}
-		getMaze().moveChap(d);
+		return direction;
+	}
+
+	public void movePlayer(Direction direction) {
+		getMaze().moveChap(direction);
 	}
 
 	public abstract Maze getMaze();
