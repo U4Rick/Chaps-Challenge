@@ -19,7 +19,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InfoTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.KeyTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.LockedDoorTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.TreasureTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.WallTile;
@@ -73,7 +73,7 @@ public class Persistence {
         
         Colours colour = getColourFromString(door.getString("colour"));
 
-        levelArray[doorX][doorY] = new LockedDoorTile(colour);
+        levelArray[doorX][doorY] = new DoorTile(colour);
       }
 
       //load keys
