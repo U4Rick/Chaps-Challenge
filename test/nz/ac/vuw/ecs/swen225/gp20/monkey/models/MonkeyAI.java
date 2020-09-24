@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.monkey;
+package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
@@ -155,7 +155,7 @@ public abstract class MonkeyAI {
     /**
      * Check if Chap has the key matching the colour of passed door.
      *
-     * @param doorTile
+     * @param doorTile Door to check key for.
      * @return True if Chap has matching key, otherwise False.
      */
     private boolean checkMatchingKey(Chap chap, LockedDoorTile doorTile) {

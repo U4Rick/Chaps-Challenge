@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.monkey;
+package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
 /**
  * An AI that tries to push through walls where possible.
