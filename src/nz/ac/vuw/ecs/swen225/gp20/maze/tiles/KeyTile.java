@@ -23,4 +23,6 @@ public class KeyTile extends AccessibleTile {
   public boolean isItem() {
     return true;
   }
+
+  public Maze.Colours getKeyColour() { return keyColour; }
 }
