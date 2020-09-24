@@ -1,14 +1,12 @@
-package nz.ac.vuw.ecs.swen225.gp20.monkey;
+package nz.ac.vuw.ecs.swen225.gp20.monkey.tests;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Baboon;
+import nz.ac.vuw.ecs.swen225.gp20.monkey.models.MonkeyAI;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class BaboonTest {
 
@@ -31,11 +29,10 @@ class BaboonTest {
 
     @Test
     void exampleTest() {
-/*        for (int i = 0; i < 10_000; i++) {
-            while (main.gameIsValid()) {
-                Direction direction = baboon.selectMove(main.getMaze);
-                main.moveChap(direction);
-            }
-        }*/
+        //TODO check game still valid somehow
+        for (int i = 0; i < 10; i++) {
+            Direction direction = baboon.selectMove(main.getMaze());
+            main.movePlayer(direction);
+        }
     }
 }

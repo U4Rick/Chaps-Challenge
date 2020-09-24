@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.monkey;
+package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
 /**
  * An AI that avoids keys and treasures but still tries to open doors and reach the exit.

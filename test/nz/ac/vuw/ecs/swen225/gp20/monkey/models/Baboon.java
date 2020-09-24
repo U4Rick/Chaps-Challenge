@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.monkey;
+package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
