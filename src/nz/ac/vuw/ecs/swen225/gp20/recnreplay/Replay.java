@@ -13,7 +13,7 @@ public class Replay {
     private List<String> recordedItems;
     private int playbackDelay;
 
-    public void getRecordedMoves() {
+    public void getRecordedMove() {
         for (String move : recordedMoves) {
             switch (move) {
                 case "up":
@@ -30,11 +30,11 @@ public class Replay {
         }
     }
 
-    public void getRecordedItems() {
+    public void getRecordedItem() {
         for (String item : recordedItems) {
             switch (item) {
                 case "key":
-                    item = "key";
+                    item = "key";   //todo handle coloured keys/doors/exit lock etc
                 case "treasure":
                     item = "treasure";
                 default:

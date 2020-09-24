@@ -16,32 +16,23 @@ public class Record {
     private JsonObjectBuilder objectBuilder;
     private JsonObject obj;
 
-    public void record() {
-        try{
-            FileReader fr = new FileReader(new File("temp"));
+    public void writeToFile() throws IOException {
+        try(FileWriter fw = new FileWriter("jsonData.txt");
+        JsonWriter jsonWriter = Json.createWriter(fw);) {
 
-            JsonReader jr = Json.createReader(fr);
-            JsonArray jArr = jr.readArray();
-
-            for (int i = 0; i < jArr.size()-1; i++) {
-                JsonObject object = jArr.getJsonObject(i).asJsonObject();
-                //deal with different type of actions here e.g move/item
+            for (Tile move : moves) {       //todo implement move.getDirection()
+               // JsonObject jsonMove = (JsonObject) objectBuilder.add("move", move.getDirection());
             }
 
+            for (Item item : items) {
+                JsonObject jsonItem = (JsonObject) objectBuilder.add("item", item.toString());
+            }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            JsonObject jsonObject = objectBuilder.build();
+            jsonWriter.writeObject(jsonObject);
         }
     }
 
-    public String writeFile(String json){
-        StringWriter stringWriter = new StringWriter();
-        JsonWriter jsonWriter = Json.createWriter(new PrintWriter(stringWriter));
-        jsonWriter.writeObject(obj);
-        jsonWriter.close();
-        return stringWriter.toString();
-
-    }
 
 
     public static List<Tile> getMoves() {
