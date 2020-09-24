@@ -25,7 +25,7 @@ public class Record {
 
             for (int i = 0; i < jArr.size()-1; i++) {
                 JsonObject object = jArr.getJsonObject(i).asJsonObject();
-
+                //deal with different type of actions here e.g move/item
             }
 
 
