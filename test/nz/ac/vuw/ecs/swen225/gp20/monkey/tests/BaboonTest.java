@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class BaboonTest {
 
     static MonkeyAI baboon;
-    Main main;
+    static Main main;
 
     @BeforeAll
     static void beforeAll() {
@@ -22,9 +22,7 @@ class BaboonTest {
     void setUp() {
         //Set up new maze
         main = new Main();
-        /*
         main.createMaze();
-        */
     }
 
     @Test
