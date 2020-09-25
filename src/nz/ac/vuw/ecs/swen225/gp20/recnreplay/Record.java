@@ -21,7 +21,7 @@ public class Record {
 
     public void writeToFile() throws IOException {
         try (FileWriter fw = new FileWriter("json_data.json");
-             JsonWriter jsonWriter = Json.createWriter(fw);) {
+             JsonWriter jsonWriter = Json.createWriter(fw)) {
             JsonObject jsonMove = null;
             JsonObject jsonItem = null;
 
@@ -29,21 +29,19 @@ public class Record {
             for (String action : actions) {
                 switch (action) {
                     case "right":
-                         jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
+                        jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
                     case "down":
-                         jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
+                        jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
                     case "left":
-                         jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
+                        jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
                     case "up":
-                         jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
-                    case "treasure":
-                        jsonItem = (JsonObject) objectBuilder.add("item", action); //todo should be "treasure"/ where it was
-                    case "key":
-                        jsonItem = (JsonObject) objectBuilder.add("item", action); //todo should be "key"/ where it was
+                        jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
+                    default:
+                        break;
                 }
             }
 
-//            for (String move : moves) {       //todo implement move.getDirection()
+//            for (String move : moves) {       //todo remove later
 //               // JsonObject jsonMove = (JsonObject) objectBuilder.add("move", move.getDirection());
 //            }
 //
