@@ -26,7 +26,7 @@ public class Record {
             JsonObject jsonItem = null;
 
 
-            for (String action : actions) {
+            for (String action : actions) {     //should be jsonArray with objects
                 switch (action) {
                     case "right":
                         jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
