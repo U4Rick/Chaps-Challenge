@@ -31,4 +31,6 @@ public class InfoTile extends AccessibleTile {
   public boolean isItem() {
     return false;
   }
+
+  public String toString() { return "infotile"; }
 }

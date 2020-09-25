@@ -10,4 +10,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccessibleTile;
 public class WallTile extends InaccessibleTile {
   @Override
   public boolean isLockedDoor() { return false; }
+
+  public String toString() { return "walltile"; }
 }

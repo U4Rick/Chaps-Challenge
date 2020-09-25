@@ -12,7 +12,7 @@ abstract public class Entity {
 
   /**
    * Constructor for entity
-   * @param entityPosition
+   * @param entityPosition x,y coordinates of entity in the board.
    */
   public Entity(Point entityPosition) {
     this.entityPosition = entityPosition;
@@ -20,10 +20,12 @@ abstract public class Entity {
 
   /**
    * Checks if the entity can be picked up by Chap, items can be picked up, Chap and npcs cannot.
-   * @return
+   * @return true if Chap can pick up this item, otherwise false.
    */
   abstract public boolean canBePickedUp();
 
   public Point getEntityPosition() { return entityPosition; }
   public void setEntityPosition(Point newLocation) { entityPosition = newLocation; }
+
+  abstract public String toString();
 }

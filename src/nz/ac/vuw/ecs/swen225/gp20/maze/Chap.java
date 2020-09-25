@@ -16,7 +16,7 @@ import java.util.HashSet;
  * @author Vic
  */
 public class Chap extends Entity {
-  private Set<Item> inventory; //stores the objects that Chap has
+  private Set<Key> inventory; //stores the objects that Chap has
 
   /**
    * Constructor for the Chap object.
@@ -33,8 +33,8 @@ public class Chap extends Entity {
    */
   public void unlockDoor(Tile door) {
     //check if have correct key for door
-    for(Item item : inventory) {
-      if(((Key)item).getKeyColour() == ((DoorTile)door).getDoorColour()) {
+    for(Key key : inventory) {
+      if(key.getKeyColour() == ((DoorTile)door).getDoorColour()) {
         //unlock door
         door = new FreeTile();
       }
@@ -63,4 +63,6 @@ public class Chap extends Entity {
   }
 
   public Set<Item> getInventory() { return Collections.unmodifiableSet(inventory);  }
+
+  public String toString() { return "chap"; }
 }

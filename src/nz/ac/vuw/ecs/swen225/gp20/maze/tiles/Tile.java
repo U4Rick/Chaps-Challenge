@@ -8,6 +8,7 @@ public interface Tile {
    * Checks if the player can walk onto this tile.
    * @return true This is always true.
    */
-  public boolean isAccessible();
+  boolean isAccessible();
+  String toString();
 }
 

@@ -12,4 +12,6 @@ public class TreasureTile extends AccessibleTile {
   public boolean isItem() {
     return true;
   }
+
+  public String toString() { return "treasuretile"; }
 }

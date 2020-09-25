@@ -10,4 +10,6 @@ public class ExitLockTile extends InaccessibleTile {
   public boolean isLockedDoor() {
     return false;
   }
+
+  public String toString() { return "exitlocktile"; }
 }
