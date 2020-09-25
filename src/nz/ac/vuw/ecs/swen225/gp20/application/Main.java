@@ -25,6 +25,9 @@ public class Main extends GUI {
 
     @Override
     public Maze getMaze() {
+        if(maze == null){
+            createMaze();
+        }
         return maze;
     }
 
