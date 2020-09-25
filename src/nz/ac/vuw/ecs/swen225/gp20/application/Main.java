@@ -5,7 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import java.io.File;
 
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.readLevel;
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadLevel;
 
 public class Main extends GUI {
 
@@ -32,6 +32,6 @@ public class Main extends GUI {
     }
 
     public void createMaze() {
-        maze = readLevel(new File("levels/level1.json"));
+        maze = loadLevel(1);
     }
 }
