@@ -16,5 +16,5 @@ public class Treasure extends Item {
   @Override
   public boolean canBeAddedToInve() { return false; }
 
-  public String toString() { return "treasureitem"; }
+  public String toString() { return "treasure_item"; }
 }

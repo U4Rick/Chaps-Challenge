@@ -12,5 +12,5 @@ public class FreeTile extends AccessibleTile {
     return false;
   }
 
-  public String toString() { return "freetile"; }
+  public String toString() { return "free_tile"; }
 }

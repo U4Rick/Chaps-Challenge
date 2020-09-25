@@ -19,5 +19,5 @@ public class DoorTile extends InaccessibleTile {
 
   public Maze.Colours  getDoorColour() { return doorColour; }
 
-  public String toString() { return doorColour.toString()+"doortile"; }
+  public String toString() { return doorColour.toString().toLowerCase()+"_door_tile"; }
 }

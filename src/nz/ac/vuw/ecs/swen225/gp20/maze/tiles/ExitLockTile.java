@@ -11,5 +11,5 @@ public class ExitLockTile extends InaccessibleTile {
     return false;
   }
 
-  public String toString() { return "exitlocktile"; }
+  public String toString() { return "exit_lock_tile"; }
 }

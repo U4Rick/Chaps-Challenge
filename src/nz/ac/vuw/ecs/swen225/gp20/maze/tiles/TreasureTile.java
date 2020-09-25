@@ -13,5 +13,5 @@ public class TreasureTile extends AccessibleTile {
     return true;
   }
 
-  public String toString() { return "treasuretile"; }
+  public String toString() { return "treasure_tile"; }
 }

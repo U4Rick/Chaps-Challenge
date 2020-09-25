@@ -11,5 +11,5 @@ public class ExitTile extends AccessibleTile {
     return false;
   }
 
-  public String toString() { return "exittile"; }
+  public String toString() { return "exit_tile"; }
 }

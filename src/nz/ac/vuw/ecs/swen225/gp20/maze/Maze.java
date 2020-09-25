@@ -114,7 +114,7 @@ public class Maze {
       if(item.canBePickedUp()) {  //check if can be picked up
         Item tileItem = (Item)item;
         if(tileItem.canBeAddedToInve()) {  //check if can be added to inventory
-          chap.addToInven((Item) item);
+          chap.addToInven((Key) item);
         } else {  //if can't be added to inventory then is treasure
           treasuresPickedUp++;
           if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit

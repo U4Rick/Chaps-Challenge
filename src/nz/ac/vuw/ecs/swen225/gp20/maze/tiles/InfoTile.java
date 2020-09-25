@@ -32,5 +32,5 @@ public class InfoTile extends AccessibleTile {
     return false;
   }
 
-  public String toString() { return "infotile"; }
+  public String toString() { return "info_tile"; }
 }

@@ -11,5 +11,5 @@ public class WallTile extends InaccessibleTile {
   @Override
   public boolean isLockedDoor() { return false; }
 
-  public String toString() { return "walltile"; }
+  public String toString() { return "wall_tile"; }
 }

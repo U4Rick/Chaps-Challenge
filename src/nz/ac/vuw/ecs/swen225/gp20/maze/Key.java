@@ -30,6 +30,6 @@ public class Key extends Item {
   public Maze.Colours getKeyColour() { return keyColour; }
 
   public String toString() {
-    return keyColour.toString()+"keyitem";
+    return keyColour.toString().toLowerCase()+"_key_item";
   }
 }
