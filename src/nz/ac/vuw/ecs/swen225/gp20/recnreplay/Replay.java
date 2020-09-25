@@ -1,13 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnreplay;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import javax.json.*;
 import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Replay {
@@ -15,6 +14,7 @@ public class Replay {
     private List<String> recordedMoves;
     private List<String> recordedItems;
     private int playbackDelay;
+    private JsonObject loadedActions;
 
     public void getRecordedMove() {
         for (String move : recordedMoves) {
@@ -46,13 +46,34 @@ public class Replay {
         }
     }
 
-    public void loadFile(String jsonString) throws FileNotFoundException {
-        InputStream fis = new FileInputStream("jsonData.txt");
+    public void loadFile() {
+        try {
+            InputStream fis = new FileInputStream("json_data.json");
 
-        JsonReader reader = Json.createReader(fis);     //
-        JsonObject Object = reader.readObject();
+            JsonReader reader = Json.createReader(fis);     //reads in json
+            loadedActions = reader.readObject();
+            reader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-        reader.close();
+    public void processActionsJson(){
+        JsonArray moves = loadedActions.getJsonArray("move");
+
+        for (JsonValue jsonMove : moves) {
+            JsonObject move = jsonMove.asJsonObject();
+            int moveX = move.getInt("x");
+            int moveY = move.getInt("y");
+        }
+
+        JsonArray items = loadedActions.getJsonArray("item");
+
+        for (JsonValue jsonItem : items) {
+            JsonObject item = jsonItem.asJsonObject();
+            int itemX = item.getInt("x");
+            int itemY = item.getInt("y");
+        }
 
     }
 

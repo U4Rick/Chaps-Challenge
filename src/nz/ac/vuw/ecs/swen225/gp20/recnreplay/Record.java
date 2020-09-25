@@ -20,7 +20,7 @@ public class Record {
 
 
     public void writeToFile() throws IOException {
-        try (FileWriter fw = new FileWriter("jsonData.txt");
+        try (FileWriter fw = new FileWriter("json_data.json");
              JsonWriter jsonWriter = Json.createWriter(fw);) {
             JsonObject jsonMove = null;
             JsonObject jsonItem = null;
@@ -37,9 +37,9 @@ public class Record {
                     case "up":
                          jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
                     case "treasure":
-                        jsonItem = (JsonObject) objectBuilder.add("treasure", action); //todo should be "treasure", where it was
+                        jsonItem = (JsonObject) objectBuilder.add("item", action); //todo should be "treasure"/ where it was
                     case "key":
-                        jsonItem = (JsonObject) objectBuilder.add("key", action); //todo should be "key", where it was
+                        jsonItem = (JsonObject) objectBuilder.add("item", action); //todo should be "key"/ where it was
                 }
             }
 
