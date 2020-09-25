@@ -4,6 +4,9 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.swing.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.List;
 
@@ -43,12 +46,14 @@ public class Replay {
         }
     }
 
-    public void loadFile(String jsonString) {
-        JFileChooser jfc = new JFileChooser();
-        jfc.showSaveDialog(null);
+    public void loadFile(String jsonString) throws FileNotFoundException {
+        InputStream fis = new FileInputStream("jsonData.txt");
 
-        JsonReader reader = Json.createReader(new StringReader(jsonString));
-        JsonObject jsonObject = reader.readObject();
+        JsonReader reader = Json.createReader(fis);     //
+        JsonObject Object = reader.readObject();
+
+        reader.close();
+
     }
 
     public int getPlaybackDelay() {
