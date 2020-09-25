@@ -29,7 +29,7 @@ public abstract class MonkeyAI {
     static final int VARIANCE = 20;
 
     //Need to store which tiles we attempted to visit and should not revisit to not get stuck in a loop.
-    ArrayList<Tile> blacklistedTiles;
+    ArrayList<Tile> blacklistedTiles = new ArrayList<>();
 
     /**
      * Instantiates a new Monkey ai.
@@ -72,13 +72,13 @@ public abstract class MonkeyAI {
 
             Tile tile = getDestinationTile(maze, direction);
 
-            //If tile is not null, then move is valid
+            //If tile is not null, then move must be within bounds
             if (tile != null) {
 
                 //Calculate EV of this tile
                 int tileEV = utilityFunction(maze.getChap(), tile);
 
-                //If tileEV is better set bestDirection and bestEV
+                //If tileEV is better, set bestDirection and bestEV
                 if (tileEV > bestEV) {
                     bestDirection = direction;
                     bestEV = tileEV;
@@ -94,20 +94,20 @@ public abstract class MonkeyAI {
      * @param direction Direction of move.
      * @return Destination tile.
      */
-    private Tile getDestinationTile(Maze maze, Direction direction) {
-/*        Point chapPosition = maze.getChapPosition();
+    Tile getDestinationTile(Maze maze, Direction direction) {
+        Point chapPosition = maze.getChapPosition();
 
         //TODO add checks for out of bounds
         switch (direction) {
             case UP:
-                return maze.getTileAt(chapPosition.x, chapPosition.y - 1);
+                return maze.getTile(chapPosition.x, chapPosition.y - 1);
             case DOWN:
-                return maze.getTileAt(chapPosition.x, chapPosition.y + 1);
+                return maze.getTile(chapPosition.x, chapPosition.y + 1);
             case LEFT:
-                return maze.getTileAt(chapPosition.x - 1, chapPosition.y);
+                return maze.getTile(chapPosition.x - 1, chapPosition.y);
             case RIGHT:
-                return maze.getTileAt(chapPosition.x + 1, chapPosition.y);
-        }*/
+                return maze.getTile(chapPosition.x + 1, chapPosition.y);
+        }
         return null;
     }
 
@@ -131,13 +131,14 @@ public abstract class MonkeyAI {
             reward = infoReward;
         } else if (tile instanceof ExitTile) {
             reward = exitReward;
-        } else if (tile instanceof WallTile) {
+        } else if (tile instanceof WallTile && !blacklistedTiles.contains(tile)) {
             reward = wallReward;
-        } else if (tile instanceof ExitLockTile) {
+        } else if (tile instanceof ExitLockTile && !blacklistedTiles.contains(tile)) {
             reward = exitLockReward;
-        } else if (tile instanceof LockedDoorTile) {
+        } else if (tile instanceof DoorTile) {
 
-            LockedDoorTile doorTile = (LockedDoorTile) tile;
+            //TODO Something clever to ensure not stuck on locked doors, but must be able to enter once we get the key.
+            DoorTile doorTile = (DoorTile) tile;
             boolean hasKey = checkMatchingKey(chap, doorTile);
 
             if (hasKey) {
@@ -158,8 +159,8 @@ public abstract class MonkeyAI {
      * @param doorTile Door to check key for.
      * @return True if Chap has matching key, otherwise False.
      */
-    private boolean checkMatchingKey(Chap chap, LockedDoorTile doorTile) {
-
+    private boolean checkMatchingKey(Chap chap, DoorTile doorTile) {
+        //TODO implement
         return false;
     }
 }
