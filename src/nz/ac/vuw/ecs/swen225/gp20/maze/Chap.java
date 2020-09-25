@@ -50,11 +50,11 @@ public class Chap extends Entity {
   }
 
   /**
-   * Adds an item to the inventory
-   * @param item Item to add to inventory.
+   * Adds a key to the inventory
+   * @param key Key to add to inventory.
    */
-  public void addToInven(Item item) {
-    inventory.add(item);
+  public void addToInven(Key key) {
+    inventory.add(key);
   }
 
   @Override
