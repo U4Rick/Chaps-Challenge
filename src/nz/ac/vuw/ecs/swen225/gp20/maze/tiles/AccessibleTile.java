@@ -11,10 +11,6 @@ abstract public class AccessibleTile extends Tile {
 
   private Entity entityHere = null; //entity that is on this tile, is null if no entity is on this tile
 
-  public AccessibleTile() {
-    ;
-  }
-
   @Override
   public boolean isAccessible() {
     return true;
@@ -31,7 +27,7 @@ abstract public class AccessibleTile extends Tile {
    * @param entity
    */
   public void setEntityHere(Entity entity) {
-    entityHere = entity;
+    this.entityHere = entity;
   }
   public Entity getEntityHere() { return entityHere; }
 }
