@@ -28,4 +28,8 @@ public class Key extends Item {
    * @return  The colour of this key
    */
   public Maze.Colours getKeyColour() { return keyColour; }
+
+  public String toString() {
+    return keyColour.toString().toLowerCase()+"_key_item";
+  }
 }

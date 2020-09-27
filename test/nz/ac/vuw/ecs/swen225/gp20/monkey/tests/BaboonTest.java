@@ -8,10 +8,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeUnit;
+
 class BaboonTest {
 
     static MonkeyAI baboon;
-    Main main;
+    static Main main;
 
     @BeforeAll
     static void beforeAll() {
@@ -22,15 +24,27 @@ class BaboonTest {
     void setUp() {
         //Set up new maze
         main = new Main();
-        /*
         main.createMaze();
-        */
     }
 
     @Test
     void exampleTest() {
         //TODO check game still valid somehow
+        for (int i = 0; i < 100_000; i++) {
+            Direction direction = baboon.selectMove(main.getMaze());
+            main.movePlayer(direction);
+        }
+    }
+
+    @Test
+    void exampleTimeDelayTest() {
+        //TODO check game still valid somehow
         for (int i = 0; i < 10; i++) {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Direction direction = baboon.selectMove(main.getMaze());
             main.movePlayer(direction);
         }

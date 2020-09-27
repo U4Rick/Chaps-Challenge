@@ -11,4 +11,6 @@ public class FreeTile extends AccessibleTile {
   public boolean isItem() {
     return false;
   }
+
+  public String toString() { return "free_tile"; }
 }

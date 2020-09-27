@@ -23,4 +23,8 @@ public class KeyTile extends AccessibleTile {
   public boolean isItem() {
     return true;
   }
+
+  public Maze.Colours getKeyColour() { return keyColour; }
+
+  public String toString() { return keyColour.toString().toLowerCase()+"_key_tile"; }
 }

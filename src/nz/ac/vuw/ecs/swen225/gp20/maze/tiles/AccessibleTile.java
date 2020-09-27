@@ -7,13 +7,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Entity;
  *
  * @author Vic
  */
-abstract public class AccessibleTile implements Tile {
+abstract public class AccessibleTile extends Tile {
 
   private Entity entityHere = null; //entity that is on this tile, is null if no entity is on this tile
-
-  public AccessibleTile() {
-    ;
-  }
 
   @Override
   public boolean isAccessible() {
@@ -31,7 +27,7 @@ abstract public class AccessibleTile implements Tile {
    * @param entity
    */
   public void setEntityHere(Entity entity) {
-    entityHere = entity;
+    this.entityHere = entity;
   }
   public Entity getEntityHere() { return entityHere; }
 }

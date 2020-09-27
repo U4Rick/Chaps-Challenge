@@ -18,4 +18,6 @@ public class DoorTile extends InaccessibleTile {
   public boolean isLockedDoor() { return true; }
 
   public Maze.Colours  getDoorColour() { return doorColour; }
+
+  public String toString() { return doorColour.toString().toLowerCase()+"_door_tile"; }
 }

@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -211,7 +212,7 @@ public abstract class GUI {
 		menu.add(helpMenu, menuConstraints);
 
 
-		JPanel game = new JPanel(); // = new Renderer();
+		JPanel game = new BoardRenderer(getMaze());
 		game.setPreferredSize(gamePanelDim);
 		game.setBackground(Color.BLACK);
 		game.addKeyListener(new KeyListener() {

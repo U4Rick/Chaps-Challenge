@@ -42,11 +42,19 @@ public class Maze {
    * @param treasuresNum  Number of treasures in the level.
    * @param board The 2d array that represents the board for the level.
    */
-  public Maze(Point chapLocation, Point exitLocation, int treasuresNum, Tile[][] board) {
+  public Maze(Point chapLocation, Point exitLocation, int treasuresNum, Tile[][] board) throws IllegalStateException{
     this.chap = new Chap(chapLocation);
     this.exitLocation = exitLocation;
     TREASURES_NUM = treasuresNum;
     this.board = board;
+
+    //set tile's entity at chap pos to chap
+    //TODO for code contracts, could violate condition of Chap not allowed in inaccessible tiles
+    if(board[chapLocation.x][chapLocation.y].isAccessible()) {
+      ((AccessibleTile)board[chapLocation.x][chapLocation.y]).setEntityHere(chap);
+    } else {
+      throw new IllegalStateException();
+    }
   }
 
   /**
@@ -114,7 +122,7 @@ public class Maze {
       if(item.canBePickedUp()) {  //check if can be picked up
         Item tileItem = (Item)item;
         if(tileItem.canBeAddedToInve()) {  //check if can be added to inventory
-          chap.addToInven((Item) item);
+          chap.addToInven((Key) item);
         } else {  //if can't be added to inventory then is treasure
           treasuresPickedUp++;
           if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit

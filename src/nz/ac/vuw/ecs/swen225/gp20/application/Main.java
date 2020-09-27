@@ -3,6 +3,10 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
+import java.io.File;
+
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadLevel;
+
 public class Main extends GUI {
 
     Maze maze;
@@ -17,11 +21,17 @@ public class Main extends GUI {
     public static void main(String[] args) {
         System.out.println("Hello world!");
         Main main  =  new Main();
-        main.run();
     }
 
     @Override
     public Maze getMaze() {
+        if(maze == null){
+            createMaze();
+        }
         return maze;
+    }
+
+    public void createMaze() {
+        maze = loadLevel(1);
     }
 }
