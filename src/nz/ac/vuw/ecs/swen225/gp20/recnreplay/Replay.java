@@ -5,22 +5,24 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import javax.json.*;
 import javax.swing.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.StringReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Replay extends GUI{
 
     private List<String> recordedMoves;
-    private int playbackDelay;
+    private int playbackDelay = 1;
     private JsonObject loadedActions;
+    private Maze maze;
 
-    public void loadFile() {
+    public Replay(Maze maze) {
+        this.maze = maze;
+    }
+
+    public void loadFile(File file) {
         try {
-            InputStream fis = new FileInputStream("json_data.txt");
+            InputStream fis = new FileInputStream(file);
 
             JsonReader reader = Json.createReader(fis);     //reads in json
             loadedActions = reader.readObject();
@@ -64,7 +66,7 @@ public class Replay extends GUI{
     }
 
     @Override
-    public Maze getMaze() {     //todo implement
-        return null;
+    public Maze getMaze() {
+        return this.maze;
     }
 }

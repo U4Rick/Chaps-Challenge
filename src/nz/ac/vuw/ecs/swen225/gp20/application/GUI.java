@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
 
 import java.awt.*;
@@ -312,5 +313,7 @@ public abstract class GUI {
 		menu.setOpaque(true);
 	}
 
-
+	public BoardRenderer getGame() {
+		return game;
+	}
 }
