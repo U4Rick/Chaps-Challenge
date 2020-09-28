@@ -12,6 +12,7 @@ public class Main extends GUI {
     Maze maze;
 
     private void run() {
+        createMaze();
         while (true) {
 
         }
@@ -21,17 +22,18 @@ public class Main extends GUI {
     public static void main(String[] args) {
         System.out.println("Hello world!");
         Main main  =  new Main();
+        main.run();
     }
 
     @Override
     public Maze getMaze() {
-        if(maze == null){
+        if(this.maze == null){
             createMaze();
         }
         return maze;
     }
 
     public void createMaze() {
-        maze = loadLevel(1);
+        this.maze = loadLevel(1);
     }
 }
