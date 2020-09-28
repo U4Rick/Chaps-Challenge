@@ -20,7 +20,7 @@ public class Baboon extends MonkeyAI {
 
     @Override
     public Direction selectMove(Maze maze) {
-        int number = new Random().nextInt(Direction.values().length - 1);   //Get random ordinal
-        return Direction.values()[number];                                          //Return direction from ordinal
+        int number = new Random().nextInt(Direction.values().length);   //Get random ordinal
+        return Direction.values()[number];                              //Return direction from ordinal
     }
 }
