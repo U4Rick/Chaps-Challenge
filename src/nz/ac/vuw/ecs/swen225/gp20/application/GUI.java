@@ -19,7 +19,7 @@ public abstract class GUI {
 	JFrame window = new JFrame();
 
 	public final Dimension counterLabelDim = new Dimension(100, 40);
-	public final Dimension gamePanelDim = new Dimension(500, 500);
+	public final Dimension gamePanelDim = new Dimension(495, 495);
 	public final Dimension controllerPanelDim = new Dimension(200, 500);
 	public final Insets controllerPanelStandardInsets = new Insets(5, 0, 5, 0);
 
