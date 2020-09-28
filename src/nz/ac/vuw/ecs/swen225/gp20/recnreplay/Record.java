@@ -14,10 +14,6 @@ import java.util.List;
 public class Record {
 
     public List<Maze.Direction> moves;
-//
-//    private JsonObjectBuilder objectBuilder;
-//    private JsonObject obj;
-
 
     public Record() {
         this.moves = getMoves();
@@ -28,41 +24,31 @@ public class Record {
             PrintWriter pw = new PrintWriter("json_data.txt");
 
             JsonArrayBuilder jArr = Json.createArrayBuilder();
-//            JsonObject jsonMove = null;
 
             for (Maze.Direction action : moves) {
                 switch (action) {
                     case RIGHT:
                         jArr.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
-                                .build()); //todo should be "move", the direction
+                                .build());
                     case DOWN:
                         jArr.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
-                                .build()); //todo should be "move", the direction
+                                .build());
                     case LEFT:
                         jArr.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
-                                .build()); //todo should be "move", the direction
+                                .build());
                     case UP:
                         jArr.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
-                                .build()); //todo should be "move", the direction
+                                .build());
                     default:
                         break;
                 }
             }
 
-//            for (String move : moves) {       //todo remove later
-//               // JsonObject jsonMove = (JsonObject) objectBuilder.add("move", move.getDirection());
-//            }
-//
-//            for (Item item : items) {
-//                JsonObject jsonItem = (JsonObject) objectBuilder.add("item", item.toString());
-//            }
-
-//            JsonObject jsonObject = objectBuilder.build();
-           pw.write(jArr.toString());
+            pw.write(jArr.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -79,14 +65,5 @@ public class Record {
     public void addMove(Maze.Direction dir) {
         this.moves.add(dir);
     }
-
-//    public static List<Item> getItems() {
-//        return items;
-//    }
-//
-//    public static void setItems(List<Item> items) {
-//        Record.items = items;
-//    }
-
 
 }

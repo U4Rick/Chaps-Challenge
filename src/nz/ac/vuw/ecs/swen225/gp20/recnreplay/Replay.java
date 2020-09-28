@@ -15,39 +15,8 @@ import java.util.List;
 public class Replay extends GUI{
 
     private List<String> recordedMoves;
-    private List<String> recordedItems;
     private int playbackDelay;
     private JsonObject loadedActions;
-
-//    public void getRecordedMove() {
-//        for (String move : recordedMoves) {
-//            switch (move) {
-//                case "up":
-//                    move = "up";
-//                case "right":
-//                    move = "right";
-//                case "down":
-//                    move = "down";
-//                case "left":
-//                    move = "left";
-//                default:
-//                    break;
-//            }
-//        }
-//    }
-
-//    public void getRecordedItem() {
-//        for (String item : recordedItems) {
-//            switch (item) {
-//                case "key":
-//                    item = "key";   //todo handle coloured keys/doors/exit lock etc
-//                case "treasure":
-//                    item = "treasure";
-//                default:
-//                    break;
-//            }
-//        }
-//    }
 
     public void loadFile() {
         try {
