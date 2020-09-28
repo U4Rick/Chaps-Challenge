@@ -23,24 +23,24 @@ public class Record {
         try {
             PrintWriter pw = new PrintWriter("json_data.txt");
 
-            JsonArrayBuilder jArr = Json.createArrayBuilder();
+            JsonArrayBuilder moves = Json.createArrayBuilder();
 
-            for (Maze.Direction action : moves) {
+            for (Maze.Direction action : this.moves) {
                 switch (action) {
                     case RIGHT:
-                        jArr.add(Json.createObjectBuilder()
+                        moves.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
                                 .build());
                     case DOWN:
-                        jArr.add(Json.createObjectBuilder()
+                        moves.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
                                 .build());
                     case LEFT:
-                        jArr.add(Json.createObjectBuilder()
+                        moves.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
                                 .build());
                     case UP:
-                        jArr.add(Json.createObjectBuilder()
+                        moves.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
                                 .build());
                     default:
@@ -48,7 +48,7 @@ public class Record {
                 }
             }
 
-            pw.write(jArr.toString());
+            pw.write(moves.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -17,11 +17,7 @@ public class Replay extends GUI{
     private int playbackDelay = 1;
     private JsonObject loadedActions;
     private Maze maze;
-    private File file;
 
-    public Replay(File file) {
-        this.file = file;
-    }
 
     public Replay(Maze maze) {
         this.maze = maze;
