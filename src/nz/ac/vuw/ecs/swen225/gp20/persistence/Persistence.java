@@ -13,6 +13,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
+import javax.json.stream.JsonParsingException;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
@@ -143,7 +144,7 @@ public class Persistence {
       return maze;
     } catch (FileNotFoundException e) {
       // file was not found - maybe display something to user?
-    } catch (ClassCastException | NullPointerException | InputMismatchException e) {
+    } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
       // error in the file
     }
     // if error, return null
@@ -304,6 +305,8 @@ public class Persistence {
       File levelFile = new File(levelName);
 
       Maze baseLevelMaze = loadLevelFromFile(levelFile);
+
+
 
       // change maze as required
     } catch (FileNotFoundException e) {
