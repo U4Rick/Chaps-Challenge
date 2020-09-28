@@ -1,7 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
 // FIXME: remove un-allowed imports
-import nz.ac.vuw.ecs.swen225.gp20.maze.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
@@ -13,7 +12,7 @@ public class BoardRenderer extends JPanel {
     private final int DISPLAY_DIMENSION = 9; // rows/columns of viewer - should be odd so Chap can be centred
     private final int BOARD_HEIGHT; // rows
     private final int BOARD_WIDTH; // columns
-    private final int TILE_SIZE = 450/DISPLAY_DIMENSION; // FIXME: constant is temp
+    private final int TILE_SIZE = 500/DISPLAY_DIMENSION; // FIXME: constant is temp
     private final Maze maze;
 
     public BoardRenderer(Maze importMaze){
@@ -44,28 +43,25 @@ public class BoardRenderer extends JPanel {
             startCol = BOARD_WIDTH - DISPLAY_DIMENSION;
         }
 
-        // TODO: add animation offset variable for smoother animation
-        int rowOffset = startRow * TILE_SIZE;
-        int colOffset = startCol * TILE_SIZE;
+        // TODO: use for animation?
+//        int rowOffset = startRow * TILE_SIZE;
+//        int colOffset = startCol * TILE_SIZE;
 
         for(int row = startRow; row < startRow + DISPLAY_DIMENSION; row++){
             for(int col = startCol; col < startCol + DISPLAY_DIMENSION; col++){
-                Tile tile = board[row][col];
+                Tile tile = board[col][row];
                 Image tileIcon = tile.getIcon();
-                g.drawImage(tileIcon, col * TILE_SIZE - colOffset, row * TILE_SIZE - rowOffset, TILE_SIZE, TILE_SIZE, null);
+//                g.drawImage(tileIcon, col * TILE_SIZE - colOffset, row * TILE_SIZE - rowOffset, TILE_SIZE, TILE_SIZE, null);
+                g.drawImage(tileIcon, (col - startCol) * TILE_SIZE, (row - startRow) * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
 
                 if(tile.isAccessible()){ // Tile can have something on it
                     AccessibleTile accessibleTile = (AccessibleTile) tile;
 
-                    // FIXME: remove when maze is working
-                    if(row == startRow + 4 && col == startCol + 4){
-                        accessibleTile.setEntityHere(new Chap(new Point(col, row)));
-                    }
-
                     if(accessibleTile.getEntityHere() != null){
                         // TODO: animate Chap
                         Image entityIcon = accessibleTile.getEntityHere().getIcon();
-                        g.drawImage(entityIcon, col * TILE_SIZE - colOffset, row * TILE_SIZE - rowOffset, TILE_SIZE, TILE_SIZE, null);
+//                        g.drawImage(entityIcon, col * TILE_SIZE - colOffset, row * TILE_SIZE - rowOffset, TILE_SIZE, TILE_SIZE, null);
+                        g.drawImage(entityIcon, (col - startCol) * TILE_SIZE, (row - startRow) * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
                     }
                 }
             } // end col for loop
