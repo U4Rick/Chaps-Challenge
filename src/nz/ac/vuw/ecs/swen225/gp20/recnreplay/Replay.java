@@ -51,7 +51,7 @@ public class Replay extends GUI{
 
     public void loadFile() {
         try {
-            InputStream fis = new FileInputStream("json_data.json");
+            InputStream fis = new FileInputStream("json_data.txt");
 
             JsonReader reader = Json.createReader(fis);     //reads in json
             loadedActions = reader.readObject();
@@ -95,7 +95,7 @@ public class Replay extends GUI{
     }
 
     @Override
-    public Maze getMaze() {
+    public Maze getMaze() {     //todo implement
         return null;
     }
 }

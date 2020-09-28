@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnreplay;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import javax.json.*;
@@ -11,9 +12,7 @@ import java.util.List;
 
 
 public class Record {
-    private static List<String> moves = new ArrayList<>();
-    private static List<Item> items = new ArrayList<>();
-    private static List<String> actions = new ArrayList<>();
+    private static List<Maze.Direction> moves;
 
     private JsonObjectBuilder objectBuilder;
     private JsonObject obj;
@@ -26,23 +25,23 @@ public class Record {
             JsonArrayBuilder jArr = Json.createArrayBuilder();
 //            JsonObject jsonMove = null;
 
-            for (String action : actions) {     //should be jsonArray with objects
+            for (Maze.Direction action : moves) {     //should be jsonArray with objects
                 switch (action) {
-                    case "right":
+                    case RIGHT:
                         jArr.add(Json.createObjectBuilder()
-                                .add("move", action)
+                                .add("move", action.toString())
                                 .build()); //todo should be "move", the direction
-                    case "down":
+                    case DOWN:
                         jArr.add(Json.createObjectBuilder()
-                                .add("move", action)
+                                .add("move", action.toString())
                                 .build()); //todo should be "move", the direction
-                    case "left":
+                    case LEFT:
                         jArr.add(Json.createObjectBuilder()
-                                .add("move", action)
+                                .add("move", action.toString())
                                 .build()); //todo should be "move", the direction
-                    case "up":
+                    case UP:
                         jArr.add(Json.createObjectBuilder()
-                                .add("move", action)
+                                .add("move", action.toString())
                                 .build()); //todo should be "move", the direction
                     default:
                         break;
@@ -57,21 +56,21 @@ public class Record {
 //                JsonObject jsonItem = (JsonObject) objectBuilder.add("item", item.toString());
 //            }
 
-            JsonObject jsonObject = objectBuilder.build();
+//            JsonObject jsonObject = objectBuilder.build();
            pw.write(jArr.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-
-    public static List<String> getMoves() {
+    public static List<Maze.Direction> getMoves() {
         return moves;
     }
 
-    public static void setMoves(List<String> moves) {
+    public static void setMoves(List<Maze.Direction> moves) {
         Record.moves = moves;
     }
+
 
 //    public static List<Item> getItems() {
 //        return items;
