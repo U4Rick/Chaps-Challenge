@@ -1,7 +1,7 @@
 {
     "name": "level1",
-    "width": "20",
-    "height": "18",
+    "width": 20,
+    "height": 18,
     "walls": [
         {
             "x": 6,

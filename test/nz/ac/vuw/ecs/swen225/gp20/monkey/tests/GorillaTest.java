@@ -1,8 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.tests;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
-import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Baboon;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Gorilla;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.MonkeyAI;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,14 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 
-class BaboonTest {
-
-    static MonkeyAI baboon;
+public class GorillaTest {
+    static MonkeyAI gorilla;
     static Main main;
 
     @BeforeAll
     static void beforeAll() {
-        baboon = new Baboon();
+        gorilla = new Gorilla();
     }
 
     @BeforeEach
@@ -31,7 +30,7 @@ class BaboonTest {
     void exampleTest() {
         //TODO check game still valid somehow
         for (int i = 0; i < 100_000; i++) {
-            Direction direction = baboon.selectMove(main.getMaze());
+            Maze.Direction direction = gorilla.selectMove(main.getMaze());
             main.movePlayer(direction);
         }
     }
@@ -45,8 +44,9 @@ class BaboonTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Direction direction = baboon.selectMove(main.getMaze());
+            Maze.Direction direction = gorilla.selectMove(main.getMaze());
             main.movePlayer(direction);
         }
     }
 }
+

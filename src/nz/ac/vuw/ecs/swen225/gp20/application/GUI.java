@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,6 +29,10 @@ public abstract class GUI {
 
 	public final Font controllerElementsFont = new Font("Calibri", Font.BOLD, 16);
 
+	private BoardRenderer game;
+	private Timer gameTimer;
+
+
 	public GUI() {
 		aMethod();
 	}
@@ -40,139 +45,71 @@ public abstract class GUI {
 
 		JMenu gameMenu = new JMenu("Game");
 		setMenuDetails(gameMenu);
-		JMenu gameStart = new JMenu("Start");
-		setMenuDetails(gameStart);
-		gameStart.addMenuListener(new MenuListener() {
+		JMenuItem gameStartItem = new JMenuItem("Start");
+		setMenuDetails(gameStartItem);
+		gameStartItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
+			public void actionPerformed(ActionEvent e) {
+				// start timer
 			}
-
+		});
+		JMenuItem gameLoadItem = new JMenuItem("Load");
+		setMenuDetails(gameLoadItem);
+		gameLoadItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 			}
 		});
-		JMenu gameLoad = new JMenu("Load");
-		setMenuDetails(gameLoad);
-		gameLoad.addMenuListener(new MenuListener() {
+		JMenuItem gameSaveItem = new JMenuItem("Save");
+		setMenuDetails(gameSaveItem);
+		gameSaveItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-
-			}
-		});
-		JMenu gameSave = new JMenu("Save");
-		setMenuDetails(gameSave);
-		gameSave.addMenuListener(new MenuListener() {
-			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 			}
 		});
 
-		gameMenu.add(gameStart);
-		gameMenu.add(gameLoad);
-		gameMenu.add(gameSave);
+		gameMenu.add(gameStartItem);
+		gameMenu.add(gameLoadItem);
+		gameMenu.add(gameSaveItem);
 
 		JMenu pauseMenu = new JMenu("Pause");
 		setMenuDetails(pauseMenu);
-		pauseMenu.addMenuListener(new MenuListener() {
+		pauseMenu.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-
+			public void actionPerformed(ActionEvent e) {
+				//pause timer
 			}
 		});
-		JMenu quitMenu = new JMenu("Quit");
+		JMenuItem quitMenu = new JMenuItem("Quit");
 		setMenuDetails(quitMenu);
-		quitMenu.addMenuListener(new MenuListener() {
-			@Override
-			public void menuSelected(MenuEvent e) {
-				System.exit(0);
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) { }
-
-			@Override
-			public void menuCanceled(MenuEvent e) { }
-		});
+		quitMenu.addActionListener(e -> System.exit(0));
 
 		JMenu replayMenu = new JMenu("Replay");
 		setMenuDetails(replayMenu);
-		JMenu replayStart = new JMenu("Start");
-		setMenuDetails(replayStart);
-		replayStart.addMenuListener(new MenuListener() {
+		JMenuItem replayStartItem = new JMenuItem("Start");
+		setMenuDetails(replayStartItem);
+		replayStartItem.setEnabled(false);
+		replayStartItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 			}
 		});
-		JMenu replayLoad = new JMenu("Load");
-		setMenuDetails(replayLoad);
-		replayLoad.addMenuListener(new MenuListener() {
+		JMenuItem replayLoadItem = new JMenuItem("Load");
+		setMenuDetails(replayLoadItem);
+		replayLoadItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
+				replayLoad();
 
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-
+				replayStartItem.setEnabled(true);
 			}
 		});
 
-		replayMenu.add(replayStart);
-		replayMenu.add(replayLoad);
+		replayMenu.add(replayStartItem);
+		replayMenu.add(replayLoadItem);
 
 		JMenu helpMenu = new JMenu("Help");
 		setMenuDetails(helpMenu);
@@ -210,22 +147,23 @@ public abstract class GUI {
 		menuConstraints.anchor = GridBagConstraints.LINE_END;
 		menu.add(helpMenu, menuConstraints);
 
-
-		JPanel game = new JPanel(); // = new Renderer();
+		game = new BoardRenderer(getMaze());
 		game.setPreferredSize(gamePanelDim);
 		game.setBackground(Color.BLACK);
-		game.addKeyListener(new KeyListener() {
+		window.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (e.getKeyCode() == (KeyEvent.VK_LEFT) || e.getKeyCode() == (KeyEvent.VK_RIGHT) || e.getKeyCode() == (KeyEvent.VK_UP) || e.getKeyCode() == (KeyEvent.VK_DOWN)) {
-					Direction direction = getDirectionFromKey(e);
-					movePlayer(direction);
-				}
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				System.out.println(e.getKeyCode());
+				if (e.getKeyCode() == (KeyEvent.VK_LEFT) || e.getKeyCode() == (KeyEvent.VK_RIGHT) || e.getKeyCode() == (KeyEvent.VK_UP) || e.getKeyCode() == (KeyEvent.VK_DOWN)) {
+					Direction direction = getDirectionFromKey(e);
+					movePlayer(direction);
+					System.out.println("success");
 
+				}
 			}
 
 			@Override
@@ -241,8 +179,16 @@ public abstract class GUI {
 		JLabel timeLabel = new JLabel("Time");
 		setControllerElementDetails(timeLabel);
 
+		ActionListener timerListener = e -> {
+			//new JDialog
+			};
+
+
+		gameTimer = new Timer(1000, timerListener);
+
 		JLabel timeCounter = new JLabel("1200");
 		setControllerElementDetails(timeCounter);
+		//timeCounter.setText();
 
 		JLabel levelLabel = new JLabel("Level");
 		setControllerElementDetails(levelLabel);
@@ -305,6 +251,11 @@ public abstract class GUI {
 		window.setVisible(true);
 	}
 
+	private void replayLoad() {
+		//open filechooser
+		//replace replay file in main with loading in
+	}
+
 	public Direction getDirectionFromKey(KeyEvent e) {
 		Direction direction = null;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -324,7 +275,10 @@ public abstract class GUI {
 
 	public void movePlayer(Direction direction) {
 		getMaze().moveChap(direction);
+		game.revalidate();
+		game.repaint();
 	}
+
 
 	public abstract Maze getMaze();
 
@@ -335,11 +289,12 @@ public abstract class GUI {
 		label.setForeground(textColorNormal);
 	}
 
-	private void setMenuDetails (JMenu menu) {
+	private void setMenuDetails (JComponent menu) {
 		menu.setForeground(textColorNormal);
 		menu.setBackground(barColorNormal);
 		menu.setFont(controllerElementsFont);
 		menu.setOpaque(true);
 	}
+
 
 }

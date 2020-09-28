@@ -10,4 +10,6 @@ public class ExitTile extends AccessibleTile {
   public boolean isItem() {
     return false;
   }
+
+  public String toString() { return "exit_tile"; }
 }
