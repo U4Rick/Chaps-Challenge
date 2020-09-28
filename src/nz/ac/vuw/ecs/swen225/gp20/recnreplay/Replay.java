@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Replay extends GUI{
+public class Replay{
 
     private List<String> recordedMoves;
     private int playbackDelay = 1;
@@ -72,33 +72,4 @@ public class Replay extends GUI{
         this.playbackDelay = playbackDelay;
     }
 
-    @Override
-    protected void createMaze() {
-
-    }
-
-    @Override
-    protected Record getRecord() {
-        return null;
-    }
-
-    @Override
-    protected void setRecord(Record record) {
-
-    }
-
-    @Override
-    protected Replay getReplay() {
-        return null;
-    }
-
-    @Override
-    protected void setReplay(Replay replay) {
-
-    }
-
-    @Override
-    public Maze getMaze() {
-        return this.maze;
-    }
 }
