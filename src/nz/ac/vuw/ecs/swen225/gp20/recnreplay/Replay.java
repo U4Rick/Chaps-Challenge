@@ -68,16 +68,16 @@ public class Replay extends GUI{
             JsonObject move = jsonMove.asJsonObject();
             String direction = move.getString("move");
             switch (direction) {
-                case "down":
+                case "DOWN":
                     super.movePlayer(Maze.Direction.DOWN);
                     break;
-                case "right":
+                case "RIGHT":
                     super.movePlayer(Maze.Direction.RIGHT);
                     break;
-                case "up":
+                case "UP":
                     super.movePlayer(Maze.Direction.UP);
                     break;
-                case "left":
+                case "LEFT":
                     super.movePlayer(Maze.Direction.LEFT);
                     break;
             }
