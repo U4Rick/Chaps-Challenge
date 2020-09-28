@@ -21,9 +21,7 @@ public class GorillaTest {
 
     @BeforeEach
     void setUp() {
-        //Set up new maze
         main = new Main();
-        main.createMaze();
     }
 
     @Test

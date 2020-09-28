@@ -6,6 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Set;
 
 import static nz.ac.vuw.ecs.swen225.gp20.maze.Maze.*;
 
@@ -29,7 +30,7 @@ public abstract class MonkeyAI {
     static final int VARIANCE = 20;
 
     //Need to store which tiles we attempted to visit and should not revisit to not get stuck in a loop.
-    ArrayList<Tile> blacklistedTiles = new ArrayList<>();
+    final ArrayList<Tile> blacklistedTiles = new ArrayList<>();
 
     /**
      * Instantiates a new Monkey ai.
@@ -160,7 +161,15 @@ public abstract class MonkeyAI {
      * @return True if Chap has matching key, otherwise False.
      */
     private boolean checkMatchingKey(Chap chap, DoorTile doorTile) {
-        //TODO implement
+        Set<Item> inventory = chap.getInventory();
+        for (Item key : inventory) {
+            Key key1 = ((Key) key); //FIXME remove cast when correct return implemented
+            Colours doorColour = doorTile.getDoorColour();
+            Colours keyColour = key1.getKeyColour();
+            if (keyColour.equals(doorColour)) {
+                return true;
+            }
+        }
         return false;
     }
 }
