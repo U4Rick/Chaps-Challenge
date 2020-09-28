@@ -4,13 +4,11 @@ Maze:
 
 Monkey:
 test/nz/ac/vuw/ecs/swen225/gp20/monkey/tests/BaboonTest.java    26
-                                                                27
-                                                                35
-                                                                49
+                                                                33
+                                                                47
 
-test/nz/ac/vuw/ecs/swen225/gp20/monkey/models/MonkeyAI.java     79
-                                                                98
-
+test/nz/ac/vuw/ecs/swen225/gp20/monkey/models/MonkeyAI.java     80
+                                                                99
 
 
 Persistence:
