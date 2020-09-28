@@ -185,7 +185,7 @@ public class Persistence {
       case RED:
         return "red";
       case YELLOW:
-        return "key";
+        return "yellow";
       case GREEN:
         return "green";
       case BLUE:
