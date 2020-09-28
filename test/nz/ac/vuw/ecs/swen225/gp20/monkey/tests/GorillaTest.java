@@ -36,9 +36,9 @@ public class GorillaTest {
     @Test
     void exampleTimeDelayTest() {
         //TODO check game still valid somehow
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
