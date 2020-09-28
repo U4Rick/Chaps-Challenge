@@ -16,11 +16,11 @@ public class Replay extends GUI{
     private List<String> recordedMoves;
     private int playbackDelay = 1;
     private JsonObject loadedActions;
-    private Maze maze;
+    private File file;
 
 
-    public Replay(Maze maze) {
-        this.maze = maze;
+    public Replay(File file) {
+        this.file = file;
     }
 
     public void loadFile(File file) {
@@ -66,6 +66,11 @@ public class Replay extends GUI{
 
     public void setPlaybackDelay(int playbackDelay) {
         this.playbackDelay = playbackDelay;
+    }
+
+    @Override
+    protected void createMaze() {
+
     }
 
     @Override
