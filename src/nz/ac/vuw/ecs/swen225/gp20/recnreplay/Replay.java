@@ -11,8 +11,6 @@ import java.util.List;
 
 public class Replay extends GUI{
 
-
-
     private List<String> recordedMoves;
     private int playbackDelay = 1;
     private JsonObject loadedActions;
@@ -21,7 +19,9 @@ public class Replay extends GUI{
 
 
     public Replay(File file) {
-        this.file = file;
+        if (file != null) {
+            this.file = file;
+        }
     }
 
     public void loadFile(File file) {
@@ -36,28 +36,31 @@ public class Replay extends GUI{
         }
     }
 
-    public void processActionsJson(){
+    public List<String> processActionsJson(){
         JsonArray moves = loadedActions.getJsonArray("move");
 
         for (JsonValue jsonMove : moves) {
             JsonObject move = jsonMove.asJsonObject();
             String direction = move.getString("move");
-            switch (direction) {
-                case "DOWN":
-                    super.movePlayer(Maze.Direction.DOWN);
-                    break;
-                case "RIGHT":
-                    super.movePlayer(Maze.Direction.RIGHT);
-                    break;
-                case "UP":
-                    super.movePlayer(Maze.Direction.UP);
-                    break;
-                case "LEFT":
-                    super.movePlayer(Maze.Direction.LEFT);
-                    break;
-            }
+            recordedMoves.add(direction);
+
+//            switch (direction) {
+//                case "DOWN":
+//                    super.movePlayer(Maze.Direction.DOWN);
+//                    break;
+//                case "RIGHT":
+//                    super.movePlayer(Maze.Direction.RIGHT);
+//                    break;
+//                case "UP":
+//                    super.movePlayer(Maze.Direction.UP);
+//                    break;
+//                case "LEFT":
+//                    super.movePlayer(Maze.Direction.LEFT);
+//                    break;
+//            }
 
         }
+        return recordedMoves;
 
     }
 
