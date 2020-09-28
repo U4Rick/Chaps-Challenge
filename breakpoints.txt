@@ -4,9 +4,9 @@ Maze:
 No breakpoints added yet.
 
 Monkey:
-test/nz/ac/vuw/ecs/swen225/gp20/monkey/tests/BaboonTest.java    26
-                                                                33
-                                                                47
+test/nz/ac/vuw/ecs/swen225/gp20/monkey/tests/BaboonTest.java    25
+                                                                32
+                                                                46
 
 test/nz/ac/vuw/ecs/swen225/gp20/monkey/models/MonkeyAI.java     80
                                                                 99
