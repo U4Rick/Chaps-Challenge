@@ -29,6 +29,9 @@ public abstract class GUI {
 
 	public final Font controllerElementsFont = new Font("Calibri", Font.BOLD, 16);
 
+	private BoardRenderer game;
+
+
 	public GUI() {
 		aMethod();
 	}
@@ -41,139 +44,68 @@ public abstract class GUI {
 
 		JMenu gameMenu = new JMenu("Game");
 		setMenuDetails(gameMenu);
-		JMenu gameStart = new JMenu("Start");
-		setMenuDetails(gameStart);
-		gameStart.addMenuListener(new MenuListener() {
+		JMenuItem gameStartItem = new JMenuItem("Start");
+		setMenuDetails(gameStartItem);
+		gameStartItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 			}
 		});
-		JMenu gameLoad = new JMenu("Load");
-		setMenuDetails(gameLoad);
-		gameLoad.addMenuListener(new MenuListener() {
+		JMenuItem gameLoadItem = new JMenuItem("Load");
+		setMenuDetails(gameLoadItem);
+		gameLoadItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 			}
 		});
-		JMenu gameSave = new JMenu("Save");
-		setMenuDetails(gameSave);
-		gameSave.addMenuListener(new MenuListener() {
+		JMenuItem gameSaveItem = new JMenuItem("Save");
+		setMenuDetails(gameSaveItem);
+		gameSaveItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 			}
 		});
 
-		gameMenu.add(gameStart);
-		gameMenu.add(gameLoad);
-		gameMenu.add(gameSave);
+		gameMenu.add(gameStartItem);
+		gameMenu.add(gameLoadItem);
+		gameMenu.add(gameSaveItem);
 
 		JMenu pauseMenu = new JMenu("Pause");
 		setMenuDetails(pauseMenu);
-		pauseMenu.addMenuListener(new MenuListener() {
+		pauseMenu.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 			}
 		});
-		JMenu quitMenu = new JMenu("Quit");
+		JMenuItem quitMenu = new JMenuItem("Quit");
 		setMenuDetails(quitMenu);
-		quitMenu.addMenuListener(new MenuListener() {
-			@Override
-			public void menuSelected(MenuEvent e) {
-				System.exit(0);
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) { }
-
-			@Override
-			public void menuCanceled(MenuEvent e) { }
-		});
+		quitMenu.addActionListener(e -> System.exit(0));
 
 		JMenu replayMenu = new JMenu("Replay");
 		setMenuDetails(replayMenu);
-		JMenu replayStart = new JMenu("Start");
-		setMenuDetails(replayStart);
-		replayStart.addMenuListener(new MenuListener() {
+		JMenuItem replayStartItem = new JMenuItem("Start");
+		setMenuDetails(replayStartItem);
+		replayStartItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 			}
 		});
-		JMenu replayLoad = new JMenu("Load");
-		setMenuDetails(replayLoad);
-		replayLoad.addMenuListener(new MenuListener() {
+		JMenuItem replayLoadItem = new JMenuItem("Load");
+		setMenuDetails(replayLoadItem);
+		replayLoadItem.addActionListener(new ActionListener() {
 			@Override
-			public void menuSelected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-
-			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 			}
 		});
 
-		replayMenu.add(replayStart);
-		replayMenu.add(replayLoad);
+		replayMenu.add(replayStartItem);
+		replayMenu.add(replayLoadItem);
 
 		JMenu helpMenu = new JMenu("Help");
 		setMenuDetails(helpMenu);
@@ -211,22 +143,21 @@ public abstract class GUI {
 		menuConstraints.anchor = GridBagConstraints.LINE_END;
 		menu.add(helpMenu, menuConstraints);
 
-
-		JPanel game = new BoardRenderer(getMaze());
+		game = new BoardRenderer(getMaze());
 		game.setPreferredSize(gamePanelDim);
 		game.setBackground(Color.BLACK);
 		game.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (e.getKeyCode() == (KeyEvent.VK_LEFT) || e.getKeyCode() == (KeyEvent.VK_RIGHT) || e.getKeyCode() == (KeyEvent.VK_UP) || e.getKeyCode() == (KeyEvent.VK_DOWN)) {
-					Direction direction = getDirectionFromKey(e);
-					movePlayer(direction);
-				}
+
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-
+				if (e.getKeyCode() == (KeyEvent.VK_LEFT) || e.getKeyCode() == (KeyEvent.VK_RIGHT) || e.getKeyCode() == (KeyEvent.VK_UP) || e.getKeyCode() == (KeyEvent.VK_DOWN)) {
+					Direction direction = getDirectionFromKey(e);
+					movePlayer(direction);
+				}
 			}
 
 			@Override
@@ -325,6 +256,8 @@ public abstract class GUI {
 
 	public void movePlayer(Direction direction) {
 		getMaze().moveChap(direction);
+		game.revalidate();
+		game.repaint();
 	}
 
 	public abstract Maze getMaze();
@@ -336,7 +269,7 @@ public abstract class GUI {
 		label.setForeground(textColorNormal);
 	}
 
-	private void setMenuDetails (JMenu menu) {
+	private void setMenuDetails (JComponent menu) {
 		menu.setForeground(textColorNormal);
 		menu.setBackground(barColorNormal);
 		menu.setFont(controllerElementsFont);
