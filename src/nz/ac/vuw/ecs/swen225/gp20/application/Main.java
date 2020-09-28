@@ -11,7 +11,6 @@ public class Main extends GUI {
     Replay replay;
 
     private void run() {
-        //createMaze();
         while (true) {
 
         }
@@ -26,9 +25,6 @@ public class Main extends GUI {
 
     @Override
     public Maze getMaze() {
-        if(this.maze == null){
-            createMaze();
-        }
         return maze;
     }
 
