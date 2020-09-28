@@ -12,11 +12,16 @@ import java.util.List;
 
 
 public class Record {
-    private static List<Maze.Direction> moves;
 
-    private JsonObjectBuilder objectBuilder;
-    private JsonObject obj;
+    public List<Maze.Direction> moves;
+//
+//    private JsonObjectBuilder objectBuilder;
+//    private JsonObject obj;
 
+
+    public Record() {
+        this.moves = getMoves();
+    }
 
     public void writeToFile() throws IOException {
         try {
@@ -25,7 +30,7 @@ public class Record {
             JsonArrayBuilder jArr = Json.createArrayBuilder();
 //            JsonObject jsonMove = null;
 
-            for (Maze.Direction action : moves) {     //should be jsonArray with objects
+            for (Maze.Direction action : moves) {
                 switch (action) {
                     case RIGHT:
                         jArr.add(Json.createObjectBuilder()
@@ -63,14 +68,17 @@ public class Record {
         }
     }
 
-    public static List<Maze.Direction> getMoves() {
+    public List<Maze.Direction> getMoves() {
         return moves;
     }
 
-    public static void setMoves(List<Maze.Direction> moves) {
-        Record.moves = moves;
+    public void setMoves(List<Maze.Direction> moves) {
+        this.moves = moves;
     }
 
+    public void addMove(Maze.Direction dir) {
+        this.moves.add(dir);
+    }
 
 //    public static List<Item> getItems() {
 //        return items;
