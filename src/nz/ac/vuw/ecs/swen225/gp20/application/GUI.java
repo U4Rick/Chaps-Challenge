@@ -215,7 +215,6 @@ public abstract class GUI {
 		constraints.insets = new Insets(5, 50, 50, 50);
 		controller.add(treasuresCounter, constraints);
 
-
 		gameStartItem.addActionListener(e -> {
 			timeLeft = TOTAL_GAME_TIME;
 			gameTimer.start();
@@ -250,7 +249,7 @@ public abstract class GUI {
 		quitMenuItem.addActionListener(e -> System.exit(0));
 
 		replayStartItem.addActionListener(e -> {
-
+			runReplay();
 		});
 
 		replayLoadItem.addActionListener(e -> {
@@ -276,7 +275,9 @@ public abstract class GUI {
 		JFileChooser chooser = new JFileChooser();
 		chooser.showOpenDialog(window);
 		File toLoadFrom = chooser.getSelectedFile();
-		setReplay(new Replay(toLoadFrom));
+		Replay replay = new Replay(toLoadFrom);
+		//System.out.println(replay);
+		setReplay(replay);
 	}
 
 	protected abstract Record getRecord();
@@ -314,6 +315,32 @@ public abstract class GUI {
 		game.revalidate();
 		game.repaint();
 	}
+
+	public void runReplay() {
+		Replay replay = getReplay();
+		if (replay != null) {
+			for (String move : getReplay().processActionsJson()) {
+				switch (move) {
+					case "DOWN":
+						movePlayer(Maze.Direction.DOWN);
+						break;
+					case "RIGHT":
+						movePlayer(Maze.Direction.RIGHT);
+						break;
+					case "UP":
+						movePlayer(Maze.Direction.UP);
+						break;
+					case "LEFT":
+						movePlayer(Maze.Direction.LEFT);
+						break;
+				}
+			}
+		}
+		else {
+			//JDialog saying no active replay
+		}
+	}
+
 
 
 	public abstract Maze getMaze();
