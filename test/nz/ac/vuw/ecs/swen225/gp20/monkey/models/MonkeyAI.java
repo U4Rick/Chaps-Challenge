@@ -161,11 +161,10 @@ public abstract class MonkeyAI {
      * @return True if Chap has matching key, otherwise False.
      */
     private boolean checkMatchingKey(Chap chap, DoorTile doorTile) {
-        Set<Item> inventory = chap.getInventory();
-        for (Item key : inventory) {
-            Key key1 = ((Key) key); //FIXME remove cast when correct return implemented
+        Set<Key> inventory = chap.getInventory();
+        for (Key key : inventory) {
             Colours doorColour = doorTile.getDoorColour();
-            Colours keyColour = key1.getKeyColour();
+            Colours keyColour = key.getKeyColour();
             if (keyColour.equals(doorColour)) {
                 return true;
             }

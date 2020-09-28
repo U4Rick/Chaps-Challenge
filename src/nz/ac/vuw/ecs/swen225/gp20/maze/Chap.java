@@ -62,7 +62,7 @@ public class Chap extends Entity {
     return false;
   }
 
-  public Set<Item> getInventory() { return Collections.unmodifiableSet(inventory);  }
+  public Set<Key> getInventory() { return Collections.unmodifiableSet(inventory);  }
 
   public String toString() { return "chap"; }
 }
