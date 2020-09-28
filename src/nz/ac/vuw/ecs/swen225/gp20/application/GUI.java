@@ -5,14 +5,11 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 public abstract class GUI {
 
@@ -38,10 +35,10 @@ public abstract class GUI {
 
 
 	public GUI() {
-		aMethod();
+		buildWindow();
 	}
 
-	public void aMethod() {
+	public void buildWindow() {
 
 		JMenuBar menu = new JMenuBar();
 		menu.setBackground(barColorNormal);
@@ -121,7 +118,6 @@ public abstract class GUI {
 
 		game = new BoardRenderer(getMaze());
 		game.setPreferredSize(gamePanelDim);
-		game.setBackground(Color.BLACK);
 		window.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) { }
@@ -273,7 +269,7 @@ public abstract class GUI {
 	}
 
 	public Direction getDirectionFromKey(KeyEvent e) {
-		Direction direction = null;
+		Direction direction;
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
 				direction = Direction.LEFT;
@@ -288,7 +284,7 @@ public abstract class GUI {
 				direction = Direction.DOWN;
 				break;
 			default:
-				return null;
+				direction = null;
 		}
 		return direction;
 	}
