@@ -60,12 +60,12 @@ public class Persistence {
       int width = level.getInt("width");
       int height = level.getInt("height");
 
-      Tile[][] levelArray = new Tile[width][height];
+      Tile[][] levelArray = new Tile[height][width];
 
       // fill array with accessibles first
-      for (int x = 0; x < levelArray.length; x++) {
-        for (int y = 0; y < levelArray[x].length; y++) {
-          levelArray[x][y] = new FreeTile();
+      for (int y = 0; y < levelArray.length; y++) {
+        for (int x = 0; x < levelArray[y].length; x++) {
+          levelArray[y][x] = new FreeTile();
         }
       }
 
@@ -78,7 +78,7 @@ public class Persistence {
         int wallX = wall.getInt("x");
         int wallY = wall.getInt("y");
 
-        levelArray[wallX][wallY] = new WallTile();
+        levelArray[wallY][wallX] = new WallTile();
       }
 
       // load locked doors
@@ -92,7 +92,7 @@ public class Persistence {
 
         Colours colour = getColourFromString(door.getString("colour"));
 
-        levelArray[doorX][doorY] = new DoorTile(colour);
+        levelArray[doorY][doorX] = new DoorTile(colour);
       }
 
       // load keys
@@ -106,7 +106,7 @@ public class Persistence {
 
         Colours colour = getColourFromString(key.getString("colour"));
 
-        levelArray[keyX][keyY] = new KeyTile(colour);
+        levelArray[keyY][keyX] = new KeyTile(colour);
       }
 
       // load treasures
@@ -118,13 +118,13 @@ public class Persistence {
         int treasureX = treasure.getInt("x");
         int treasureY = treasure.getInt("y");
 
-        levelArray[treasureX][treasureY] = new TreasureTile();
+        levelArray[treasureY][treasureX] = new TreasureTile();
       }
 
       // load exit tile
       JsonObject exit = level.getJsonObject("exit");
       Point exitPos = new Point(exit.getInt("x"), exit.getInt("y"));
-      levelArray[exitPos.x][exitPos.y] = new ExitTile();
+      levelArray[exitPos.y][exitPos.x] = new ExitTile();
 
       // load starting position
       JsonObject startPos = level.getJsonObject("starting_position");
@@ -132,11 +132,11 @@ public class Persistence {
 
       // load exit lock
       JsonObject exitLock = level.getJsonObject("exit_lock");
-      levelArray[exitLock.getInt("x")][exitLock.getInt("y")] = new ExitLockTile();
+      levelArray[exitLock.getInt("y")][exitLock.getInt("x")] = new ExitLockTile();
 
       // load info tile
       JsonObject infoTile = level.getJsonObject("info");
-      levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile("");
+      levelArray[infoTile.getInt("y")][infoTile.getInt("x")] = new InfoTile("");
 
       // make maze
       Maze maze = new Maze(chapPos, exitPos, treasureTiles.size(), levelArray);
