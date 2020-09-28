@@ -30,6 +30,7 @@ public abstract class GUI {
 	public final Font controllerElementsFont = new Font("Calibri", Font.BOLD, 16);
 
 	private BoardRenderer game;
+	private Timer gameTimer;
 
 
 	public GUI() {
@@ -49,7 +50,7 @@ public abstract class GUI {
 		gameStartItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				// start timer
 			}
 		});
 		JMenuItem gameLoadItem = new JMenuItem("Load");
@@ -78,7 +79,7 @@ public abstract class GUI {
 		pauseMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				//pause timer
 			}
 		});
 		JMenuItem quitMenu = new JMenuItem("Quit");
@@ -89,6 +90,7 @@ public abstract class GUI {
 		setMenuDetails(replayMenu);
 		JMenuItem replayStartItem = new JMenuItem("Start");
 		setMenuDetails(replayStartItem);
+		replayStartItem.setEnabled(false);
 		replayStartItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -100,7 +102,9 @@ public abstract class GUI {
 		replayLoadItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				replayLoad();
 
+				replayStartItem.setEnabled(true);
 			}
 		});
 
@@ -146,17 +150,19 @@ public abstract class GUI {
 		game = new BoardRenderer(getMaze());
 		game.setPreferredSize(gamePanelDim);
 		game.setBackground(Color.BLACK);
-		game.addKeyListener(new KeyListener() {
+		window.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				System.out.println(e.getKeyCode());
 				if (e.getKeyCode() == (KeyEvent.VK_LEFT) || e.getKeyCode() == (KeyEvent.VK_RIGHT) || e.getKeyCode() == (KeyEvent.VK_UP) || e.getKeyCode() == (KeyEvent.VK_DOWN)) {
 					Direction direction = getDirectionFromKey(e);
 					movePlayer(direction);
+					System.out.println("success");
+
 				}
 			}
 
@@ -173,8 +179,16 @@ public abstract class GUI {
 		JLabel timeLabel = new JLabel("Time");
 		setControllerElementDetails(timeLabel);
 
+		ActionListener timerListener = e -> {
+			//new JDialog
+			};
+
+
+		gameTimer = new Timer(1000, timerListener);
+
 		JLabel timeCounter = new JLabel("1200");
 		setControllerElementDetails(timeCounter);
+		//timeCounter.setText();
 
 		JLabel levelLabel = new JLabel("Level");
 		setControllerElementDetails(levelLabel);
@@ -237,6 +251,11 @@ public abstract class GUI {
 		window.setVisible(true);
 	}
 
+	private void replayLoad() {
+		//open filechooser
+		//replace replay file in main with loading in
+	}
+
 	public Direction getDirectionFromKey(KeyEvent e) {
 		Direction direction = null;
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -260,6 +279,7 @@ public abstract class GUI {
 		game.repaint();
 	}
 
+
 	public abstract Maze getMaze();
 
 	private void setControllerElementDetails(JLabel label) {
@@ -275,5 +295,6 @@ public abstract class GUI {
 		menu.setFont(controllerElementsFont);
 		menu.setOpaque(true);
 	}
+
 
 }
