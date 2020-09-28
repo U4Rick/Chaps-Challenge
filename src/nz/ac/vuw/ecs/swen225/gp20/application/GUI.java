@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
 
@@ -34,10 +35,12 @@ public abstract class GUI {
 	public static final int TOTAL_GAME_TIME = 60;
 	public int timeLeft;
 	public boolean pause = false;
+	public boolean canMove;
 
 
 	public GUI() {
 		createMaze();
+		canMove = false;
 		buildWindow();
 	}
 
@@ -128,9 +131,11 @@ public abstract class GUI {
 			public void keyTyped(KeyEvent e) { }
 			@Override
 			public void keyPressed(KeyEvent e) {
-				Direction direction = getDirectionFromKey(e);
-				if (direction != null) {
-					movePlayer(direction);
+				if (canMove) {
+					Direction direction = getDirectionFromKey(e);
+					if (direction != null) {
+						movePlayer(direction);
+					}
 				}
 			}
 			@Override
@@ -148,11 +153,12 @@ public abstract class GUI {
 		setControllerElementDetails(timeCounter);
 
 		ActionListener timerListener = e -> {
-			if (timeLeft > 1) {
+			if (timeLeft >= 1) {
 				timeLeft--;
 				timeCounter.setText(String.valueOf(timeLeft));
 
 			} else {
+				canMove = false;
 				//stop game
 				//JDialog game over
 			}
@@ -213,6 +219,8 @@ public abstract class GUI {
 		gameStartItem.addActionListener(e -> {
 			timeLeft = TOTAL_GAME_TIME;
 			gameTimer.start();
+			canMove = true;
+			setRecord(new Record());
 			pauseMenuItem.setEnabled(true);
 			timeCounter.setText(String.valueOf(timeLeft));
 
@@ -268,9 +276,16 @@ public abstract class GUI {
 		JFileChooser chooser = new JFileChooser();
 		chooser.showOpenDialog(window);
 		File toLoadFrom = chooser.getSelectedFile();
-
-
+		setReplay(new Replay(toLoadFrom));
 	}
+
+	protected abstract Record getRecord();
+
+	protected abstract void setRecord(Record record);
+
+	protected abstract Replay getReplay();
+
+	protected abstract void setReplay(Replay replay);
 
 	public Direction getDirectionFromKey(KeyEvent e) {
 		Direction direction;
@@ -295,7 +310,7 @@ public abstract class GUI {
 
 	public void movePlayer(Direction direction) {
 		getMaze().moveChap(direction);
-
+		getRecord().addMove(direction);
 		game.revalidate();
 		game.repaint();
 	}

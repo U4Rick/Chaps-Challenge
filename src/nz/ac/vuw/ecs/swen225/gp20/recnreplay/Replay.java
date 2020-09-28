@@ -75,6 +75,26 @@ public class Replay extends GUI{
     }
 
     @Override
+    protected Record getRecord() {
+        return null;
+    }
+
+    @Override
+    protected void setRecord(Record record) {
+
+    }
+
+    @Override
+    protected Replay getReplay() {
+        return null;
+    }
+
+    @Override
+    protected void setReplay(Replay replay) {
+
+    }
+
+    @Override
     public Maze getMaze() {
         return this.maze;
     }

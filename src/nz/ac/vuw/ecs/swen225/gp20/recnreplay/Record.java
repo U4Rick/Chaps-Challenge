@@ -16,7 +16,7 @@ public class Record {
     public List<Maze.Direction> moves;
 
     public Record() {
-        this.moves = getMoves();
+        this.moves = new ArrayList<>();
     }
 
     public void writeToFile() throws IOException {
