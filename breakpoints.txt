@@ -13,6 +13,7 @@ test/nz/ac/vuw/ecs/swen225/gp20/monkey/models/MonkeyAI.java     80
 
 
 Persistence:
+src/nz/ac/vuw/ecs/swen225/gp20/persistence/Persistence.java     142
 
 Record and Replay:
 
