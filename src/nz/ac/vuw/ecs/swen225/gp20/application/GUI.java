@@ -238,11 +238,13 @@ public abstract class GUI {
 				gameTimer.start();
 				pause = false;
 				pauseMenuItem.setText("Pause");
+				canMove = true;
 			}
 			else {
 				gameTimer.stop();
 				pause = true;
 				pauseMenuItem.setText("Play");
+				canMove = false;
 			}
 		});
 
@@ -311,7 +313,7 @@ public abstract class GUI {
 
 	public void movePlayer(Direction direction) {
 		getMaze().moveChap(direction);
-		getRecord().addMove(direction);
+		if (getRecord() != null) { getRecord().addMove(direction); } // for tests
 		game.revalidate();
 		game.repaint();
 	}
