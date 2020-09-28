@@ -21,7 +21,7 @@ public class Record {
 
     public void writeToFile() throws IOException {
         try {
-            PrintWriter pw = new PrintWriter("json_data.txt");
+            PrintWriter pw = new PrintWriter("json_data.json");
 
             JsonArrayBuilder moves = Json.createArrayBuilder();
 
