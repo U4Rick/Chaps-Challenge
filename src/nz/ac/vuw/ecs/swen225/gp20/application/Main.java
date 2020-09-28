@@ -1,18 +1,17 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-
-import java.io.File;
+import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 
 import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadLevel;
 
 public class Main extends GUI {
 
     Maze maze;
+    Replay replay;
 
     private void run() {
-        createMaze();
+        //createMaze();
         while (true) {
 
         }
