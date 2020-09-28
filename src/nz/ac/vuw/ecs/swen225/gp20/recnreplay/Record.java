@@ -20,22 +20,30 @@ public class Record {
 
 
     public void writeToFile() throws IOException {
-        try (FileWriter fw = new FileWriter("json_data.json");
-             JsonWriter jsonWriter = Json.createWriter(fw)) {
-            JsonObject jsonMove = null;
-            JsonObject jsonItem = null;
+        try {
+            PrintWriter pw = new PrintWriter("json_data.txt");
 
+            JsonArrayBuilder jArr = Json.createArrayBuilder();
+//            JsonObject jsonMove = null;
 
             for (String action : actions) {     //should be jsonArray with objects
                 switch (action) {
                     case "right":
-                        jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
+                        jArr.add(Json.createObjectBuilder()
+                                .add("move", action)
+                                .build()); //todo should be "move", the direction
                     case "down":
-                        jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
+                        jArr.add(Json.createObjectBuilder()
+                                .add("move", action)
+                                .build()); //todo should be "move", the direction
                     case "left":
-                        jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
+                        jArr.add(Json.createObjectBuilder()
+                                .add("move", action)
+                                .build()); //todo should be "move", the direction
                     case "up":
-                        jsonMove = (JsonObject) objectBuilder.add("move", action); //todo should be "move", the direction
+                        jArr.add(Json.createObjectBuilder()
+                                .add("move", action)
+                                .build()); //todo should be "move", the direction
                     default:
                         break;
                 }
@@ -50,7 +58,9 @@ public class Record {
 //            }
 
             JsonObject jsonObject = objectBuilder.build();
-            jsonWriter.writeObject(jsonObject);
+           pw.write(jArr.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -63,13 +73,13 @@ public class Record {
         Record.moves = moves;
     }
 
-    public static List<Item> getItems() {
-        return items;
-    }
-
-    public static void setItems(List<Item> items) {
-        Record.items = items;
-    }
+//    public static List<Item> getItems() {
+//        return items;
+//    }
+//
+//    public static void setItems(List<Item> items) {
+//        Record.items = items;
+//    }
 
 
 }
