@@ -8,6 +8,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import java.awt.Point;
 
+//TODO rewrite Javadoc
+
 /**
  * Represents the map used in the game for each level.
  *
@@ -63,7 +65,7 @@ public class Maze {
    * @param direction Represents the direction to move Chap
    * @throws ArrayIndexOutOfBoundsException if going to new direction will cause Chap to go out of bounds, will throw an ArrayIndexOutOfBoundsException.
    */
-  public void moveChap(Direction direction) throws ArrayIndexOutOfBoundsException {
+  public void moveChap(Direction direction) throws IllegalStateException, IllegalArgumentException {
     Point chapLocation = chap.getEntityPosition();
     //get new position to move Chap to
     Point position;
@@ -80,13 +82,14 @@ public class Maze {
       case RIGHT:
         position = new Point(chapLocation.x+1, chapLocation.y);
         break;
-      default:  //don't move, if not any of the directions
-        position = new Point(chapLocation.x, chapLocation.y);
+      default:  //if not any of the move cases, then is not a valid move
+        throw new IllegalArgumentException();
+        //position = new Point(chapLocation.x, chapLocation.y);
     }
 
     //check that new position is in the bounds of the board, if not throw exception
     if(position.x >= board.length || position.y >= board[0].length) {
-      throw new ArrayIndexOutOfBoundsException();
+      throw new IllegalStateException();
     }
 
 
@@ -110,16 +113,22 @@ public class Maze {
       (accessibleTile).setEntityHere(chap);
       chap.setEntityPosition(new Point(position));  //to keep track of Chap's location
     }
+
+    //TODO see if need to add assert here
+    //assert(board[chapLocation.x][chapLocation.y] instanceof AccessibleTile); //check that chap is not on an invalid tile
   }
 
   /**
    * For dealing with logic of picking up an item
    * @param accessibleTile The tile to pick the item from.
    */
-  public void pickUpItem(AccessibleTile accessibleTile) {
+  public void pickUpItem(AccessibleTile accessibleTile) throws IllegalStateException {
     Entity item = accessibleTile.getEntityHere();
     if(item != null) {
       if(item.canBePickedUp()) {  //check if can be picked up
+        if(!(item instanceof Item)) {
+          throw new IllegalStateException();
+        }
         Item tileItem = (Item)item;
         if(tileItem.canBeAddedToInve()) {  //check if can be added to inventory
           chap.addToInven((Key) item);

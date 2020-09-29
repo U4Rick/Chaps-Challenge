@@ -31,7 +31,10 @@ public class Chap extends Entity {
    * Checks if door can be unlocked by Chap and if so unlocks the door
    * @param door  Door that is unlocked
    */
-  public void unlockDoor(Tile door) {
+  public void unlockDoor(Tile door) throws IllegalStateException {
+    if(!(door instanceof DoorTile)) {
+      throw new IllegalStateException();
+    }
     //check if have correct key for door
     for(Key key : inventory) {
       if(key.getKeyColour() == ((DoorTile)door).getDoorColour()) {
