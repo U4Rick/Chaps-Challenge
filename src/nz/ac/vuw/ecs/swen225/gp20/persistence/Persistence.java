@@ -250,7 +250,7 @@ public class Persistence {
         .build();
 
     JsonArrayBuilder chapInventoryArray = Json.createArrayBuilder();
-    for (Item item : maze.getChap().getInventory()) {
+    for (Item item : maze.getChap().getKeyInventory()) {
 
       JsonObject object = null;
       if (item instanceof Key) {

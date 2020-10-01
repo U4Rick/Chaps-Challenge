@@ -161,7 +161,7 @@ public abstract class MonkeyAI {
      * @return True if Chap has matching key, otherwise False.
      */
     private boolean checkMatchingKey(Chap chap, DoorTile doorTile) {
-        Set<Key> inventory = chap.getInventory();
+        Set<Key> inventory = chap.getKeyInventory();
         for (Key key : inventory) {
             Colours doorColour = doorTile.getDoorColour();
             Colours keyColour = key.getKeyColour();
