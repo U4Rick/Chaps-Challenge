@@ -63,7 +63,9 @@ public class Chap extends Entity {
     keyInventory.add(key);
   }
 
-  public Set<Key> getKeyInventory() { return Collections.unmodifiableSet(keyInventory);  }
+  public Set<Key> getKeyInventory() {
+    return Collections.unmodifiableSet(keyInventory);
+  }
 
   public String toString() { return "chap"; }
 }

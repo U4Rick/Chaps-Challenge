@@ -37,7 +37,6 @@ abstract public class AccessibleTile extends Tile {
    * @return The entity in this tile.
    */
   public Entity getEntityHere() {
-    assert(entityHere != null);
     return entityHere;
   }
 
@@ -46,7 +45,6 @@ abstract public class AccessibleTile extends Tile {
    * @param item
    */
   public void setItemHere(Item item) {
-    //TODO add assertions for setters
     this.itemHere = item;
   }
 
@@ -55,7 +53,6 @@ abstract public class AccessibleTile extends Tile {
    * @return The item in this tile.
    */
   public Item getItemHere() {
-    assert(itemHere != null);
     return itemHere;
   }
 }
