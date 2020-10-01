@@ -16,7 +16,7 @@ import java.util.HashSet;
  * @author Vic
  */
 public class Chap extends Entity {
-  private Set<Key> inventory; //stores the objects that Chap has
+  private Set<Key> keyInventory; //stores the objects that Chap has
 
   /**
    * Constructor for the Chap object.
@@ -24,19 +24,20 @@ public class Chap extends Entity {
    */
   public Chap(Point chapsLocation) {
     super(chapsLocation);
-    inventory = new HashSet<>();
+    keyInventory = new HashSet<>();
   }
 
   /**
    * Checks if door can be unlocked by Chap and if so unlocks the door
    * @param door  Door that is unlocked
    */
-  public void unlockDoor(Tile door) throws IllegalStateException {
-    if(!(door instanceof DoorTile)) {
+  public void unlockDoor(Tile door) {
+    assert(door instanceof DoorTile);
+    /*if(!(door instanceof DoorTile)) {
       throw new IllegalStateException();
-    }
+    }*/
     //check if have correct key for door
-    for(Key key : inventory) {
+    for(Key key : keyInventory) {
       if(key.getKeyColour() == ((DoorTile)door).getDoorColour()) {
         //unlock door
         door = new FreeTile();
@@ -49,6 +50,7 @@ public class Chap extends Entity {
    * @param tile The tile to check if Chap can move into.
    */
   public boolean canMove(Tile tile) {
+    assert(tile != null);
     return tile.isAccessible();
   }
 
@@ -56,16 +58,12 @@ public class Chap extends Entity {
    * Adds a key to the inventory
    * @param key Key to add to inventory.
    */
-  public void addToInven(Key key) {
-    inventory.add(key);
+  public void addToKeyInven(Key key) {
+    assert(key != null);
+    keyInventory.add(key);
   }
 
-  @Override
-  public boolean canBePickedUp() {
-    return false;
-  }
-
-  public Set<Key> getInventory() { return Collections.unmodifiableSet(inventory);  }
+  public Set<Key> getInventory() { return Collections.unmodifiableSet(keyInventory);  }
 
   public String toString() { return "chap"; }
 }

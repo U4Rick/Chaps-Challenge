@@ -13,15 +13,10 @@ public class Key extends Item {
   /**
    * Constructor for the Key object.
    * @param keyColour The colour of the key, is associated with a door in the level
-   * @param keyPos  The x,y coordinates of the key in the level
    */
-  public Key(Maze.Colours keyColour, Point keyPos) {
-    super(keyPos);
+  public Key(Maze.Colours keyColour) {
     this.keyColour = keyColour;
   }
-
-  @Override
-  public boolean canBeAddedToInve() { return true; }
 
   /**
    * Gets the colour of this key

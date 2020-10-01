@@ -1,10 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 //importing libraries needed
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccessibleTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import java.awt.Point;
 
@@ -66,9 +63,10 @@ public class Maze {
    * @throws ArrayIndexOutOfBoundsException if going to new direction will cause Chap to go out of bounds, will throw an ArrayIndexOutOfBoundsException.
    */
   public void moveChap(Direction direction) throws IllegalStateException, IllegalArgumentException {
+    assert(chap != null && board != null);
     Point chapLocation = chap.getEntityPosition();
     //get new position to move Chap to
-    Point position;
+    Point position = null;
     switch(direction) {
       case UP:
         position = new Point(chapLocation.x, chapLocation.y-1);
@@ -84,9 +82,9 @@ public class Maze {
         break;
       default:  //if not any of the move cases, then is not a valid move
         throw new IllegalArgumentException();
-        //position = new Point(chapLocation.x, chapLocation.y);
     }
 
+    assert(position != null);
     //check that new position is in the bounds of the board, if not throw exception
     if(position.x >= board.length || position.y >= board[0].length) {
       throw new IllegalStateException();
@@ -113,9 +111,7 @@ public class Maze {
       (accessibleTile).setEntityHere(chap);
       chap.setEntityPosition(new Point(position));  //to keep track of Chap's location
     }
-
-    //TODO see if need to add assert here
-    //assert(board[chapLocation.x][chapLocation.y] instanceof AccessibleTile); //check that chap is not on an invalid tile
+    assert(board[chapLocation.x][chapLocation.y] instanceof AccessibleTile); //check that chap is not on an invalid tile
   }
 
   /**
@@ -123,32 +119,37 @@ public class Maze {
    * @param accessibleTile The tile to pick the item from.
    */
   public void pickUpItem(AccessibleTile accessibleTile) throws IllegalStateException {
-    Entity item = accessibleTile.getEntityHere();
-    if(item != null) {
-      if(item.canBePickedUp()) {  //check if can be picked up
-        if(!(item instanceof Item)) {
-          throw new IllegalStateException();
-        }
-        Item tileItem = (Item)item;
-        if(tileItem.canBeAddedToInve()) {  //check if can be added to inventory
-          chap.addToInven((Key) item);
-        } else {  //if can't be added to inventory then is treasure
-          treasuresPickedUp++;
-          if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit
-            board[exitLocation.x][exitLocation.y] = new ExitTile();
-          }
-        }
-        accessibleTile.setEntityHere(null); //set tile's item to null since item is picked up
+    Item item = accessibleTile.getItemHere();
+    assert(item != null);
+    Item tileItem = item;
+    //check if treasure tile
+    if(!(accessibleTile instanceof TreasureTile)) {  //check if not on a treasure tile
+      chap.addToKeyInven((Key) item);
+      accessibleTile.setItemHere(null); //set tile's item to null since item is picked up
+    } else {  //if Chap is going to pick up treasure
+      treasuresPickedUp++;
+      if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit
+        board[exitLocation.x][exitLocation.y] = new ExitTile();
       }
     }
   }
 
   //getters and setters
-  public Tile getTile(int x, int y) { return board[x][y]; }
+  public Tile getTile(int x, int y) throws IllegalStateException, IllegalArgumentException {
+    assert(board != null);
+    if(x < 0 || x > board.length || y < 0 || y > board[0].length) {
+      throw new IllegalArgumentException();
+    }
+    return board[x][y];
+  }
 
-  public Point getChapPosition() { return chap.entityPosition; }
+  public Point getChapPosition() {
+    assert(chap != null);
+    return chap.entityPosition;
+  }
 
   public Tile[][] getBoard() {
+    assert(board != null);
     return board;
   }
 
@@ -157,6 +158,7 @@ public class Maze {
   }
 
   public Chap getChap() {
+    assert(chap != null);
     return chap;
   }
 
