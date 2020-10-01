@@ -79,10 +79,18 @@ public class Replay{
 
     }
 
+    /**
+     * Get the delay speed for replaying actions.
+     * @return the delay
+     */
     public int getPlaybackDelay() {
         return playbackDelay;
     }
 
+    /**
+     * Set the delay speed for replaying actions.
+     * @param playbackDelay
+     */
     public void setPlaybackDelay(int playbackDelay) {
         this.playbackDelay = playbackDelay;
     }
