@@ -34,7 +34,7 @@ class BaboonTest {
         }
     }
 
-    @Test
+/*    @Test
     void exampleTimeDelayTest() {
         //TODO check game still valid somehow
         for (int i = 0; i < 20; i++) {
@@ -46,5 +46,5 @@ class BaboonTest {
             Direction direction = baboon.selectMove(main.getMaze());
             main.movePlayer(direction);
         }
-    }
+    }*/
 }

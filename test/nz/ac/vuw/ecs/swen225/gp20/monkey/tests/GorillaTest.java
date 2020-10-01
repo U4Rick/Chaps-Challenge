@@ -33,7 +33,7 @@ public class GorillaTest {
         }
     }
 
-    @Test
+/*    @Test
     void exampleTimeDelayTest() {
         //TODO check game still valid somehow
         for (int i = 0; i < 20; i++) {
@@ -45,6 +45,6 @@ public class GorillaTest {
             Maze.Direction direction = gorilla.selectMove(main.getMaze());
             main.movePlayer(direction);
         }
-    }
+    }*/
 }
 
