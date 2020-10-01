@@ -32,6 +32,7 @@ public class Record {
         try {
             PrintWriter pw = new PrintWriter("json_data.json");
 
+            JsonObjectBuilder jsonObject = Json.createObjectBuilder();
             JsonArrayBuilder moves = Json.createArrayBuilder();
 
             for (Maze.Direction action : this.moves) {
@@ -56,8 +57,10 @@ public class Record {
                         break;
                 }
             }
+            jsonObject.add("moves",moves);
+            JsonObject JsonObjectMain = jsonObject.build();
 
-            pw.write(moves.toString());
+            pw.write(JsonObjectMain.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
