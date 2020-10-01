@@ -6,28 +6,40 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A renderer to visually display the state of the game board.
+ *
+ * @author Cherie
+ */
 public class BoardRenderer extends JPanel {
-    private final int DISPLAY_DIMENSION = 9; // Number of rows/columns shown (should be odd so Chap can be centred).
+    private final int DISPLAY_DIMENSION = 9; // Should be odd so Chap can be centred.
     private final int BOARD_WIDTH;
     private final int BOARD_HEIGHT;
-    private final int TILE_SIZE = 495/DISPLAY_DIMENSION; // FIXME: set value in constructor
+    private final int TILE_SIZE;
     private final Maze maze;
 
-    public BoardRenderer(Maze importMaze/*, Dimension size*/){
-        setPreferredSize(new Dimension(495, 495)); // FIXME: use parameter dimension
+    /**
+     * Constructs a new renderer to display the current board.
+     *
+     * @param importMaze the maze containing the board to be drawn.
+     */
+    public BoardRenderer(Maze importMaze, Dimension size){
+        setPreferredSize(size);
         setLayout(null);
         maze = importMaze;
         BOARD_WIDTH = maze.getBoard().length;
         BOARD_HEIGHT = maze.getBoard()[0].length;
-//        TILE_SIZE = size.width/DISPLAY_DIMENSION;
+        TILE_SIZE = size.width/DISPLAY_DIMENSION;
     }
 
+    @Override
     public void paintComponent(Graphics g){
         Tile[][] board = maze.getBoard();
 
         // Centre display around Chap.
         int startX = maze.getChapPosition().x - (DISPLAY_DIMENSION-1)/2;
         int startY = maze.getChapPosition().y - (DISPLAY_DIMENSION-1)/2;
+
         // Boundaries.
         if(startX < 0){
             startX = 0;
@@ -36,7 +48,7 @@ public class BoardRenderer extends JPanel {
         }
         if(startY < 0){
             startY = 0;
-        } else if(startY + DISPLAY_DIMENSION > BOARD_HEIGHT){ // TODO: check maths >= or >
+        } else if(startY + DISPLAY_DIMENSION > BOARD_HEIGHT){
             startY = BOARD_HEIGHT - DISPLAY_DIMENSION;
         }
 
@@ -50,7 +62,7 @@ public class BoardRenderer extends JPanel {
                 Image tileIcon = tile.getIcon();
                 g.drawImage(tileIcon, (xPos - startX) * TILE_SIZE, (yPos - startY) * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
 
-                if(tile.isAccessible()){ // Tile can have something on it
+                if(tile.isAccessible()){ // Tile might have something on it
                     AccessibleTile accessibleTile = (AccessibleTile) tile;
 
                     if(accessibleTile.getEntityHere() != null){
