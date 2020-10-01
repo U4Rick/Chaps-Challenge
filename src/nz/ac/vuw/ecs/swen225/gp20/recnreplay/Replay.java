@@ -52,28 +52,12 @@ public class Replay{
     public List<String> processActionsJson(){
 
 
-        JsonArray moves = loadedActions.getJsonArray("move");
+        JsonArray moves = loadedActions.getJsonArray("moves");
 
         for (JsonValue jsonMove : moves) {
             JsonObject move = jsonMove.asJsonObject();
             String direction = move.getString("move");
             recordedMoves.add(direction);
-
-//            switch (direction) {
-//                case "DOWN":
-//                    super.movePlayer(Maze.Direction.DOWN);
-//                    break;
-//                case "RIGHT":
-//                    super.movePlayer(Maze.Direction.RIGHT);
-//                    break;
-//                case "UP":
-//                    super.movePlayer(Maze.Direction.UP);
-//                    break;
-//                case "LEFT":
-//                    super.movePlayer(Maze.Direction.LEFT);
-//                    break;
-//            }
-
         }
         return recordedMoves;
 

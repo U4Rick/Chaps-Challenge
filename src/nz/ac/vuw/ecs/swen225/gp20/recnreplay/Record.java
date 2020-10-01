@@ -57,7 +57,7 @@ public class Record {
                         break;
                 }
             }
-            jsonObject.add("moves",moves);
+            jsonObject.add("moves", moves);
             JsonObject JsonObjectMain = jsonObject.build();
 
             pw.write(JsonObjectMain.toString());
