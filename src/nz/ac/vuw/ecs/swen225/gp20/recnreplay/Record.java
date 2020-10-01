@@ -27,9 +27,8 @@ public class Record {
 
     /**
      * Writes the movements made by the player out to a file.
-     * @throws IOException if file error occurs
      */
-    public void writeToFile() throws IOException {
+    public void writeToFile() {
         try {
             PrintWriter pw = new PrintWriter("json_data.json");
 
