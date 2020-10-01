@@ -9,6 +9,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Create a replay of the movements made by the player for the previous level.
+ */
 public class Replay{
 
     private List<String> recordedMoves;
@@ -17,13 +20,20 @@ public class Replay{
     private File file;
     private Maze maze;
 
-
+    /**
+     * Constructs the replay with relevant maze.
+     *
+     */
     public Replay(File file) {
         if (file != null) {
             this.file = file;
         }
     }
 
+    /**
+     * Loads in a file to play a replay from.
+     * @param file containing replay json
+     */
     public void loadFile(File file) {
         try {
             InputStream fis = new FileInputStream(file);
@@ -35,8 +45,12 @@ public class Replay{
             e.printStackTrace();
         }
     }
-
+    /**
+     * Processes the actions of the loaded json file.
+     */
     public List<String> processActionsJson(){
+
+
         JsonArray moves = loadedActions.getJsonArray("move");
 
         for (JsonValue jsonMove : moves) {
