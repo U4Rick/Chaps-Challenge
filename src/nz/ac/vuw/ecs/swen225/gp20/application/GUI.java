@@ -14,6 +14,11 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import javax.swing.*;
 
+/**
+ * Builds the Graphic User Interface.
+ *
+ * @author Keely Haskett
+ */
 public abstract class GUI {
 
 	JFrame window = new JFrame();
@@ -38,14 +43,19 @@ public abstract class GUI {
 	public boolean canMove;
 
 
+	/**
+	 *  Intializes the maze, and builds the main window.
+	 */
 	public GUI() {
 		createMaze();
 		canMove = false;
 		buildWindow();
 	}
 
-	protected abstract void createMaze();
 
+	/**
+	 *  Builds the window with a JMenuBar, a Renderer panel and a Controller panel.
+	 */
 	public void buildWindow() {
 
 		JMenuBar menu = new JMenuBar();
@@ -273,44 +283,21 @@ public abstract class GUI {
 		window.setVisible(true);
 	}
 
+	/**
+	 *  Load the replay file and reset the replay object.
+	 */
 	public void replayLoad() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.showOpenDialog(window);
 		File toLoadFrom = chooser.getSelectedFile();
 		Replay replay = new Replay(toLoadFrom);
-		//System.out.println(replay);
 		setReplay(replay);
 	}
 
-	protected abstract Record getRecord();
-
-	protected abstract void setRecord(Record record);
-
-	protected abstract Replay getReplay();
-
-	protected abstract void setReplay(Replay replay);
-
-	public Direction getDirectionFromKey(KeyEvent e) {
-		Direction direction;
-		switch (e.getKeyCode()) {
-			case KeyEvent.VK_LEFT:
-				direction = Direction.LEFT;
-				break;
-			case KeyEvent.VK_RIGHT:
-				direction = Direction.RIGHT;
-				break;
-			case KeyEvent.VK_UP:
-				direction = Direction.UP;
-				break;
-			case KeyEvent.VK_DOWN:
-				direction = Direction.DOWN;
-				break;
-			default:
-				direction = null;
-		}
-		return direction;
-	}
-
+	/**
+	 * Helper method to move the player and repaint the renderer.
+	 * @param direction Direction to move player.
+	 */
 	public void movePlayer(Direction direction) {
 		getMaze().moveChap(direction);
 		if (getRecord() != null) { getRecord().addMove(direction); } // for tests
@@ -318,6 +305,9 @@ public abstract class GUI {
 		game.repaint();
 	}
 
+	/**
+	 *  Runs the replay.
+	 */
 	public void runReplay() {
 		Replay replay = getReplay();
 		if (replay != null) {
@@ -343,10 +333,10 @@ public abstract class GUI {
 		}
 	}
 
-
-
-	public abstract Maze getMaze();
-
+	/**
+	 * Sets the visual details of elements in the controller.
+	 * @param label JLabel to set
+	 */
 	private void setControllerElementDetails(JLabel label) {
 		label.setPreferredSize(counterLabelDim);
 		label.setFont(controllerElementsFont);
@@ -354,6 +344,10 @@ public abstract class GUI {
 		label.setForeground(textColorNormal);
 	}
 
+	/**
+	 * Sets the visual details of elements of the JMenuBar.
+	 * @param menu JComponent to set
+	 */
 	private void setMenuDetails (JComponent menu) {
 		menu.setForeground(textColorNormal);
 		menu.setBackground(barColorNormal);
@@ -361,7 +355,66 @@ public abstract class GUI {
 		menu.setOpaque(true);
 	}
 
-	public BoardRenderer getGame() {
-		return game;
+	/**
+	 * Get Direction enum value from KeyEvent.
+	 * @param e KeyEvent to get direction from
+	 * @return  Returns Direction if applicable, or null if not.
+	 */
+	public Direction getDirectionFromKey(KeyEvent e) {
+		Direction direction;
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_LEFT:
+				direction = Direction.LEFT;
+				break;
+			case KeyEvent.VK_RIGHT:
+				direction = Direction.RIGHT;
+				break;
+			case KeyEvent.VK_UP:
+				direction = Direction.UP;
+				break;
+			case KeyEvent.VK_DOWN:
+				direction = Direction.DOWN;
+				break;
+			default:
+				direction = null;
+		}
+		return direction;
 	}
+
+
+	/**
+	 *  Creates maze object.
+	 */
+	protected abstract void createMaze();
+
+	/**
+	 *  Gets the record object.
+	 * @return  Replay Object
+	 */
+	protected abstract Record getRecord();
+
+	/**
+	 * Sets the replay object.
+	 * @param record    Record to set with.
+	 */
+	protected abstract void setRecord(Record record);
+
+	/**
+	 * Gets replay object.
+	 * @return  Replay Object
+	 */
+	protected abstract Replay getReplay();
+
+	/**
+	 * Sets the replay object.
+	 * @param replay    Replay to set with.
+	 */
+	protected abstract void setReplay(Replay replay);
+
+	/**
+	 * Gets Maze.
+	 * @return  Maze Object
+	 */
+	public abstract Maze getMaze();
+
 }

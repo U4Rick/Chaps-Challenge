@@ -6,12 +6,20 @@ import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 
 import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadLevel;
 
+/**
+ * Run the game.
+ *
+ * @author Keely Haskett
+ */
 public class Main extends GUI {
 
     Maze maze;
     Replay replay;
     Record record;
 
+    /**
+     * maybe delete?
+     */
     private void run() {
         while (true) {
 
@@ -19,6 +27,10 @@ public class Main extends GUI {
 
     }
 
+    /**
+     * Run the game.
+     * @param args Runtime arguments.
+     */
     public static void main(String[] args) {
         System.out.println("Hello world!");
         Main main  =  new Main();
