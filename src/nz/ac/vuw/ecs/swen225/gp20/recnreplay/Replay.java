@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Create a replay of the movements made by the player for the previous level.
+ * Class to create a replay of the movements made by the player for the previous level.
+ * @author Ricky McLean
  */
 public class Replay{
 
