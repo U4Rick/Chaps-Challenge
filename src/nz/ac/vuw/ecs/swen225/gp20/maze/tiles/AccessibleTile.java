@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Entity;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 
 /**
  * Represents ta tile that the player can walk on
@@ -10,6 +11,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Entity;
 abstract public class AccessibleTile extends Tile {
 
   private Entity entityHere = null; //entity that is on this tile, is null if no entity is on this tile
+  private Item itemHere = null; //item that is on this tile, is null if no item is on this tile
 
   @Override
   public boolean isAccessible() {
@@ -29,5 +31,31 @@ abstract public class AccessibleTile extends Tile {
   public void setEntityHere(Entity entity) {
     this.entityHere = entity;
   }
-  public Entity getEntityHere() { return entityHere; }
+
+  /**
+   * Gets the entity located in this tile.
+   * @return The entity in this tile.
+   */
+  public Entity getEntityHere() {
+    assert(entityHere != null);
+    return entityHere;
+  }
+
+  /**
+   * Moves an item to this tile
+   * @param item
+   */
+  public void setItemHere(Item item) {
+    //TODO add assertions for setters
+    this.itemHere = item;
+  }
+
+  /**
+   * Gets the item located in this tile.
+   * @return The item in this tile.
+   */
+  public Item getItemHere() {
+    assert(itemHere != null);
+    return itemHere;
+  }
 }
