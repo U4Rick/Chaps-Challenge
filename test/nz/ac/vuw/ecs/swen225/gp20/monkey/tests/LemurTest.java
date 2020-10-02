@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.monkey.tests;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Gorilla;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Lemur;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.MonkeyAI;
 import org.junit.jupiter.api.BeforeAll;
