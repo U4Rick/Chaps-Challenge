@@ -11,6 +11,13 @@ public class Capuchin extends MonkeyAI {
      * Instantiates a new Capuchin model MonkeyAI with preset reward weightings.
      */
     public Capuchin() {
-        super(40, 80, 80, 30, 100, 0, 0, 90, 0);
+        super(40,
+                80,
+                80,
+                100,
+                0,
+                0,
+                90,
+                0);
     }
 }
