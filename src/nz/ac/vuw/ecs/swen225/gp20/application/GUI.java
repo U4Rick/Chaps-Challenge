@@ -6,6 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
+import nz.ac.vuw.ecs.swen225.gp20.render.InventoryRenderer;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -210,12 +211,14 @@ public abstract class GUI {
 		JLabel treasuresCounter = new JLabel("3");
 		setControllerElementDetails(treasuresCounter);
 
+		InventoryRenderer inventory = new InventoryRenderer(getMaze(), controllerPanelDim.width);
+
 		controller.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		constraints.insets = controllerPanelStandardInsets;
+		//constraints.insets = controllerPanelStandardInsets;
 		controller.add(timeLabel, constraints);
 
 		constraints.gridy++;
@@ -237,8 +240,11 @@ public abstract class GUI {
 		controller.add(treasuresLabel, constraints);
 
 		constraints.gridy++;
-		constraints.insets = new Insets(5, 50, 50, 50);
+		//constraints.insets = new Insets(5, 50, 0, 50);
 		controller.add(treasuresCounter, constraints);
+
+		constraints.gridy++;
+		controller.add(inventory, constraints);
 
 		gameStartItem.addActionListener(e -> {
 			timeLeft = TOTAL_GAME_TIME;
