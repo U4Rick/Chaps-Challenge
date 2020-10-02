@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Class to create a record and write out the players movements.
+ *
  * @author Ricky McLean
  */
 public class Record {
@@ -38,21 +39,13 @@ public class Record {
             for (Maze.Direction action : this.moves) {
                 switch (action) {
                     case RIGHT:
-                        moves.add(Json.createObjectBuilder()
-                                .add("move", action.toString())
-                                .build());
                     case DOWN:
-                        moves.add(Json.createObjectBuilder()
-                                .add("move", action.toString())
-                                .build());
                     case LEFT:
-                        moves.add(Json.createObjectBuilder()
-                                .add("move", action.toString())
-                                .build());
                     case UP:
                         moves.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
                                 .build());
+                        break;
                     default:
                         break;
                 }
@@ -68,6 +61,7 @@ public class Record {
 
     /**
      * Gets a list of moves made by the player.
+     *
      * @return the list of moves
      */
     public List<Maze.Direction> getMoves() {
@@ -76,6 +70,7 @@ public class Record {
 
     /**
      * Set the list of moves made by the player.
+     *
      * @param moves the list of moves.
      */
     public void setMoves(List<Maze.Direction> moves) {
@@ -84,6 +79,7 @@ public class Record {
 
     /**
      * Add a move to the current list of moves made by the player.
+     *
      * @param dir the direction of the movement
      */
     public void addMove(Maze.Direction dir) {
