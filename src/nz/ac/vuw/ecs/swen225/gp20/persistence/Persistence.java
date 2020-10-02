@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -15,20 +17,13 @@ import javax.json.JsonReader;
 import javax.json.JsonValue;
 import javax.json.stream.JsonParsingException;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Colours;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitLockTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InfoTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.KeyTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.TreasureTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.WallTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 public class Persistence {
   
@@ -140,8 +135,7 @@ public class Persistence {
       levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile("");
 
       // make maze
-      Maze maze = new Maze(chapPos, exitPos, treasureTiles.size(), levelArray);
-      return maze;
+      return new Maze(chapPos, exitPos, treasureTiles.size(), levelArray);
     } catch (FileNotFoundException e) {
       // file was not found - maybe display something to user?
     } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
@@ -201,6 +195,8 @@ public class Persistence {
   /**
    * Saves the game state to a json file for loading later. Needs to save all the
    * things that can change.
+   * @param maze the maze to be saved.
+   * @param file the file to be saved to.
    */
   public static void saveGameState(Maze maze, File file) {
     // generate board arrays first
@@ -291,24 +287,104 @@ public class Persistence {
   /**
    * Loads a game state from a file.
    * 
-   * @param gameStateFile the state file to load
-   * @return
+   * @param gameStateFile the state file to load.
+   * @return the maze loaded from the game state.
    */
   public static Maze loadGameState(File gameStateFile) {
     try {
       JsonReader reader = Json.createReader(new FileReader(gameStateFile));
 
-      JsonObject levelState = reader.readObject();
+      JsonObject gameState = reader.readObject();
 
-      String levelName = "levels/" + levelState.getString("level_name") + "json";
+      String levelName = "levels/" + gameState.getString("level_name") + ".json";
 
       File levelFile = new File(levelName);
 
-      Maze baseLevelMaze = loadLevelFromFile(levelFile);
+      Maze maze = loadLevelFromFile(levelFile);
 
+      Map<Point, TreasureTile> treasures = new HashMap<>();
+      Map<Point, KeyTile> keys = new HashMap<>();
+      Map<Point, DoorTile> doors = new HashMap<>();
 
+      JsonArray treasuresArray = gameState.getJsonArray("treasures");
 
-      // change maze as required
+      for (JsonValue treasureValue : treasuresArray) {
+        JsonObject treasure = treasureValue.asJsonObject();
+
+        int treasureX = treasure.getInt("x");
+        int treasureY = treasure.getInt("y");
+
+        treasures.put(new Point(treasureX, treasureY), new TreasureTile());
+      }
+
+      JsonArray keysArray = gameState.getJsonArray("keys");
+
+      for (JsonValue keyValue : keysArray) {
+        JsonObject key = keyValue.asJsonObject();
+
+        int keyX = key.getInt("x");
+        int keyY = key.getInt("y");
+
+        Colours keyColour = getColourFromString(key.getString("colour"));
+
+        keys.put(new Point(keyX, keyY), new KeyTile(keyColour));
+      }
+
+      JsonArray lockedDoorsArray = gameState.getJsonArray("locked_doors");
+
+      for (JsonValue doorValue : lockedDoorsArray) {
+        JsonObject door = doorValue.asJsonObject();
+
+        int doorX = door.getInt("x");
+        int doorY = door.getInt("y");
+
+        Colours doorColour = getColourFromString(door.getString("colour"));
+
+        doors.put(new Point(doorX, doorY), new DoorTile(doorColour));
+      }
+
+      Tile[][] board = maze.getBoard();
+
+      for (int x=0;x<board.length;x++) {
+        for (int y=0;y<board[x].length;y++) {
+          if (board[x][y] instanceof TreasureTile) {
+            if (!treasures.containsKey(new Point(x, y))) {
+              board[x][y] = new FreeTile();
+            }
+          } else if (board[x][y] instanceof KeyTile) {
+            if (!keys.containsKey(new Point(x, y))) {
+              board[x][y] = new FreeTile();
+            }
+          } else if (board[x][y] instanceof DoorTile) {
+            if (!doors.containsKey(new Point(x, y))) {
+              board[x][y] = new FreeTile();
+            }
+          }
+        }
+      }
+
+      //move chap to correct position
+      Chap chap = maze.getChap();
+      Point chapStartPos = chap.getEntityPosition();
+
+      ((AccessibleTile)board[chapStartPos.x][chapStartPos.y]).setEntityHere(null);
+
+      JsonObject chapObject = gameState.getJsonObject("chap");
+      JsonObject chapPosObj = chapObject.getJsonObject("position");
+
+      Point chapPos = new Point(chapPosObj.getInt("x"), chapPosObj.getInt("y"));
+
+      ((AccessibleTile)board[chapPos.x][chapPos.y]).setEntityHere(chap);
+      chap.setEntityPosition(chapPos);
+
+      JsonArray inventory = chapObject.getJsonArray("inventory");
+      for (JsonValue keyValue : inventory) {
+        Key key = new Key(getColourFromString(keyValue.asJsonObject().getString("colour")));
+        chap.addToKeyInven(key);
+      }
+
+      return maze;
+
     } catch (FileNotFoundException e) {
       // error reading file
     }

@@ -5,12 +5,10 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.WallTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,6 +18,7 @@ class PersistenceTest {
     @BeforeEach
     void setUp() {
     }
+
 
     @Test
     public void Test_success_01() {
@@ -33,6 +32,10 @@ class PersistenceTest {
         assertTrue(board[0][0] instanceof WallTile);
     }
 
+    /**
+     * Creates a test file with a level for testing
+     * @return the file created
+     */
     private File createTestFile() {
         File testFile = new File("testLevel.json");
         try {
