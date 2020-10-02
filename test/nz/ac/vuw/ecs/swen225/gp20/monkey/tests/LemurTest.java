@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.monkey.tests;
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Gorilla;
+import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Lemur;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.MonkeyAI;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,18 +11,18 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * Testing suite for the Gorilla model AI, which tries to push through doors and walls.
+ * Testing suite for the Lemur model AI, which avoids keys and treasures and tries to move through doors and the exit.
  *
  * @author Matt
  */
-public class GorillaTest {
+public class LemurTest {
 
     private static MonkeyAI monkeyAI;
     private Main main;
 
     @BeforeAll
     static void beforeAll() {
-        monkeyAI = new Gorilla();
+        monkeyAI = new Lemur();
     }
 
     @BeforeEach

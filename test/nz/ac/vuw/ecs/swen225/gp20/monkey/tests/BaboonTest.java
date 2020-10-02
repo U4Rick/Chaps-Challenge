@@ -11,18 +11,18 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Testing suite for the Baboon model AI. Uses purely random movement to play the game.
+ * Testing suite for the Baboon model AI, which uses purely random movement to play the game.
  *
  * @author Matt
  */
 class BaboonTest {
 
-    static MonkeyAI baboon;
-    static Main main;
+    private static MonkeyAI monkeyAI;
+    private Main main;
 
     @BeforeAll
     static void beforeAll() {
-        baboon = new Baboon();
+        monkeyAI = new Baboon();
     }
 
     @BeforeEach
@@ -31,24 +31,33 @@ class BaboonTest {
     }
 
     @Test
-    void exampleTest() {
+    void singleLongGame() {
         //TODO check game still valid somehow
         for (int i = 0; i < 100_000; i++) {
-            Direction direction = baboon.selectMove(main.getMaze());
+            Direction direction = monkeyAI.selectMove(main.getMaze());
             main.movePlayer(direction);
         }
     }
 
+    @Test
+    void multipleShortGames() {
+        for (int i = 0; i < 10; i++) {
+            main = new Main();
+            for (int j = 0; j < 10_000; j++) {
+                Direction direction = monkeyAI.selectMove(main.getMaze());
+                main.movePlayer(direction);
+            }
+        }
+    }
 /*    @Test
     void exampleTimeDelayTest() {
-        //TODO check game still valid somehow
         for (int i = 0; i < 20; i++) {
             try {
                 TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Direction direction = baboon.selectMove(main.getMaze());
+            Direction direction = monkeyAI.selectMove(main.getMaze());
             main.movePlayer(direction);
         }
     }*/

@@ -153,7 +153,7 @@ public abstract class MonkeyAI {
             }
         }
 
-        int variance = new Random().nextInt(VARIANCE);  //Calculate variance between 0 and VARIANCE
+        int variance = new Random().nextInt(VARIANCE);  //Calculate amount of variance to add (between 0 and VARIANCE)
 
         return reward + variance;
     }
@@ -165,10 +165,16 @@ public abstract class MonkeyAI {
      * @return True if Chap has matching key, otherwise False.
      */
     private boolean checkMatchingKey(Chap chap, DoorTile doorTile) {
-        Set<Key> inventory = chap.getKeyInventory();
-        for (Key key : inventory) {
+        Set<Key> keyInventory = chap.getKeyInventory();
+
+        //For each key in chaps key inventory
+        for (Key key : keyInventory) {
+
+            //Get colours of Door and Key
             Colours doorColour = doorTile.getDoorColour();
             Colours keyColour = key.getKeyColour();
+
+            //Check if they match
             if (keyColour.equals(doorColour)) {
                 return true;
             }
