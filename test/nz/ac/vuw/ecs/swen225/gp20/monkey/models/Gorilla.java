@@ -4,12 +4,17 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
+import java.util.ArrayList;
+
 /**
  * An AI that tries to push through walls where possible.
  *
  * @author Matt
  */
 public class Gorilla extends MonkeyAI {
+
+    //Need to store which tiles we attempted to visit and should not revisit to not get stuck in a loop.
+    final ArrayList<Tile> blacklistedTiles = new ArrayList<>();
 
     /**
      * Instantiates a new Gorilla model MonkeyAI with preset reward weightings.

@@ -32,9 +32,6 @@ public abstract class MonkeyAI {
     //Variance to prevent AI actions from being deterministic
     static final int VARIANCE = 20;
 
-    //Need to store which tiles we attempted to visit and should not revisit to not get stuck in a loop.
-    final ArrayList<Tile> blacklistedTiles = new ArrayList<>();
-
     /**
      * Instantiates a new Monkey ai.
      *
