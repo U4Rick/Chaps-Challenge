@@ -73,7 +73,7 @@ public class Replay{
 
     /**
      * Set the delay speed for replaying actions.
-     * @param playbackDelay
+     * @param playbackDelay the delay
      */
     public void setPlaybackDelay(int playbackDelay) {
         this.playbackDelay = playbackDelay;
