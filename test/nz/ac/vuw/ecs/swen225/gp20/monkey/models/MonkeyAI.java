@@ -14,6 +14,8 @@ import static nz.ac.vuw.ecs.swen225.gp20.maze.Maze.*;
 
 /**
  * Abstract class representing the contractual requirements of MonkeyAI players.
+ *
+ * @author Matt
  */
 public abstract class MonkeyAI {
 
@@ -21,7 +23,6 @@ public abstract class MonkeyAI {
     private final int freeReward;
     private final int keyReward;
     private final int treasureReward;
-    private final int infoReward;
     private final int exitReward;
     private final int wallReward;
     private final int exitLockReward;
@@ -31,28 +32,23 @@ public abstract class MonkeyAI {
     //Variance to prevent AI actions from being deterministic
     static final int VARIANCE = 20;
 
-    //Need to store which tiles we attempted to visit and should not revisit to not get stuck in a loop.
-    final ArrayList<Tile> blacklistedTiles = new ArrayList<>();
-
     /**
      * Instantiates a new Monkey ai.
      *
      * @param freeReward       the free reward.
      * @param keyReward        the key reward.
      * @param treasureReward   the treasure reward.
-     * @param infoReward       the info reward.
      * @param exitReward       the exit reward.
      * @param wallReward       the wall reward.
      * @param exitLockReward   the exit lock reward.
      * @param lockAndKeyReward the lock and key reward.
      * @param lockNoKeyReward  the lock no key reward.
      */
-    public MonkeyAI(int freeReward, int keyReward, int treasureReward, int infoReward, int exitReward,
+    public MonkeyAI(int freeReward, int keyReward, int treasureReward, int exitReward,
                     int wallReward, int exitLockReward, int lockAndKeyReward, int lockNoKeyReward) {
         this.freeReward = freeReward;
         this.keyReward = keyReward;
         this.treasureReward = treasureReward;
-        this.infoReward = infoReward;
         this.exitReward = exitReward;
         this.wallReward = wallReward;
         this.exitLockReward = exitLockReward;
@@ -94,6 +90,7 @@ public abstract class MonkeyAI {
     /**
      * Returns destination tile of the move in passed Direction.
      *
+     * @param maze Current maze.
      * @param direction Direction of move.
      * @return Destination tile.
      */
@@ -117,60 +114,89 @@ public abstract class MonkeyAI {
     /**
      * Assigns an numeric value to the proposed tile.
      *
+     * @param chap Active player.
      * @param tile Proposed Tile.
      * @return Expected Value of Tile.
      */
-    public int utilityFunction(Chap chap, Tile tile) {
-        int reward = 0;
+    private int utilityFunction(Chap chap, Tile tile) {
 
-        //Typically a code smell, however there is no way to use polymorphism instead as this is not production code.
-        if (tile instanceof FreeTile) {
-            reward = freeReward;
-        } else if (tile instanceof KeyTile) {
-            reward = keyReward;
-        } else if (tile instanceof TreasureTile) {
-            reward = treasureReward;
-        } else if (tile instanceof InfoTile) {
-            reward = infoReward;
-        } else if (tile instanceof ExitTile) {
-            reward = exitReward;
-        } else if (tile instanceof WallTile && !blacklistedTiles.contains(tile)) {
-            reward = wallReward;
-        } else if (tile instanceof ExitLockTile && !blacklistedTiles.contains(tile)) {
-            reward = exitLockReward;
-        } else if (tile instanceof DoorTile) {
+        int reward = assignReward(chap, tile);          //Get the reward of the tile
 
-            //TODO Something clever to ensure not stuck on locked doors, but must be able to enter once we get the key.
-            DoorTile doorTile = (DoorTile) tile;
-            boolean hasKey = checkMatchingKey(chap, doorTile);
-
-            if (hasKey) {
-                reward = lockAndKeyReward;
-            } else {
-                reward = lockNoKeyReward;
-            }
-        }
-
-        int variance = new Random().nextInt(VARIANCE);  //Calculate variance between 0 and VARIANCE
+        int variance = new Random().nextInt(VARIANCE);  //Calculate amount of variance to add
 
         return reward + variance;
     }
 
     /**
+     * Checks the associated weighting for the passed tile and returns it.
+     * For doors, takes into account whether the corresponding key is held or not.
+     *
+     * @param chap Active player.
+     * @param tile Tile to get the reward of.
+     * @return Reward associated with the tile.
+     */
+    private int assignReward(Chap chap, Tile tile) {
+        //Get enum representation of the Tile's class name
+        TileType tileType = TileType.valueOf(tile.getClass().getSimpleName().toUpperCase());
+
+        //Return associated reward
+        switch (tileType) {
+            case FREE_TILE:
+            case INFO_TILE:
+                return freeReward;
+            case KEY_TILE:
+                return keyReward;
+            case TREASURE_TILE:
+                return treasureReward;
+            case EXIT_TILE:
+                return exitReward;
+            case WALL_TILE:
+                return wallReward;
+            case EXIT_LOCK_TILE:
+                return exitLockReward;
+            case DOOR_TILE:
+                DoorTile doorTile = (DoorTile) tile;
+                boolean hasKey = checkMatchingKey(chap, doorTile);
+
+                if (hasKey) {
+                    return lockAndKeyReward;
+                }
+                return lockNoKeyReward;
+
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+    /**
      * Check if Chap has the key matching the colour of passed door.
      *
+     * @param chap Active player.
      * @param doorTile Door to check key for.
      * @return True if Chap has matching key, otherwise False.
      */
     private boolean checkMatchingKey(Chap chap, DoorTile doorTile) {
-        Set<Key> inventory = chap.getKeyInventory();
-        for (Key key : inventory) {
+        Set<Key> keyInventory = chap.getKeyInventory();
+
+        //For each key in chaps key inventory
+        for (Key key : keyInventory) {
+
+            //Get colours of Door and Key
             Colours doorColour = doorTile.getDoorColour();
             Colours keyColour = key.getKeyColour();
+
+            //Check if they match
             if (keyColour.equals(doorColour)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Enum representation of the Tile class names, used for the assignReward function.
+     */
+    private enum TileType {
+        DOOR_TILE, EXIT_LOCK_TILE, EXIT_TILE, FREE_TILE, INFO_TILE, KEY_TILE, TREASURE_TILE, WALL_TILE
     }
 }
