@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
+import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import java.awt.*;

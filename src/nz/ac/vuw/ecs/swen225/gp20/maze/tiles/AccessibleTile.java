@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Entity;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
+import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 
 /**
  * Represents ta tile that the player can walk on

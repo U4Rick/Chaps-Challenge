@@ -15,8 +15,8 @@ import javax.json.JsonReader;
 import javax.json.JsonValue;
 import javax.json.stream.JsonParsingException;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
+import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
+import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Colours;
 
