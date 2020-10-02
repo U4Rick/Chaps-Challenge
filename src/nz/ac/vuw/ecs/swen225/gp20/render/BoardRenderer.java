@@ -22,6 +22,7 @@ public class BoardRenderer extends JPanel {
      * Constructs a new renderer to display the current board.
      *
      * @param importMaze the maze containing the board to be drawn.
+     * @param size the dimensions of the board.
      */
     public BoardRenderer(Maze importMaze, Dimension size){
         setPreferredSize(size);
