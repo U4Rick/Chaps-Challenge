@@ -10,6 +10,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Testing suite for the Baboon model AI. Uses purely random movement to play the game.
+ *
+ * @author Matt
+ */
 class BaboonTest {
 
     static MonkeyAI baboon;

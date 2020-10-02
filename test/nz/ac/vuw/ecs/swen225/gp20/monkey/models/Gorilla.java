@@ -6,6 +6,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 /**
  * An AI that tries to push through walls where possible.
+ *
+ * @author Matt
  */
 public class Gorilla extends MonkeyAI {
 

@@ -10,6 +10,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Testing suite for the Gorilla model AI. Tries to push through doors and walls.
+ *
+ * @author Matt
+ */
 public class GorillaTest {
     static MonkeyAI gorilla;
     static Main main;

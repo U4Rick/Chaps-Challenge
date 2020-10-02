@@ -14,6 +14,8 @@ import static nz.ac.vuw.ecs.swen225.gp20.maze.Maze.*;
 
 /**
  * Abstract class representing the contractual requirements of MonkeyAI players.
+ *
+ * @author Matt
  */
 public abstract class MonkeyAI {
 

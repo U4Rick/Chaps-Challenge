@@ -8,6 +8,8 @@ import static nz.ac.vuw.ecs.swen225.gp20.maze.Maze.*;
 
 /**
  * An AI that plays based on purely random inputs.
+ *
+ * @author Matt
  */
 public class Baboon extends MonkeyAI {
 
