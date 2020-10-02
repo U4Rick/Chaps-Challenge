@@ -52,7 +52,5 @@ abstract public class AccessibleTile extends Tile {
    * Gets the item located in this tile.
    * @return The item in this tile.
    */
-  public Item getItemHere() {
-    return itemHere;
-  }
+  abstract public Item getItemHere();
 }

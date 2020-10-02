@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 
 /**
@@ -14,4 +15,9 @@ public class TreasureTile extends AccessibleTile {
   }
 
   public String toString() { return "treasure_tile"; }
+
+  @Override
+  public Item getItemHere() {
+    return null;
+  }
 }

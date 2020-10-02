@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 
@@ -25,6 +27,11 @@ public class KeyTile extends AccessibleTile {
   }
 
   public Maze.Colours getKeyColour() { return keyColour; }
+
+  @Override
+  public Item getItemHere() {
+    return new Key(keyColour);
+  }
 
   public String toString() { return keyColour.toString().toLowerCase()+"_key_tile"; }
 }

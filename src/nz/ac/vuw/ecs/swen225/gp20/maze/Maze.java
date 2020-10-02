@@ -122,13 +122,13 @@ public class Maze {
    * @param accessibleTile The tile to pick the item from.
    */
   public void pickUpItem(AccessibleTile accessibleTile) throws IllegalStateException {
-    Item item = accessibleTile.getItemHere();
-    assert(item != null);
-    Item tileItem = item;
     //check if treasure tile
     if(!(accessibleTile instanceof TreasureTile)) {  //check if not on a treasure tile
-      chap.addToKeyInven((Key) item);
-      accessibleTile.setItemHere(null); //set tile's item to null since item is picked up
+      Item item = accessibleTile.getItemHere();
+      if(item != null) {
+        chap.addToKeyInven((Key) item);
+        accessibleTile.setItemHere(null); //set tile's item to null since item is picked up
+      }
     } else {  //if Chap is going to pick up treasure
       treasuresPickedUp++;
       if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit

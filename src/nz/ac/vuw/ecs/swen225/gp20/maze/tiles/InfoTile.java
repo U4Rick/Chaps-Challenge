@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 
 /**
@@ -30,6 +31,11 @@ public class InfoTile extends AccessibleTile {
   @Override
   public boolean isItem() {
     return false;
+  }
+
+  @Override
+  public Item getItemHere() {
+    return null;
   }
 
   public String toString() { return "info_tile"; }
