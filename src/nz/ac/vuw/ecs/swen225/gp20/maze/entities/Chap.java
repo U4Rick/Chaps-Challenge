@@ -34,14 +34,13 @@ public class Chap extends Entity {
    */
   public void unlockDoor(Tile door) {
     assert(door instanceof DoorTile);
-    /*if(!(door instanceof DoorTile)) {
-      throw new IllegalStateException();
-    }*/
+
     //check if have correct key for door
     for(Key key : keyInventory) {
       if(key.getKeyColour() == ((DoorTile)door).getDoorColour()) {
         //unlock door
         door = new FreeTile();
+        break;
       }
     }
   }
