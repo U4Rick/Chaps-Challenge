@@ -42,20 +42,21 @@ public class InventoryRenderer extends JPanel {
     public void paintComponent(Graphics g){
         Map<Key, Integer> inventory = new HashMap<>();
 
-        // FIXME: temp hardcode
-        Set<Key> temp = chap.getKeyInventory();
-        for (Key k : temp) {
-            inventory.put(k, 1);
-        }
+        // FIXME: temp hard code
+        inventory.put(new Key(Maze.Colours.BLUE), 2);
+        inventory.put(new Key(Maze.Colours.GREEN), 1);
+        inventory.put(new Key(Maze.Colours.YELLOW), 1);
+        inventory.put(new Key(Maze.Colours.RED), 1);
 
         int x = 0;
         for (Key key : inventory.keySet()) {
             int numKeys = inventory.get(key);
             if(numKeys > 0){
                 g.drawImage(key.getIcon(), x * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
-                /*if(numKeys > 1){
+                if(numKeys > 1){
                     // Draw number on top.
-                }*/
+                    g.drawImage(chap.getIcon(), x * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null); // FIXME: temp
+                }
             }
             x++;
         }
