@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 
@@ -42,6 +43,12 @@ public class Main extends GUI {
         return maze;
     }
 
+    @Override
+    protected void setMaze(Maze maze) {
+        this.maze = maze;
+    }
+
+    @Override
     public void createMaze() {
         this.maze = loadLevel(1);
     }

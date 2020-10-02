@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
@@ -11,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
 import javax.swing.*;
 
 /**
@@ -66,14 +68,23 @@ public abstract class GUI {
 		JMenuItem gameStartItem = new JMenuItem("Start");
 		setMenuDetails(gameStartItem);
 
-		JMenuItem gameLoadItem = new JMenuItem("Load");
-		setMenuDetails(gameLoadItem);
+		JMenu gameLoad = new JMenu("Load");
+		setMenuDetails(gameLoad);
+
+		JMenuItem gameLoadLevel = new JMenuItem("From Level");
+		setMenuDetails(gameLoadLevel);
+
+		JMenuItem gameLoadState = new JMenuItem("From State");
+		setMenuDetails(gameLoadState);
+
+		gameLoad.add(gameLoadLevel);
+		gameLoad.add(gameLoadState);
 
 		JMenuItem gameSaveItem = new JMenuItem("Save");
 		setMenuDetails(gameSaveItem);
 
 		gameMenu.add(gameStartItem);
-		gameMenu.add(gameLoadItem);
+		gameMenu.add(gameLoad);
 		gameMenu.add(gameSaveItem);
 
 		JMenuItem pauseMenuItem = new JMenuItem("Pause");
@@ -169,6 +180,12 @@ public abstract class GUI {
 				canMove = false;
 				//TODO: stop game
 				//TODO: JDialog game over
+				try {
+					getRecord().writeToFile();
+				} catch (IOException ioException) {
+					ioException.printStackTrace();
+				}
+				//TODO: load replay into field
 			}
 		};
 
@@ -230,16 +247,13 @@ public abstract class GUI {
 			setRecord(new Record());
 			pauseMenuItem.setEnabled(true);
 			timeCounter.setText(String.valueOf(timeLeft));
-
 		});
 
-		gameLoadItem.addActionListener(e -> {
+		gameLoadLevel.addActionListener(e -> persistenceLoad(false));
 
-		});
+		gameLoadState.addActionListener(e -> persistenceLoad(true));
 
-		gameSaveItem.addActionListener(e -> {
-
-		});
+		gameSaveItem.addActionListener(e -> persistenceSave());
 
 		pauseMenuItem.addActionListener(e -> {
 			if (pause) {
@@ -247,12 +261,14 @@ public abstract class GUI {
 				pause = false;
 				pauseMenuItem.setText("Pause");
 				canMove = true;
+				gameSaveItem.setEnabled(false);
 			}
 			else {
 				gameTimer.stop();
 				pause = true;
 				pauseMenuItem.setText("Play");
 				canMove = false;
+				gameSaveItem.setEnabled(true);
 			}
 		});
 
@@ -262,7 +278,6 @@ public abstract class GUI {
 
 		replayLoadItem.addActionListener(e -> {
 			replayLoad();
-
 			replayStartItem.setEnabled(true);
 		});
 
@@ -284,10 +299,47 @@ public abstract class GUI {
 	 */
 	public void replayLoad() {
 		JFileChooser chooser = new JFileChooser();
-		chooser.showOpenDialog(window);
-		File toLoadFrom = chooser.getSelectedFile();
-		Replay replay = new Replay(toLoadFrom);
-		setReplay(replay);
+		int choice = chooser.showOpenDialog(window);
+		if (choice == JFileChooser.APPROVE_OPTION) {
+			File toLoadFrom = chooser.getSelectedFile();
+			Replay replay = new Replay(toLoadFrom);
+			setReplay(replay);
+		}
+	}
+
+	/**
+	 * Load the level file to play from.
+	 * @param isState   If true, load a pre-played and saved level.
+	 *                  If false, load a fresh version of a level.
+	 */
+	public void persistenceLoad(boolean isState) {
+		JFileChooser chooser = new JFileChooser();
+		int choice = chooser.showOpenDialog(window);
+		if (choice == JFileChooser.APPROVE_OPTION) {
+			File toLoadFrom = chooser.getSelectedFile();
+			Maze maze;
+			if (isState) {
+				maze = Persistence.loadGameState(toLoadFrom);
+			} else {
+				maze = Persistence.loadLevelFromFile(toLoadFrom);
+
+			}
+			setMaze(maze);
+			game = new BoardRenderer(getMaze(), gamePanelDim);
+		}
+	}
+
+
+	/**
+	 * Save the current game state to a file
+	 */
+	public void persistenceSave() {
+		JFileChooser chooser = new JFileChooser();
+		int choice = chooser.showSaveDialog(window);
+		if (choice == JFileChooser.APPROVE_OPTION) {
+			File toSaveTo = chooser.getSelectedFile();
+			Persistence.saveGameState(getMaze(), toSaveTo);
+		}
 	}
 
 	/**
@@ -412,5 +464,12 @@ public abstract class GUI {
 	 * @return  Maze Object
 	 */
 	public abstract Maze getMaze();
+
+	/**
+	 * Sets maze to a preexisting maze object.
+	 * @param maze  Maze to set with.
+	 */
+	protected abstract void setMaze(Maze maze);
+
 
 }
