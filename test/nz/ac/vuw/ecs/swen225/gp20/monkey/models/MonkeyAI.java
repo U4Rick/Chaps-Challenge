@@ -141,20 +141,20 @@ public abstract class MonkeyAI {
 
         //Return associated reward
         switch (tileType) {
-            case FREE_TILE:
-            case INFO_TILE:
+            case FREETILE:
+            case INFOTILE:
                 return freeReward;
-            case KEY_TILE:
+            case KEYTILE:
                 return keyReward;
-            case TREASURE_TILE:
+            case TREASURETILE:
                 return treasureReward;
-            case EXIT_TILE:
+            case EXITTILE:
                 return exitReward;
-            case WALL_TILE:
+            case WALLTILE:
                 return wallReward;
-            case EXIT_LOCK_TILE:
+            case EXITLOCKTILE:
                 return exitLockReward;
-            case DOOR_TILE:
+            case DOORTILE:
                 DoorTile doorTile = (DoorTile) tile;
                 boolean hasKey = checkMatchingKey(chap, doorTile);
 
@@ -197,6 +197,6 @@ public abstract class MonkeyAI {
      * Enum representation of the Tile class names, used for the assignReward function.
      */
     private enum TileType {
-        DOOR_TILE, EXIT_LOCK_TILE, EXIT_TILE, FREE_TILE, INFO_TILE, KEY_TILE, TREASURE_TILE, WALL_TILE
+        DOORTILE, EXITLOCKTILE, EXITTILE, FREETILE, INFOTILE, KEYTILE, TREASURETILE, WALLTILE
     }
 }
