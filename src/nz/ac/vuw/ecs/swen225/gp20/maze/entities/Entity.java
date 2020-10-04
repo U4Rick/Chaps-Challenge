@@ -7,7 +7,7 @@ import java.awt.*;
 import java.io.File;
 
 /**
- * Represents an object that is placed on top of the tiles, this is either an item that Chap can pick up or a character that moves around the map
+ * Represents an object that is a character that moves around the map.
  *
  * @author Vic
  */
@@ -23,10 +23,15 @@ abstract public class Entity extends Icon {
     this.entityPosition = entityPosition;
   }
 
+  /**
+   * Gets the entity's x,y coordinates on the map.
+   * @return Entity's x,y coordinates on the map.
+   */
   public Point getEntityPosition() { return entityPosition; }
+
+  /**
+   * Gets the entity's x,y coordinates on the map.
+   * @param newLocation The new x,y coordinates.
+   */
   public void setEntityPosition(Point newLocation) { entityPosition = newLocation; }
-
-  abstract public String toString();
-
-
 }

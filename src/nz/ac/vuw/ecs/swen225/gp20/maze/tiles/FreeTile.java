@@ -14,5 +14,6 @@ public class FreeTile extends AccessibleTile {
     return false;
   }
 
+  @Override
   public String toString() { return "free_tile"; }
 }

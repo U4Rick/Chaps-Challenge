@@ -25,6 +25,7 @@ public class Key extends Item {
    */
   public Maze.Colours getKeyColour() { return keyColour; }
 
+  @Override
   public String toString() {
     return keyColour.toString().toLowerCase()+"_key_item";
   }

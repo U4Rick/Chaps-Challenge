@@ -4,6 +4,11 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 
+/**
+ * Represents an object in the maze that will be drawn by the renderer.
+ *
+ * @author Vic
+ */
 abstract public class Icon {
   private Image icon = null;
   
@@ -22,4 +27,10 @@ abstract public class Icon {
     }
     return icon;
   }
+
+  /**
+   * ToString method, used by the renderer.
+   * @return String of tile, item or entity.
+   */
+  abstract public String toString();
 }

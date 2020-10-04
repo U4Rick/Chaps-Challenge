@@ -44,6 +44,7 @@ public class Maze {
    * @param exitLocation  The location of the exit in the level.
    * @param treasuresNum  Number of treasures in the level.
    * @param board The 2d array that represents the board for the level.
+   * @throws IllegalStateException If chap is being set onto an inaccessible tile, then there is something wrong with the level.
    */
   public Maze(String levelName, Point chapLocation, Point exitLocation, int treasuresNum, Tile[][] board) throws IllegalStateException{
     this.levelName = levelName;
@@ -53,7 +54,6 @@ public class Maze {
     this.board = board;
 
     //set tile's entity at chap pos to chap
-    //TODO for code contracts, could violate condition of Chap not allowed in inaccessible tiles
     if(board[chapLocation.x][chapLocation.y].isAccessible()) {
       ((AccessibleTile)board[chapLocation.x][chapLocation.y]).setEntityHere(chap);
     } else {
@@ -65,7 +65,8 @@ public class Maze {
    * Moves Chap in the direction stated by one tile on the board.
    *
    * @param direction Represents the direction to move Chap
-   * @throws ArrayIndexOutOfBoundsException if going to new direction will cause Chap to go out of bounds, will throw an ArrayIndexOutOfBoundsException.
+   * @throws IllegalStateException If going to new direction will cause Chap to go out of bounds, will throw an IllegalStateException.
+   * @throws IllegalArgumentException If the direction provided is not left, right, up or down, then is an invalid direction.
    */
   public void moveChap(Direction direction) throws IllegalStateException, IllegalArgumentException {
     assert(chap != null && board != null);
@@ -122,7 +123,7 @@ public class Maze {
    * For dealing with logic of picking up an item
    * @param accessibleTile The tile to pick the item from.
    */
-  public void pickUpItem(AccessibleTile accessibleTile) throws IllegalStateException {
+  public void pickUpItem(AccessibleTile accessibleTile) {
     assert(accessibleTile instanceof KeyTile || accessibleTile instanceof TreasureTile); //check that tile is a keytile or treasuretile
     if(!(accessibleTile instanceof TreasureTile)) {  //check if not on a treasure tile
       Item item = accessibleTile.getItemHere();
@@ -142,7 +143,15 @@ public class Maze {
   }
 
   //getters and setters
-  public Tile getTile(int x, int y) throws IllegalStateException, IllegalArgumentException {
+
+  /**
+   * Gets tile from board located at x,y.
+   * @param x x coordinate of tile.
+   * @param y y coordinate of tile.
+   * @return  The tile located at x,y.
+   * @throws IllegalArgumentException If the x,y coordinates are out of bounds, then is invalid coordinates.
+   */
+  public final Tile getTile(int x, int y) throws IllegalArgumentException {
     assert(board != null);
     if(x < 0 || x > board.length || y < 0 || y > board[0].length) {
       throw new IllegalArgumentException();
@@ -150,30 +159,46 @@ public class Maze {
     return board[x][y];
   }
 
-  public Point getChapPosition() {
+  /**
+   * Gets coordinates of chap's position on the board.
+   * @return  The coordinates of chap's position on the board.
+   */
+  public final Point getChapPosition() {
     assert(chap != null);
     return chap.entityPosition;
   }
 
-  public Tile[][] getBoard() {
+  /**
+   * Gets the board used for this level.
+   * @return  The board used for this level.
+   */
+  public final Tile[][] getBoard() {
     assert(board != null);
     return board;
   }
 
-  public void setBoard(Tile[][] board) {
-    this.board = board;
-  }
-
-  public Chap getChap() {
+  /**
+   * Gets chap that is for this level.
+   * @return Chap that is for this level.
+   */
+  public final Chap getChap() {
     assert(chap != null);
     return chap;
   }
 
-  public String getLevelName() {
+  /**
+   * Gets the name of this level, for the persistence package.
+   * @return The name of this level.
+   */
+  public final String getLevelName() {
     assert(levelName != null);
     return levelName;
   }
 
-  public int getTreasuresPickedUp() { return treasuresPickedUp; }
+  /**
+   * Gets the int number of treasures currently picked up by Chap.
+   * @return Number of treasures currently picked up by Chap.
+   */
+  public final int getTreasuresPickedUp() { return treasuresPickedUp; }
 
 }

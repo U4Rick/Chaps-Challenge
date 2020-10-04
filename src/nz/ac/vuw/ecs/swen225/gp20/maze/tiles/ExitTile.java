@@ -4,7 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 
 /**
- * Represents the exit tile in the level, when the player enters the tile the level is finished.
+ * Represents the exit tile in the level, when the player enters this tile the level is finished.
  */
 public class ExitTile extends AccessibleTile {
   @Override
@@ -12,5 +12,6 @@ public class ExitTile extends AccessibleTile {
     return false;
   }
 
+  @Override
   public String toString() { return "exit_tile"; }
 }

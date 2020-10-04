@@ -4,7 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 
 /**
- * Represents ta tile that the player can walk on
+ * Represents ta tile that the player can walk on.
  *
  * @author Vic
  */
@@ -40,7 +40,7 @@ abstract public class AccessibleTile extends Tile {
   }
 
   /**
-   * Gets the item located in this tile, usually would be null.
+   * Gets the item located in this tile, usually would be null unless tile represents a tile with an item on it. Then would return the item.
    * @return The item in this tile.
    */
   public Item getItemHere() { return null; }

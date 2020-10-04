@@ -14,6 +14,6 @@ public class TreasureTile extends AccessibleTile {
     return true;
   }
 
+  @Override
   public String toString() { return "treasure_tile"; }
-
 }

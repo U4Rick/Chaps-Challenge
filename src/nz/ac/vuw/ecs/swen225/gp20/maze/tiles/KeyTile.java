@@ -33,5 +33,6 @@ public class KeyTile extends AccessibleTile {
     return new Key(keyColour);
   }
 
+  @Override
   public String toString() { return keyColour.toString().toLowerCase()+"_key_tile"; }
 }

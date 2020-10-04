@@ -4,7 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 
 /**
- * Represents a tile that displays information when the player walks onto it
+ * Represents a tile that displays information when the player walks onto it.
  *
  * @author Vic
  */
@@ -24,7 +24,7 @@ public class InfoTile extends AccessibleTile {
    * Gets the information stored in this tile.
    * @return The information stored in this tile.
    */
-  public String getInformation() {
+  public final String getInformation() {
     return information;
   }
 
@@ -33,5 +33,6 @@ public class InfoTile extends AccessibleTile {
     return false;
   }
 
+  @Override
   public String toString() { return "info_tile"; }
 }

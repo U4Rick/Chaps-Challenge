@@ -17,7 +17,12 @@ public class DoorTile extends InaccessibleTile {
   @Override
   public boolean isLockedDoor() { return true; }
 
-  public Maze.Colours  getDoorColour() { return doorColour; }
+  /**
+   * Gets the colour of the door, associated with a key on the level.
+   * @return The colour of the door.
+   */
+  public final Maze.Colours getDoorColour() { return doorColour; }
 
+  @Override
   public String toString() { return doorColour.toString().toLowerCase()+"_door_tile"; }
 }
