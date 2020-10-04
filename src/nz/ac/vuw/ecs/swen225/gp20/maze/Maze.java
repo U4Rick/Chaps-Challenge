@@ -33,6 +33,7 @@ public class Maze {
   private Tile[][] board; //2d array of tiles,
   private Point exitLocation; //where exit is located at on the map
   private Chap chap;  //it's Chap!
+  private String levelName; //name of the current maze
 
   private final int TREASURES_NUM;
   private int treasuresPickedUp = 0;
@@ -44,7 +45,8 @@ public class Maze {
    * @param treasuresNum  Number of treasures in the level.
    * @param board The 2d array that represents the board for the level.
    */
-  public Maze(Point chapLocation, Point exitLocation, int treasuresNum, Tile[][] board) throws IllegalStateException{
+  public Maze(String levelName, Point chapLocation, Point exitLocation, int treasuresNum, Tile[][] board) throws IllegalStateException{
+    this.levelName = levelName;
     this.chap = new Chap(chapLocation);
     this.exitLocation = exitLocation;
     TREASURES_NUM = treasuresNum;
@@ -69,7 +71,7 @@ public class Maze {
     assert(chap != null && board != null);
     Point chapLocation = chap.getEntityPosition();
     //get new position to move Chap to
-    Point position = null;
+    Point position;
     switch(direction) {
       case UP:
         position = new Point(chapLocation.x, chapLocation.y-1);
@@ -87,7 +89,6 @@ public class Maze {
         throw new IllegalArgumentException();
     }
 
-    assert(position != null);
     //check that new position is in the bounds of the board, if not throw exception
     if(position.x >= board.length || position.y >= board[0].length) {
       throw new IllegalStateException();
@@ -122,16 +123,19 @@ public class Maze {
    * @param accessibleTile The tile to pick the item from.
    */
   public void pickUpItem(AccessibleTile accessibleTile) throws IllegalStateException {
-    //check if treasure tile
+    assert(accessibleTile instanceof KeyTile || accessibleTile instanceof TreasureTile); //check that tile is a keytile or treasuretile
     if(!(accessibleTile instanceof TreasureTile)) {  //check if not on a treasure tile
       Item item = accessibleTile.getItemHere();
       if(item != null) {
+        int originalSize = chap.getKeyInventory().size();
         chap.addToKeyInven((Key) item);
-        accessibleTile.setItemHere(null); //set tile's item to null since item is picked up
+        accessibleTile = new FreeTile();  //change to free tile
+        assert(chap.getKeyInventory().size() == (originalSize+1) && chap.getKeyInventory().contains(item));  //check that key is in inventory
       }
     } else {  //if Chap is going to pick up treasure
       treasuresPickedUp++;
       if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit
+        assert(board[exitLocation.x][exitLocation.y] instanceof ExitLockTile); //check that exit is initialised at locked exit
         board[exitLocation.x][exitLocation.y] = new ExitTile();
       }
     }
@@ -163,6 +167,11 @@ public class Maze {
   public Chap getChap() {
     assert(chap != null);
     return chap;
+  }
+
+  public String getLevelName() {
+    assert(levelName != null);
+    return levelName;
   }
 
   public int getTreasuresPickedUp() { return treasuresPickedUp; }

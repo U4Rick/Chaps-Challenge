@@ -33,10 +33,5 @@ public class InfoTile extends AccessibleTile {
     return false;
   }
 
-  @Override
-  public Item getItemHere() {
-    return null;
-  }
-
   public String toString() { return "info_tile"; }
 }

@@ -11,7 +11,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 abstract public class AccessibleTile extends Tile {
 
   private Entity entityHere = null; //entity that is on this tile, is null if no entity is on this tile
-  private Item itemHere = null; //item that is on this tile, is null if no item is on this tile
 
   @Override
   public boolean isAccessible() {
@@ -26,7 +25,7 @@ abstract public class AccessibleTile extends Tile {
 
   /**
    * Moves an entity to this tile
-   * @param entity
+   * @param entity  Entity to move into this tile.
    */
   public void setEntityHere(Entity entity) {
     this.entityHere = entity;
@@ -41,16 +40,8 @@ abstract public class AccessibleTile extends Tile {
   }
 
   /**
-   * Moves an item to this tile
-   * @param item
-   */
-  public void setItemHere(Item item) {
-    this.itemHere = item;
-  }
-
-  /**
-   * Gets the item located in this tile.
+   * Gets the item located in this tile, usually would be null.
    * @return The item in this tile.
    */
-  abstract public Item getItemHere();
+  public Item getItemHere() { return null; }
 }

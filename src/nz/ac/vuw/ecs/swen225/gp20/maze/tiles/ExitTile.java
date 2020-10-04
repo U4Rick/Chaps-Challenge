@@ -13,9 +13,4 @@ public class ExitTile extends AccessibleTile {
   }
 
   public String toString() { return "exit_tile"; }
-
-  @Override
-  public Item getItemHere() {
-    return null;
-  }
 }
