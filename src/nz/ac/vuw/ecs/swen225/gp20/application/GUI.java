@@ -8,13 +8,27 @@ import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
 import nz.ac.vuw.ecs.swen225.gp20.render.InventoryRenderer;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.IOException;
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 /**
  * Builds the Graphic User Interface.
@@ -37,6 +51,15 @@ public abstract class GUI {
 
 	public final Font controllerElementsFont = new Font("Calibri", Font.BOLD, 16);
 
+	//Swing elements that need to be accessed for updates
+	private JLabel treasuresCounter;
+	private JLabel keysCounter;
+	private JLabel levelCounter;
+	private JLabel timeCounter;
+	private JMenuItem pauseMenuItem;
+	private JMenuItem gameSaveItem;
+	private JMenuItem replayStartItem;
+
 	private BoardRenderer game;
 	private Timer gameTimer;
 	public static final int TOTAL_GAME_TIME = 60;
@@ -45,13 +68,15 @@ public abstract class GUI {
 	public boolean canMove;
 
 
+
 	/**
-	 *  Intializes the maze, and builds the main window.
+	 *  Initializes the maze, and builds the main window.
 	 */
 	public GUI() {
 		createMaze();
 		canMove = false;
 		buildWindow();
+		repaintAll();
 	}
 
 
@@ -81,14 +106,14 @@ public abstract class GUI {
 		gameLoad.add(gameLoadLevel);
 		gameLoad.add(gameLoadState);
 
-		JMenuItem gameSaveItem = new JMenuItem("Save");
+		gameSaveItem = new JMenuItem("Save");
 		setMenuDetails(gameSaveItem);
 
 		gameMenu.add(gameStartItem);
 		gameMenu.add(gameLoad);
 		gameMenu.add(gameSaveItem);
 
-		JMenuItem pauseMenuItem = new JMenuItem("Pause");
+		pauseMenuItem = new JMenuItem("Pause");
 		setMenuDetails(pauseMenuItem);
 		pauseMenuItem.setEnabled(false);
 
@@ -98,7 +123,7 @@ public abstract class GUI {
 		JMenu replayMenu = new JMenu("Replay");
 		setMenuDetails(replayMenu);
 
-		JMenuItem replayStartItem = new JMenuItem("Start");
+		replayStartItem = new JMenuItem("Start");
 		setMenuDetails(replayStartItem);
 		replayStartItem.setEnabled(false);
 
@@ -150,14 +175,7 @@ public abstract class GUI {
 			@Override
 			public void keyTyped(KeyEvent e) { }
 			@Override
-			public void keyPressed(KeyEvent e) {
-				if (canMove) {
-					Direction direction = getDirectionFromKey(e);
-					if (direction != null) {
-						movePlayer(direction);
-					}
-				}
-			}
+			public void keyPressed(KeyEvent e) { checkMove(e); }
 			@Override
 			public void keyReleased(KeyEvent e) { }
 		});
@@ -169,52 +187,39 @@ public abstract class GUI {
 		JLabel timeLabel = new JLabel("Time");
 		setControllerElementDetails(timeLabel);
 
-		JLabel timeCounter = new JLabel("1200");
+		timeCounter = new JLabel();
 		setControllerElementDetails(timeCounter);
 
-		ActionListener timerListener = e -> {
-			if (timeLeft >= 1) {
-				timeLeft--;
-				timeCounter.setText(String.valueOf(timeLeft));
-
-			} else {
-				canMove = false;
-				//TODO: stop game
-				//TODO: JDialog game over
-				getRecord().writeToFile();
-				//TODO: load replay into field
-			}
-		};
+		ActionListener timerListener = e -> onGameTimeTick();
 
 		gameTimer = new Timer(1000, timerListener);
-		timeCounter.setText(String.valueOf(timeLeft));
 
 		JLabel levelLabel = new JLabel("Level");
 		setControllerElementDetails(levelLabel);
 
-		JLabel levelCounter = new JLabel("1");
+		levelCounter = new JLabel("1");
 		setControllerElementDetails(levelCounter);
 
 		JLabel keysLabel = new JLabel("Keys");
 		setControllerElementDetails(keysLabel);
 
-		JLabel keysCounter = new JLabel("4");
+		keysCounter = new JLabel("4");
 		setControllerElementDetails(keysCounter);
 
 		JLabel treasuresLabel = new JLabel("Treasures Left");
 		setControllerElementDetails(treasuresLabel);
 
-		JLabel treasuresCounter = new JLabel("3");
+		treasuresCounter = new JLabel("3");
 		setControllerElementDetails(treasuresCounter);
 
-		InventoryRenderer inventory = new InventoryRenderer(getMaze(), controllerPanelDim.width);
+		InventoryRenderer inventory = new InventoryRenderer(getMaze(), controllerPanelDim.width-20); //TODO: fix that -20 stuff, is for centering panel
 
 		controller.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		//constraints.insets = controllerPanelStandardInsets;
+		constraints.insets = controllerPanelStandardInsets;
 		controller.add(timeLabel, constraints);
 
 		constraints.gridy++;
@@ -236,20 +241,12 @@ public abstract class GUI {
 		controller.add(treasuresLabel, constraints);
 
 		constraints.gridy++;
-		//constraints.insets = new Insets(5, 50, 0, 50);
 		controller.add(treasuresCounter, constraints);
 
 		constraints.gridy++;
 		controller.add(inventory, constraints);
 
-		gameStartItem.addActionListener(e -> {
-			timeLeft = TOTAL_GAME_TIME;
-			gameTimer.start();
-			canMove = true;
-			setRecord(new Record());
-			pauseMenuItem.setEnabled(true);
-			timeCounter.setText(String.valueOf(timeLeft));
-		});
+		gameStartItem.addActionListener(e -> gameStart());
 
 		gameLoadLevel.addActionListener(e -> persistenceLoad(false));
 
@@ -257,31 +254,13 @@ public abstract class GUI {
 
 		gameSaveItem.addActionListener(e -> persistenceSave());
 
-		pauseMenuItem.addActionListener(e -> {
-			if (pause) {
-				gameTimer.start();
-				pause = false;
-				pauseMenuItem.setText("Pause");
-				canMove = true;
-				gameSaveItem.setEnabled(false);
-			}
-			else {
-				gameTimer.stop();
-				pause = true;
-				pauseMenuItem.setText("Play");
-				canMove = false;
-				gameSaveItem.setEnabled(true);
-			}
-		});
+		pauseMenuItem.addActionListener(e -> togglePause());
 
 		quitMenuItem.addActionListener(e -> System.exit(0));
 
 		replayStartItem.addActionListener(e -> runReplay());
 
-		replayLoadItem.addActionListener(e -> {
-			replayLoad();
-			replayStartItem.setEnabled(true);
-		});
+		replayLoadItem.addActionListener(e -> { replayLoad(); });
 
 		window.setLayout(new FlowLayout());
 		window.add(game);
@@ -296,6 +275,65 @@ public abstract class GUI {
 		window.setVisible(true);
 	}
 
+	public void onGameTimeTick() {
+		if (timeLeft >= 1) {
+			timeLeft--;
+			repaintAll();
+
+		} else {
+			canMove = false;
+			//TODO: stop game
+			//TODO: JDialog game over
+			getRecord().writeToFile();
+			//TODO: load replay into field
+		}
+	}
+
+	/**
+	 * Process KeyEvent, checking if it could be a valid move, and call associated methods if true.
+	 * @param e KeyEvent that occurred.
+	 */
+	public void checkMove(KeyEvent e) {
+		if (canMove) {
+			Direction direction = getDirectionFromKey(e);
+			if (direction != null) {
+				movePlayer(direction);
+			}
+		}
+	}
+
+	/**
+	 * Start the game process.
+	 */
+	public void gameStart() {
+		timeLeft = TOTAL_GAME_TIME;
+		gameTimer.start();
+		canMove = true;
+		setRecord(new Record());
+		pauseMenuItem.setEnabled(true);
+		timeCounter.setText(String.valueOf(timeLeft));
+	}
+
+	/**
+	 * Perform necessary actions on pause/play of game.
+	 */
+	public void togglePause() {
+		if (pause) {
+			gameTimer.start();
+			pause = false;
+			pauseMenuItem.setText("Pause");
+			canMove = true;
+			gameSaveItem.setEnabled(false);
+		}
+		else {
+			gameTimer.stop();
+			pause = true;
+			pauseMenuItem.setText("Play");
+			canMove = false;
+			gameSaveItem.setEnabled(true);
+		}
+	}
+
 	/**
 	 *  Load the replay file and reset the replay object.
 	 */
@@ -308,6 +346,7 @@ public abstract class GUI {
 			setReplay(replay);
 			replay.loadFile(toLoadFrom);
 		}
+		replayStartItem.setEnabled(true);
 	}
 
 	/**
@@ -327,8 +366,14 @@ public abstract class GUI {
 				maze = Persistence.loadLevelFromFile(toLoadFrom);
 
 			}
-			setMaze(maze);
-			game = new BoardRenderer(getMaze(), gamePanelDim);
+			if (maze != null) {
+				setMaze(maze);
+				game = new BoardRenderer(getMaze(), gamePanelDim);
+				levelCounter.setText(maze.getLevelName());
+			}
+			else {
+				//TODO: JDialog broken load
+			}
 		}
 	}
 
@@ -352,8 +397,7 @@ public abstract class GUI {
 	public void movePlayer(Direction direction) {
 		getMaze().moveChap(direction);
 		if (getRecord() != null) { getRecord().addMove(direction); } // for tests
-		game.revalidate();
-		game.repaint();
+		repaintAll();
 	}
 
 	/**
@@ -430,6 +474,18 @@ public abstract class GUI {
 				direction = null;
 		}
 		return direction;
+	}
+
+	/**
+	 * Update and repaint all components which tend to  change regularly, such as panel repainting and counter texts.
+	 */
+	public void repaintAll() {
+		treasuresCounter.setText(String.valueOf(4 - getMaze().getTreasuresPickedUp())); //TODO: change 4 to TREASURE_NUM from maze when available
+		keysCounter.setText(String.valueOf(getMaze().getChap().getKeyInventory().size()));
+		levelCounter.setText(getMaze().getLevelName());
+		timeCounter.setText(String.valueOf(timeLeft));
+		game.revalidate();
+		game.repaint();
 	}
 
 
