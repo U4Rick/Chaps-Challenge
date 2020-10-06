@@ -52,6 +52,8 @@ public class Persistence {
       JsonReader reader = Json.createReader(new FileReader(levelFile));
 
       JsonObject level = reader.readObject();
+      
+      String levelName = level.getString("name");
 
       int width = level.getInt("width");
       int height = level.getInt("height");
@@ -135,7 +137,7 @@ public class Persistence {
       levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile("");
 
       // make maze
-      return new Maze(chapPos, exitPos, treasureTiles.size(), levelArray);
+      return new Maze(levelName, chapPos, exitPos, treasureTiles.size(), levelArray);
     } catch (FileNotFoundException e) {
       // file was not found - maybe display something to user?
     } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
