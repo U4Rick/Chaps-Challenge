@@ -1,0 +1,15 @@
+{
+	"moves": [{
+			"move": "UP"
+		},
+		{
+			"move": "UP"
+		},
+		{
+			"move": "LEFT"
+		},
+		{
+			"move": "RIGHT"
+		}
+	]
+}
