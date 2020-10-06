@@ -67,6 +67,8 @@ public abstract class GUI {
 	public boolean pause = false;
 	public boolean canMove;
 
+	public KeyEvent previousKeyPressed;
+
 
 
 	/**
@@ -175,7 +177,7 @@ public abstract class GUI {
 			@Override
 			public void keyTyped(KeyEvent e) { }
 			@Override
-			public void keyPressed(KeyEvent e) { checkMove(e); }
+			public void keyPressed(KeyEvent e) { processKeyEvent(e); }
 			@Override
 			public void keyReleased(KeyEvent e) { }
 		});
@@ -197,19 +199,19 @@ public abstract class GUI {
 		JLabel levelLabel = new JLabel("Level");
 		setControllerElementDetails(levelLabel);
 
-		levelCounter = new JLabel("1");
+		levelCounter = new JLabel();
 		setControllerElementDetails(levelCounter);
 
 		JLabel keysLabel = new JLabel("Keys");
 		setControllerElementDetails(keysLabel);
 
-		keysCounter = new JLabel("4");
+		keysCounter = new JLabel();
 		setControllerElementDetails(keysCounter);
 
 		JLabel treasuresLabel = new JLabel("Treasures Left");
 		setControllerElementDetails(treasuresLabel);
 
-		treasuresCounter = new JLabel("3");
+		treasuresCounter = new JLabel();
 		setControllerElementDetails(treasuresCounter);
 
 		InventoryRenderer inventory = new InventoryRenderer(getMaze(), controllerPanelDim.width-20); //TODO: fix that -20 stuff, is for centering panel
@@ -275,6 +277,9 @@ public abstract class GUI {
 		window.setVisible(true);
 	}
 
+	/**
+	 * Actions to be processed on every gameTimer tick.
+	 */
 	public void onGameTimeTick() {
 		if (timeLeft >= 1) {
 			timeLeft--;
@@ -289,8 +294,54 @@ public abstract class GUI {
 		}
 	}
 
+	public void processKeyEvent(KeyEvent e) {
+		if (previousKeyPressed.getKeyCode() == KeyEvent.VK_CONTROL) {
+			switch (e.getKeyCode()) {
+				//exit the game, the current game state will be lost, the next time the game is started, it will resume from the last unfinished level
+				case KeyEvent.VK_X:
+
+
+				//exit the game, saves the game state, game will resume next time the application will be started
+				case KeyEvent.VK_S:
+
+
+				//resume a saved game
+				case KeyEvent.VK_R:
+
+
+				//start a new game at the last unfinished level
+				case KeyEvent.VK_P:
+
+
+				//start a new game at level 1
+				case KeyEvent.VK_1:
+
+
+			}
+		} else {
+			switch (e.getKeyCode()) {
+				//pause the game
+				case KeyEvent.VK_ESCAPE:
+					togglePause(false);
+					break;
+
+				//resume the game
+				case KeyEvent.VK_SPACE:
+					togglePause(true);
+					break;
+
+				//if not anything else, assume user is trying to move chap
+				default:
+					checkMove(e);
+					break;
+			}
+			previousKeyPressed = e;
+		}
+	}
+
 	/**
-	 * Process KeyEvent, checking if it could be a valid move, and call associated methods if true.
+	 * Process KeyEvent determined to be a move, checking if it could be a valid move,
+	 * and call associated methods if true.
 	 * @param e KeyEvent that occurred.
 	 */
 	public void checkMove(KeyEvent e) {
@@ -319,6 +370,26 @@ public abstract class GUI {
 	 */
 	public void togglePause() {
 		if (pause) {
+			gameTimer.start();
+			pause = false;
+			pauseMenuItem.setText("Pause");
+			canMove = true;
+			gameSaveItem.setEnabled(false);
+		}
+		else {
+			gameTimer.stop();
+			pause = true;
+			pauseMenuItem.setText("Play");
+			canMove = false;
+			gameSaveItem.setEnabled(true);
+		}
+	}
+
+	/**
+	 * Perform necessary actions on pause/play of game, with a predefined game state.
+	 */
+	public void togglePause(boolean toggle) {
+		if (toggle) {
 			gameTimer.start();
 			pause = false;
 			pauseMenuItem.setText("Pause");
@@ -424,7 +495,7 @@ public abstract class GUI {
 			}
 		}
 		else {
-			//JDialog saying no active replay
+			//TODO: JDialog saying no active replay
 		}
 	}
 
