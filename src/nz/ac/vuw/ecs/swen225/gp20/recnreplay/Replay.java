@@ -1,3 +1,4 @@
+
 package nz.ac.vuw.ecs.swen225.gp20.recnreplay;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
@@ -9,6 +10,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to create a replay of the movements made by the player for the previous level.
+ * @author Ricky McLean
+ */
 public class Replay{
 
     private List<String> recordedMoves;
@@ -17,13 +22,20 @@ public class Replay{
     private File file;
     private Maze maze;
 
-
+    /**
+     * Constructs the replay with relevant maze.
+     *
+     */
     public Replay(File file) {
         if (file != null) {
             this.file = file;
         }
     }
 
+    /**
+     * Loads in a file to play a replay from.
+     * @param file containing replay json
+     */
     public void loadFile(File file) {
         try {
             InputStream fis = new FileInputStream(file);
@@ -35,39 +47,36 @@ public class Replay{
             e.printStackTrace();
         }
     }
-
+    /**
+     * Processes the actions of the loaded json file.
+     */
     public List<String> processActionsJson(){
-        JsonArray moves = loadedActions.getJsonArray("move");
+        recordedMoves = new ArrayList<>();
+
+
+        JsonArray moves = loadedActions.getJsonArray("moves");
 
         for (JsonValue jsonMove : moves) {
             JsonObject move = jsonMove.asJsonObject();
             String direction = move.getString("move");
             recordedMoves.add(direction);
-
-//            switch (direction) {
-//                case "DOWN":
-//                    super.movePlayer(Maze.Direction.DOWN);
-//                    break;
-//                case "RIGHT":
-//                    super.movePlayer(Maze.Direction.RIGHT);
-//                    break;
-//                case "UP":
-//                    super.movePlayer(Maze.Direction.UP);
-//                    break;
-//                case "LEFT":
-//                    super.movePlayer(Maze.Direction.LEFT);
-//                    break;
-//            }
-
         }
         return recordedMoves;
 
     }
 
+    /**
+     * Get the delay speed for replaying actions.
+     * @return the delay
+     */
     public int getPlaybackDelay() {
         return playbackDelay;
     }
 
+    /**
+     * Set the delay speed for replaying actions.
+     * @param playbackDelay the delay
+     */
     public void setPlaybackDelay(int playbackDelay) {
         this.playbackDelay = playbackDelay;
     }

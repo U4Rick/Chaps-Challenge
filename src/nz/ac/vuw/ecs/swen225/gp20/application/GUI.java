@@ -181,11 +181,7 @@ public abstract class GUI {
 				canMove = false;
 				//TODO: stop game
 				//TODO: JDialog game over
-				try {
-					getRecord().writeToFile();
-				} catch (IOException ioException) {
-					ioException.printStackTrace();
-				}
+				getRecord().writeToFile();
 				//TODO: load replay into field
 			}
 		};
@@ -310,6 +306,7 @@ public abstract class GUI {
 			File toLoadFrom = chooser.getSelectedFile();
 			Replay replay = new Replay(toLoadFrom);
 			setReplay(replay);
+			replay.loadFile(toLoadFrom);
 		}
 	}
 
