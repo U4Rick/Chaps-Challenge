@@ -8,8 +8,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import java.awt.Point;
 
-//TODO rewrite Javadoc
-
 /**
  * Represents the map used in the game for each level.
  *
@@ -136,7 +134,14 @@ public class Maze {
     } else {  //if Chap is going to pick up treasure
       treasuresPickedUp++;
       if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit
-        assert(board[exitLocation.x][exitLocation.y] instanceof ExitLockTile); //check that exit is initialised at locked exit
+        //find all exit locks and change them into free tiles once all treasures have been picked up.
+        for(int x = 0; x < board.length; x++) {
+          for(int y = 0; y < board[0].length; y++) {
+            if(board[x][y] instanceof ExitLockTile) {
+              board[x][y] = new FreeTile();
+            }
+          }
+        }
         board[exitLocation.x][exitLocation.y] = new ExitTile();
       }
     }
@@ -201,4 +206,9 @@ public class Maze {
    */
   public final int getTreasuresPickedUp() { return treasuresPickedUp; }
 
+  /**
+   * Gets the total number of treasures on the level.
+   * @return  The total number of treasures on the level.
+   */
+  public final int getTREASURES_NUM() { return TREASURES_NUM; }
 }
