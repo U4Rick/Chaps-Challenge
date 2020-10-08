@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 //importing libraries needed
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
@@ -32,6 +33,8 @@ public class Maze {
   private Point exitLocation; //where exit is located at on the map
   private Chap chap;  //it's Chap!
   private int levelNumber; //name of the current maze
+  private int timeAvailable;  //amount of time available to solve the maze at beginning of level
+  private int timeLeft; //amount of time left to solve the maze
 
   private final int TREASURES_NUM;
   private int treasuresPickedUp = 0;
@@ -44,10 +47,12 @@ public class Maze {
    * @param board The 2d array that represents the board for the level.
    * @throws IllegalStateException If chap is being set onto an inaccessible tile, then there is something wrong with the level.
    */
-  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, Tile[][] board) throws IllegalStateException{
+  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, int timeAvailable, Tile[][] board) throws IllegalStateException{
     this.levelNumber = levelNumber;
     this.chap = new Chap(chapLocation);
     this.exitLocation = exitLocation;
+    this.timeAvailable = timeAvailable;
+    this.timeLeft = timeAvailable;
     TREASURES_NUM = treasuresNum;
     this.board = board;
 
@@ -59,62 +64,25 @@ public class Maze {
     }
   }
 
+
   /**
-   * Moves Chap in the direction stated by one tile on the board.
-   *
-   * @param direction Represents the direction to move Chap
-   * @throws IllegalStateException If going to new direction will cause Chap to go out of bounds, will throw an IllegalStateException.
-   * @throws IllegalArgumentException If the direction provided is not left, right, up or down, then is an invalid direction.
+   * Moves the entity when there's no direction specified.
+   * @param entity  Entity to move.
+   * @param isChap  For checking that entity is Chap
    */
-  public void moveChap(Direction direction) throws IllegalStateException, IllegalArgumentException {
-    assert(chap != null && board != null);
-    Point chapLocation = chap.getEntityPosition();
-    //get new position to move Chap to
-    Point position;
-    switch(direction) {
-      case UP:
-        position = new Point(chapLocation.x, chapLocation.y-1);
-        break;
-      case DOWN:
-        position = new Point(chapLocation.x, chapLocation.y+1);
-        break;
-      case LEFT:
-        position = new Point(chapLocation.x-1, chapLocation.y);
-        break;
-      case RIGHT:
-        position = new Point(chapLocation.x+1, chapLocation.y);
-        break;
-      default:  //if not any of the move cases, then is not a valid move
-        throw new IllegalArgumentException();
-    }
+  public void moveEntity(Entity entity, boolean isChap) {
+    Direction direction = entity.moveRandom();
+    entity.moveEntity(direction, entity,this, isChap);
+  }
 
-    //check that new position is in the bounds of the board, if not throw exception
-    if(position.x >= board.length || position.y >= board[0].length) {
-      throw new IllegalStateException();
-    }
-
-
-    if(!chap.canMove(board[position.x][position.y])) {
-      InaccessibleTile tile = (InaccessibleTile)board[position.x][position.y];
-      if(tile.isLockedDoor()) { //check that tile is a locked door
-        chap.unlockDoor(tile);
-      }
-    }
-
-    else {    //if Chap can move onto tile
-      AccessibleTile accessibleTile = (AccessibleTile)board[position.x][position.y];
-
-      //pick up item on tile if is an item tile
-      if(accessibleTile.isItem()) {
-        pickUpItem(accessibleTile);
-      }
-
-      //reassign Chap to new tile
-      ((AccessibleTile)board[chapLocation.x][chapLocation.y]).setEntityHere(null);
-      (accessibleTile).setEntityHere(chap);
-      chap.setEntityPosition(new Point(position));  //to keep track of Chap's location
-    }
-    assert(board[chapLocation.x][chapLocation.y] instanceof AccessibleTile); //check that chap is not on an invalid tile
+  /**
+   * Moves the entity when there's a direction specified.
+   * @param entity  Entity to move.
+   * @param isChap  For checking that entity is Chap
+   * @param direction Direction specified.
+   */
+  public void moveEntity(Entity entity, boolean isChap, Direction direction) {
+    entity.moveEntity(direction, entity,this, isChap);
   }
 
   /**
@@ -197,6 +165,30 @@ public class Maze {
    */
   public final int getLevelNumber() {
     return levelNumber;
+  }
+
+  /**
+   * Gets the amount of time available to solve the maze at beginning of level.
+   * @return The amount of time available to solve the maze at beginning of level.
+   */
+  public final int getTimeAvailable() {
+    return timeAvailable;
+  }
+
+  /**
+   * Sets the amount of time left to solve the maze.
+   * @param timeLeft  The amount of time left to solve the maze.
+   */
+  public void setTimeLeft(int timeLeft) {
+    this.timeLeft = timeLeft;
+  }
+
+  /**
+   * Gets the amount of time left to solve the maze.
+   * @return  The amount of time left to solve the maze.
+   */
+  public final int getTimeLeft() {
+    return timeLeft;
   }
 
   /**

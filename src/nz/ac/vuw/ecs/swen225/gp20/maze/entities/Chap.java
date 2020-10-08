@@ -28,6 +28,8 @@ public class Chap extends Entity {
     keyInventory = new HashSet<>();
   }
 
+
+
   /**
    * Checks if door can be unlocked by Chap and if so unlocks the door
    * @param door  Door that is unlocked
@@ -43,15 +45,6 @@ public class Chap extends Entity {
         break;
       }
     }
-  }
-
-  /**
-   * For checking if Chap can move to the new tile.
-   * @param tile The tile to check if Chap can move into.
-   */
-  public boolean canMove(Tile tile) {
-    assert(tile != null);
-    return tile.isAccessible();
   }
 
   /**
