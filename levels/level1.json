@@ -1,7 +1,8 @@
 {
-    "name": "level1",
+    "number": 1,
     "width": 20,
     "height": 18,
+    "time": 90,
     "walls": [
         {
             "x": 6,
