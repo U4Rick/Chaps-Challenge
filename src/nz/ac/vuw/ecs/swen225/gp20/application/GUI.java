@@ -268,6 +268,7 @@ public abstract class GUI {
 		window.add(game);
 		window.add(controller);
 
+		window.setTitle("Chap's Challenge");
 		window.setJMenuBar(menu);
 		window.getContentPane().setBackground(mainColor);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -454,7 +455,7 @@ public abstract class GUI {
 			if (maze != null) {
 				setMaze(maze);
 				game = new BoardRenderer(getMaze(), gamePanelDim);
-				levelCounter.setText(maze.getLevelNumber());
+				levelCounter.setText(String.valueOf(maze.getLevelNumber()));
 			}
 			else {
 				//TODO: JDialog broken load
@@ -567,7 +568,7 @@ public abstract class GUI {
 	public void repaintAll() {
 		treasuresCounter.setText(String.valueOf(getMaze().getTREASURES_NUM() - getMaze().getTreasuresPickedUp()));
 		keysCounter.setText(String.valueOf(getMaze().getChap().getKeyInventory().size()));
-		levelCounter.setText(getMaze().getLevelNumber());
+		levelCounter.setText(String.valueOf(getMaze().getLevelNumber()));
 		timeCounter.setText(String.valueOf(timeLeft));
 		game.revalidate();
 		game.repaint();
