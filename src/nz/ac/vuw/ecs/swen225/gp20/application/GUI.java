@@ -294,8 +294,12 @@ public abstract class GUI {
 		}
 	}
 
+	/**
+	 * Process any KeyEvent encountered.
+	 * @param e KeyEvent to process
+	 */
 	public void processKeyEvent(KeyEvent e) {
-		if (previousKeyPressed.getKeyCode() == KeyEvent.VK_CONTROL) {
+		if (previousKeyPressed != null && previousKeyPressed.getKeyCode() == KeyEvent.VK_CONTROL) {
 			switch (e.getKeyCode()) {
 				//exit the game, the current game state will be lost, the next time the game is started, it will resume from the last unfinished level
 				case KeyEvent.VK_X:
@@ -551,7 +555,7 @@ public abstract class GUI {
 	 * Update and repaint all components which tend to  change regularly, such as panel repainting and counter texts.
 	 */
 	public void repaintAll() {
-		treasuresCounter.setText(String.valueOf(4 - getMaze().getTreasuresPickedUp())); //TODO: change 4 to TREASURE_NUM from maze when available
+		treasuresCounter.setText(String.valueOf(getMaze().getTREASURES_NUM() - getMaze().getTreasuresPickedUp()));
 		keysCounter.setText(String.valueOf(getMaze().getChap().getKeyInventory().size()));
 		levelCounter.setText(getMaze().getLevelName());
 		timeCounter.setText(String.valueOf(timeLeft));
