@@ -25,6 +25,11 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Colours;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
+/**
+ * 
+ * @author Tristan
+ *
+ */
 public class Persistence {
   
   /**
@@ -57,6 +62,8 @@ public class Persistence {
 
       int width = level.getInt("width");
       int height = level.getInt("height");
+      
+      int levelTime = level.getInt("time");
 
       Tile[][] levelArray = new Tile[width][height];
 
@@ -68,55 +75,31 @@ public class Persistence {
       }
 
       // load walls
-      JsonArray wallTiles = level.getJsonArray("walls");
+      TileObject[] wallTiles = getObjectValues(level, "walls", false);
 
-      for (JsonValue wallValue : wallTiles) {
-        JsonObject wall = wallValue.asJsonObject();
-
-        int wallX = wall.getInt("x");
-        int wallY = wall.getInt("y");
-
-        levelArray[wallX][wallY] = new WallTile();
+      for (TileObject wall : wallTiles) {
+        levelArray[wall.x][wall.y] = new WallTile();
       }
 
       // load locked doors
-      JsonArray lockedDoorTiles = level.getJsonArray("locked_doors");
+      TileObject[] lockedDoorTiles = getObjectValues(level, "locked_doors", true);
 
-      for (JsonValue doorValue : lockedDoorTiles) {
-        JsonObject door = doorValue.asJsonObject();
-
-        int doorX = door.getInt("x");
-        int doorY = door.getInt("y");
-
-        Colours colour = getColourFromString(door.getString("colour"));
-
-        levelArray[doorX][doorY] = new DoorTile(colour);
+      for (TileObject door : lockedDoorTiles) {
+        levelArray[door.x][door.y] = new DoorTile(door.colour);
       }
 
       // load keys
-      JsonArray keyTiles = level.getJsonArray("keys");
+      TileObject[] keyTiles = getObjectValues(level, "keys", true);
 
-      for (JsonValue keyValue : keyTiles) {
-        JsonObject key = keyValue.asJsonObject();
-
-        int keyX = key.getInt("x");
-        int keyY = key.getInt("y");
-
-        Colours colour = getColourFromString(key.getString("colour"));
-
-        levelArray[keyX][keyY] = new KeyTile(colour);
+      for (TileObject key : keyTiles) {
+        levelArray[key.x][key.y] = new KeyTile(key.colour);
       }
 
       // load treasures
-      JsonArray treasureTiles = level.getJsonArray("treasures");
+      TileObject[] treasureTiles = getObjectValues(level, "treasures", false);
 
-      for (JsonValue treasureValue : treasureTiles) {
-        JsonObject treasure = treasureValue.asJsonObject();
-
-        int treasureX = treasure.getInt("x");
-        int treasureY = treasure.getInt("y");
-
-        levelArray[treasureX][treasureY] = new TreasureTile();
+      for (TileObject treasure : treasureTiles) {
+        levelArray[treasure.x][treasure.y] = new TreasureTile();
       }
 
       // load exit tile
@@ -137,7 +120,7 @@ public class Persistence {
       levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile("");
 
       // make maze
-      return new Maze(levelName, chapPos, exitPos, treasureTiles.size(), levelArray);
+      return new Maze(levelName, chapPos, exitPos, treasureTiles.length, levelArray);
     } catch (FileNotFoundException e) {
       // file was not found - maybe display something to user?
     } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
@@ -145,6 +128,29 @@ public class Persistence {
     }
     // if error, return null
     return null;
+  }
+  
+  private static TileObject[] getObjectValues(JsonObject levelObject, String levelKey, boolean colour) {
+	// load keys
+	  JsonArray objects = levelObject.getJsonArray(levelKey);
+	  
+	  TileObject[] objArray = new TileObject[objects.size()];
+	
+	  for (int i=0;i<objects.size();i++) {
+	    JsonObject object = objects.getJsonObject(i);
+	
+	    int objectX = object.getInt("x");
+	    int objectY = object.getInt("y");
+	    
+	    if (colour) {
+	    	Colours objColour = getColourFromString(object.getString("colour"));
+	    	objArray[i] = new TileObject(objectX, objectY, objColour);
+	    } else {
+	    	objArray[i] = new TileObject(objectX, objectY);
+	    }
+	  }
+	  
+	  return objArray;
   }
 
   /**
@@ -307,42 +313,25 @@ public class Persistence {
       Map<Point, TreasureTile> treasures = new HashMap<>();
       Map<Point, KeyTile> keys = new HashMap<>();
       Map<Point, DoorTile> doors = new HashMap<>();
+      
+      //load treasures still on map
+      TileObject[] treasureTiles = getObjectValues(gameState, "treasures", false);
 
-      JsonArray treasuresArray = gameState.getJsonArray("treasures");
+      for (TileObject treasure : treasureTiles) {
+        treasures.put(new Point(treasure.x, treasure.y), new TreasureTile());
+      }
+      
+      //load keys still on map
+      TileObject[] keyTiles = getObjectValues(gameState, "keys", true);
 
-      for (JsonValue treasureValue : treasuresArray) {
-        JsonObject treasure = treasureValue.asJsonObject();
-
-        int treasureX = treasure.getInt("x");
-        int treasureY = treasure.getInt("y");
-
-        treasures.put(new Point(treasureX, treasureY), new TreasureTile());
+      for (TileObject key : keyTiles) {
+        keys.put(new Point(key.x, key.y), new KeyTile(key.colour));
       }
 
-      JsonArray keysArray = gameState.getJsonArray("keys");
+      TileObject[] doorTiles = getObjectValues(gameState, "locked_doors", true);
 
-      for (JsonValue keyValue : keysArray) {
-        JsonObject key = keyValue.asJsonObject();
-
-        int keyX = key.getInt("x");
-        int keyY = key.getInt("y");
-
-        Colours keyColour = getColourFromString(key.getString("colour"));
-
-        keys.put(new Point(keyX, keyY), new KeyTile(keyColour));
-      }
-
-      JsonArray lockedDoorsArray = gameState.getJsonArray("locked_doors");
-
-      for (JsonValue doorValue : lockedDoorsArray) {
-        JsonObject door = doorValue.asJsonObject();
-
-        int doorX = door.getInt("x");
-        int doorY = door.getInt("y");
-
-        Colours doorColour = getColourFromString(door.getString("colour"));
-
-        doors.put(new Point(doorX, doorY), new DoorTile(doorColour));
+      for (TileObject door : doorTiles) {
+        doors.put(new Point(door.x, door.y), new DoorTile(door.colour));
       }
 
       Tile[][] board = maze.getBoard();
@@ -392,4 +381,26 @@ public class Persistence {
     }
     return null;
   }
+}
+
+/**
+ * 
+ * @author Tristan
+ *
+ */
+class TileObject {
+	public int x;
+	public int y;
+	public Colours colour;
+	
+	public TileObject(int x, int y) {
+		this.x = x;
+		this.y = y;
+		this.colour = null;
+	}
+	public TileObject(int x, int y, Colours colour) {
+		this.x = x;
+		this.y = y;
+		this.colour = colour;
+	}
 }
