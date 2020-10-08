@@ -444,7 +444,7 @@ public abstract class GUI {
 			if (maze != null) {
 				setMaze(maze);
 				game = new BoardRenderer(getMaze(), gamePanelDim);
-				levelCounter.setText(maze.getLevelName());
+				levelCounter.setText(maze.getLevelNumber());
 			}
 			else {
 				//TODO: JDialog broken load
@@ -557,7 +557,7 @@ public abstract class GUI {
 	public void repaintAll() {
 		treasuresCounter.setText(String.valueOf(getMaze().getTREASURES_NUM() - getMaze().getTreasuresPickedUp()));
 		keysCounter.setText(String.valueOf(getMaze().getChap().getKeyInventory().size()));
-		levelCounter.setText(getMaze().getLevelName());
+		levelCounter.setText(getMaze().getLevelNumber());
 		timeCounter.setText(String.valueOf(timeLeft));
 		game.revalidate();
 		game.repaint();

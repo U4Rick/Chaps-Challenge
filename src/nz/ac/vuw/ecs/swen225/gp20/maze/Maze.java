@@ -31,7 +31,7 @@ public class Maze {
   private Tile[][] board; //2d array of tiles,
   private Point exitLocation; //where exit is located at on the map
   private Chap chap;  //it's Chap!
-  private String levelName; //name of the current maze
+  private int levelNumber; //name of the current maze
 
   private final int TREASURES_NUM;
   private int treasuresPickedUp = 0;
@@ -44,8 +44,8 @@ public class Maze {
    * @param board The 2d array that represents the board for the level.
    * @throws IllegalStateException If chap is being set onto an inaccessible tile, then there is something wrong with the level.
    */
-  public Maze(String levelName, Point chapLocation, Point exitLocation, int treasuresNum, Tile[][] board) throws IllegalStateException{
-    this.levelName = levelName;
+  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, Tile[][] board) throws IllegalStateException{
+    this.levelNumber = levelNumber;
     this.chap = new Chap(chapLocation);
     this.exitLocation = exitLocation;
     TREASURES_NUM = treasuresNum;
@@ -195,9 +195,8 @@ public class Maze {
    * Gets the name of this level, for the persistence package.
    * @return The name of this level.
    */
-  public final String getLevelName() {
-    assert(levelName != null);
-    return levelName;
+  public final int getLevelNumber() {
+    return levelNumber;
   }
 
   /**
