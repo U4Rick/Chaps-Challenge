@@ -481,7 +481,7 @@ public abstract class GUI {
 	 * @param direction Direction to move player.
 	 */
 	public void movePlayer(Direction direction) {
-		getMaze().moveEntity(direction);
+		getMaze().moveChap(direction);
 		if (getRecord() != null) { getRecord().addMove(direction); } // for tests
 		repaintAll();
 	}

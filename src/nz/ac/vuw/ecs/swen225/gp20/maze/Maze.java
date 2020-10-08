@@ -64,25 +64,21 @@ public class Maze {
     }
   }
 
-
   /**
-   * Moves the entity when there's no direction specified.
-   * @param entity  Entity to move.
-   * @param isChap  For checking that entity is Chap
+   * Moves Chap with the direction specified.
+   * @param direction Direction specified.
    */
-  public void moveEntity(Entity entity, boolean isChap) {
-    Direction direction = entity.moveRandom();
-    entity.moveEntity(direction, entity,this, isChap);
+  public void moveChap(Direction direction) {
+    chap.moveEntity(direction, chap, this, true);
   }
 
   /**
-   * Moves the entity when there's a direction specified.
+   * Moves the NPC.
    * @param entity  Entity to move.
-   * @param isChap  For checking that entity is Chap
-   * @param direction Direction specified.
    */
-  public void moveEntity(Entity entity, boolean isChap, Direction direction) {
-    entity.moveEntity(direction, entity,this, isChap);
+  public void moveNPC(Entity entity) {
+    Direction direction = entity.moveRandom();
+    entity.moveEntity(direction, entity,this, false);
   }
 
   /**
