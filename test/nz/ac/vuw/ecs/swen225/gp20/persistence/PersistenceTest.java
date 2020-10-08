@@ -45,6 +45,7 @@ class PersistenceTest {
                          "   \"number\": 1," +
                          "   \"width\": 11," +
                          "   \"height\": 11," +
+                         "   \"time\": 90," +
                          "   \"walls\": [" +
                          "      {\"x\": 0, \"y\": 0}" +
                          "   ]," +

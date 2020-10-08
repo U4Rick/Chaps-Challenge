@@ -120,11 +120,12 @@ public class Persistence {
       levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile("");
 
       // make maze
-      return new Maze(levelNum, chapPos, exitPos, treasureTiles.length, levelArray);
+      return new Maze(levelNum, chapPos, exitPos, treasureTiles.length, levelTime, levelArray);
     } catch (FileNotFoundException e) {
       // file was not found - maybe display something to user?
     } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
       // error in the file
+      e.printStackTrace();
     }
     // if error, return null
     return null;
@@ -279,6 +280,7 @@ public class Persistence {
         .add("keys", keysBuilder.build())
         .add("treasures", treasuresBuilder.build())
         .add("chap", chap)
+        .add("time_left", maze.getTimeLeft())
         .build();
 
     try {
@@ -373,6 +375,9 @@ public class Persistence {
         Key key = new Key(getColourFromString(keyValue.asJsonObject().getString("colour")));
         chap.addToKeyInven(key);
       }
+
+      int timeLeft = gameState.getInt("time_left");
+      maze.setTimeLeft(timeLeft);
 
       return maze;
 
