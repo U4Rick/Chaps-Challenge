@@ -42,7 +42,7 @@ class PersistenceTest {
             FileWriter fw = new FileWriter(testFile);
 
             fw.write("{" +
-                         "   \"name\": \"testLevel\"," +
+                         "   \"number\": 1," +
                          "   \"width\": 11," +
                          "   \"height\": 11," +
                          "   \"walls\": [" +
