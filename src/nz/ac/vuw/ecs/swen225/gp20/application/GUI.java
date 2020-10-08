@@ -262,12 +262,13 @@ public abstract class GUI {
 
 		replayStartItem.addActionListener(e -> runReplay());
 
-		replayLoadItem.addActionListener(e -> { replayLoad(); });
+		replayLoadItem.addActionListener(e -> replayLoad());
 
 		window.setLayout(new FlowLayout());
 		window.add(game);
 		window.add(controller);
 
+		window.setTitle("Chap's Challenge");
 		window.setJMenuBar(menu);
 		window.getContentPane().setBackground(mainColor);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -299,26 +300,36 @@ public abstract class GUI {
 	 * @param e KeyEvent to process
 	 */
 	public void processKeyEvent(KeyEvent e) {
-		if (previousKeyPressed != null && previousKeyPressed.getKeyCode() == KeyEvent.VK_CONTROL) {
+		if (e.isControlDown()) {
 			switch (e.getKeyCode()) {
 				//exit the game, the current game state will be lost, the next time the game is started, it will resume from the last unfinished level
 				case KeyEvent.VK_X:
+					System.out.println("x");
+					break;
 
 
 				//exit the game, saves the game state, game will resume next time the application will be started
 				case KeyEvent.VK_S:
+					System.out.println("s");
+					break;
 
 
 				//resume a saved game
 				case KeyEvent.VK_R:
+					System.out.println("r");
+					break;
 
 
 				//start a new game at the last unfinished level
 				case KeyEvent.VK_P:
+					System.out.println("p");
+					break;
 
 
 				//start a new game at level 1
 				case KeyEvent.VK_1:
+					System.out.println("1");
+					break;
 
 
 			}
@@ -444,7 +455,7 @@ public abstract class GUI {
 			if (maze != null) {
 				setMaze(maze);
 				game = new BoardRenderer(getMaze(), gamePanelDim);
-				levelCounter.setText(maze.getLevelNumber());
+				levelCounter.setText(String.valueOf(maze.getLevelNumber()));
 			}
 			else {
 				//TODO: JDialog broken load
@@ -557,7 +568,7 @@ public abstract class GUI {
 	public void repaintAll() {
 		treasuresCounter.setText(String.valueOf(getMaze().getTREASURES_NUM() - getMaze().getTreasuresPickedUp()));
 		keysCounter.setText(String.valueOf(getMaze().getChap().getKeyInventory().size()));
-		levelCounter.setText(getMaze().getLevelNumber());
+		levelCounter.setText(String.valueOf(getMaze().getLevelNumber()));
 		timeCounter.setText(String.valueOf(timeLeft));
 		game.revalidate();
 		game.repaint();
