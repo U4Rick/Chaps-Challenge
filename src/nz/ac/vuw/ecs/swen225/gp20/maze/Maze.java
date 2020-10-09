@@ -10,6 +10,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import java.awt.Point;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Represents the map used in the game for each level.
  *
@@ -88,7 +90,8 @@ public class Maze {
    * @param location The tile to pick the item from.
    */
   public void pickUpItem(Point location) {
-    assert(board[location.x][location.y] instanceof  AccessibleTile );
+    Preconditions.checkState(board[location.x][location.y] instanceof  AccessibleTile );
+    //assert(board[location.x][location.y] instanceof  AccessibleTile );
     AccessibleTile accessibleTile = (AccessibleTile)this.getBoard()[location.x][location.y];
     assert(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile); //check that tile is a keytile or treasuretile
     if(accessibleTile instanceof KeyTile) {  //check if not on a treasure tile
