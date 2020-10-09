@@ -62,13 +62,9 @@ public abstract class GUI {
 
 	private BoardRenderer game;
 	private Timer gameTimer;
-	public static final int TOTAL_GAME_TIME = 60;
 	public int timeLeft;
-	public boolean pause = false;
+	public boolean isPause = false;
 	public boolean canMove;
-
-	public KeyEvent previousKeyPressed;
-
 
 
 	/**
@@ -284,6 +280,7 @@ public abstract class GUI {
 	public void onGameTimeTick() {
 		if (timeLeft >= 1) {
 			timeLeft--;
+			getMaze().setTimeLeft(timeLeft);
 			repaintAll();
 
 		} else {
@@ -350,7 +347,6 @@ public abstract class GUI {
 					checkMove(e);
 					break;
 			}
-			previousKeyPressed = e;
 		}
 	}
 
@@ -372,7 +368,7 @@ public abstract class GUI {
 	 * Start the game process.
 	 */
 	public void gameStart() {
-		timeLeft = TOTAL_GAME_TIME;
+		timeLeft = getMaze().getTimeAvailable();
 		gameTimer.start();
 		canMove = true;
 		setRecord(new Record());
@@ -384,19 +380,11 @@ public abstract class GUI {
 	 * Perform necessary actions on pause/play of game.
 	 */
 	public void togglePause() {
-		if (pause) {
-			gameTimer.start();
-			pause = false;
-			pauseMenuItem.setText("Pause");
-			canMove = true;
-			gameSaveItem.setEnabled(false);
+		if (isPause) {
+			play();
 		}
 		else {
-			gameTimer.stop();
-			pause = true;
-			pauseMenuItem.setText("Play");
-			canMove = false;
-			gameSaveItem.setEnabled(true);
+			pause();
 		}
 	}
 
@@ -404,20 +392,28 @@ public abstract class GUI {
 	 * Perform necessary actions on pause/play of game, with a predefined game state.
 	 */
 	public void togglePause(boolean toggle) {
-		if (toggle) {
-			gameTimer.start();
-			pause = false;
-			pauseMenuItem.setText("Pause");
-			canMove = true;
-			gameSaveItem.setEnabled(false);
+		if (!toggle) {
+			play();
 		}
 		else {
-			gameTimer.stop();
-			pause = true;
-			pauseMenuItem.setText("Play");
-			canMove = false;
-			gameSaveItem.setEnabled(true);
+			pause();
 		}
+	}
+
+	public void pause() {
+		gameTimer.stop();
+		isPause = true;
+		pauseMenuItem.setText("Play");
+		canMove = false;
+		gameSaveItem.setEnabled(true);
+	}
+
+	public void play() {
+		gameTimer.start();
+		isPause = false;
+		pauseMenuItem.setText("Pause");
+		canMove = true;
+		gameSaveItem.setEnabled(false);
 	}
 
 	/**
@@ -545,15 +541,19 @@ public abstract class GUI {
 		Direction direction;
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_A:
 				direction = Direction.LEFT;
 				break;
 			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_D:
 				direction = Direction.RIGHT;
 				break;
 			case KeyEvent.VK_UP:
+			case KeyEvent.VK_W:
 				direction = Direction.UP;
 				break;
 			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_S:
 				direction = Direction.DOWN;
 				break;
 			default:
