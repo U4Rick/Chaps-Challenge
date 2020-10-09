@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 //importing libraries needed
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
@@ -31,7 +32,10 @@ public class Maze {
 
   private Tile[][] board; //2d array of tiles,
   private Point exitLocation; //where exit is located at on the map
+
   private Chap chap;  //it's Chap!
+  private NPC npc;  //it's a man
+
   private int levelNumber; //name of the current maze
   private int timeAvailable;  //amount of time available to solve the maze at beginning of level
   private int timeLeft; //amount of time left to solve the maze
@@ -74,11 +78,9 @@ public class Maze {
 
   /**
    * Moves the NPC.
-   * @param entity  Entity to move.
    */
-  public void moveNPC(Entity entity) {
-    Direction direction = entity.moveRandom();
-    entity.moveEntity(direction, entity,this, false);
+  public void moveNPC() {
+    //TODO implement this in separate branch for NPC.
   }
 
   /**
