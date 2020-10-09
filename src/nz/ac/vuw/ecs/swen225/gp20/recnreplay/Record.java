@@ -31,7 +31,7 @@ public class Record {
      */
     public void writeToFile() {
         try {
-            PrintWriter pw = new PrintWriter("json_data.json");
+            PrintWriter pw = new PrintWriter("json_data_record.json");
 
             JsonObjectBuilder jsonObject = Json.createObjectBuilder();
             JsonArrayBuilder moves = Json.createArrayBuilder();
@@ -54,6 +54,7 @@ public class Record {
             JsonObject JsonObjectMain = jsonObject.build();
 
             pw.write(JsonObjectMain.toString());
+            pw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
