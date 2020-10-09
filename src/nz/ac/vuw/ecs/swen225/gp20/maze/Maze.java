@@ -84,21 +84,26 @@ public class Maze {
   }
 
   /**
-   * For dealing with logic of picking up an item
-   * @param accessibleTile The tile to pick the item from.
+   * For dealing with logic of picking up an item.
+   * @param location The tile to pick the item from.
    */
-  public void pickUpItem(AccessibleTile accessibleTile) {
-    assert(accessibleTile instanceof KeyTile || accessibleTile instanceof TreasureTile); //check that tile is a keytile or treasuretile
-    if(!(accessibleTile instanceof TreasureTile)) {  //check if not on a treasure tile
+  public void pickUpItem(Point location) {
+    assert(board[location.x][location.y] instanceof  AccessibleTile );
+    AccessibleTile accessibleTile = (AccessibleTile)this.getBoard()[location.x][location.y];
+    assert(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile); //check that tile is a keytile or treasuretile
+    if(accessibleTile instanceof KeyTile) {  //check if not on a treasure tile
       Item item = accessibleTile.getItemHere();
       if(item != null) {
         int originalSize = chap.getKeyInventory().size();
         chap.addToKeyInven((Key) item);
-        accessibleTile = new FreeTile();  //change to free tile
+        board[location.x][location.y] = new FreeTile(); //change to free tile
         assert(chap.getKeyInventory().size() == (originalSize+1) && chap.getKeyInventory().contains(item));  //check that key is in inventory
       }
     } else {  //if Chap is going to pick up treasure
       treasuresPickedUp++;
+
+      board[location.x][location.y] = new FreeTile(); //change to free tile
+
       if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit
         //find all exit locks and change them into free tiles once all treasures have been picked up.
         for(int x = 0; x < board.length; x++) {

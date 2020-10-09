@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.entities;
 
 //importing libraries needed
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
@@ -32,16 +33,17 @@ public class Chap extends Entity {
 
   /**
    * Checks if door can be unlocked by Chap and if so unlocks the door
-   * @param door  Door that is unlocked
+   * @param location  x,y coordinates of door.
+   * @param maze The level in this maze.
    */
-  public void unlockDoor(Tile door) {
-    assert(door instanceof DoorTile);
+  public void unlockDoor(Point location, Maze maze) {
+    assert(maze.getBoard()[location.x][location.y] instanceof DoorTile);
 
     //check if have correct key for door
     for(Key key : keyInventory) {
-      if(key.getKeyColour() == ((DoorTile)door).getDoorColour()) {
+      if(key.getKeyColour() == ((DoorTile)maze.getBoard()[location.x][location.y]).getDoorColour()) {
         //unlock door
-        door = new FreeTile();
+        maze.getBoard()[location.x][location.y] = new FreeTile();
         break;
       }
     }

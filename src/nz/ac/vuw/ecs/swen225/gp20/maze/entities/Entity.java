@@ -101,21 +101,22 @@ abstract public class Entity extends Icon {
     if(!entity.canMove(maze.getBoard()[position.x][position.y])) {
       InaccessibleTile tile = (InaccessibleTile)maze.getBoard()[position.x][position.y];
       if(isChap && tile.isLockedDoor()) { //check that tile is a locked door
-        chap.unlockDoor(tile);
+        chap.unlockDoor(position, maze);
       }
     }
 
     else {    //if entity can move onto tile
-      AccessibleTile accessibleTile = (AccessibleTile)maze.getBoard()[position.x][position.y];
-
       //pick up item on tile if is an item tile
-      if(isChap && accessibleTile.isItem()) {
-        maze.pickUpItem(accessibleTile);
+      if(isChap && maze.getBoard()[position.x][position.y].isAccessible()) {
+        if(((AccessibleTile)maze.getBoard()[position.x][position.y]).isItem()) {
+          maze.pickUpItem(position);
+        }
       }
 
       //reassign entity to new tile
       ((AccessibleTile)maze.getBoard()[entityLocation.x][entityLocation.y]).setEntityHere(null);
-      (accessibleTile).setEntityHere(entity);
+      AccessibleTile accessibleTile = (AccessibleTile)maze.getBoard()[position.x][position.y];
+      accessibleTile.setEntityHere(entity);
       entity.setEntityPosition(new Point(position));  //to keep track of entity's location
     }
     assert(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile); //check that entity is not on an invalid tile
