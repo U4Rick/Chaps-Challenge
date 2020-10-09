@@ -3,8 +3,10 @@ package nz.ac.vuw.ecs.swen225.gp20.render;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 /**
  * A renderer to visually display the state of the game board.
@@ -17,6 +19,7 @@ public class BoardRenderer extends JPanel {
     private final int BOARD_HEIGHT;
     private final int TILE_SIZE;
     private final Maze maze;
+    private Image level1_info;
 
     /**
      * Constructs a new renderer to display the current board.
@@ -25,12 +28,21 @@ public class BoardRenderer extends JPanel {
      * @param size the dimensions of the board.
      */
     public BoardRenderer(Maze importMaze, Dimension size){
-        setPreferredSize(size);
-        setLayout(null);
         maze = importMaze;
         BOARD_WIDTH = maze.getBoard().length;
         BOARD_HEIGHT = maze.getBoard()[0].length;
         TILE_SIZE = size.width/DISPLAY_DIMENSION;
+
+        // Set as actual display size in case size parameter did not divide well. FIXME: good code style?
+        setPreferredSize(new Dimension(DISPLAY_DIMENSION * TILE_SIZE, DISPLAY_DIMENSION * TILE_SIZE));
+        setLayout(null);
+
+        // Info display.
+        try {
+            level1_info = ImageIO.read(new File("./resources/level1_info.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -73,6 +85,11 @@ public class BoardRenderer extends JPanel {
                     }
                 }
             }
+        }
+
+        // If chap is on info tile, display info.
+        if(maze.getTile(maze.getChapPosition().x, maze.getChapPosition().y) instanceof InfoTile){
+            g.drawImage(level1_info, 25, 300, 445, 165, null);
         }
     }
 }

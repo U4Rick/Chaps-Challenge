@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * A renderer to visually display the player's inventory.
@@ -40,7 +39,7 @@ public class InventoryRenderer extends JPanel {
 
     @Override
     public void paintComponent(Graphics g){
-        Map<Key, Integer> inventory = new HashMap<>();
+        Map<Key, Integer> inventory = /*chap.getKeyInventory(); //*/new HashMap<>();
 
         // FIXME: temp hard code
         inventory.put(new Key(Maze.Colours.BLUE), 2);
@@ -54,8 +53,8 @@ public class InventoryRenderer extends JPanel {
             if(numKeys > 0){
                 g.drawImage(key.getIcon(), x * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
                 if(numKeys > 1){
-                    // Draw number on top.
-                    g.drawImage(chap.getIcon(), x * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null); // FIXME: temp
+                    // Draw number on top. FIXME: currently drawing chap
+                    g.drawImage(chap.getIcon(), x * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
                 }
             }
             x++;
