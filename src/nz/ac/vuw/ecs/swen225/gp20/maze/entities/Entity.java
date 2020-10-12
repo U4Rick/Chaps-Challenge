@@ -28,32 +28,6 @@ abstract public class Entity extends Icon {
   }
 
   /**
-   * Chooses a random direction that the NPC will move.
-   * @return The random direction that the NPC will move.
-   */
-  public Maze.Direction moveRandom() {
-    //choose random direction
-    Maze.Direction direction = Maze.Direction.LEFT;
-    int directionValue = (int)(Math.random()*4);
-    assert(directionValue > -1 && directionValue < 4);
-    switch(directionValue) {
-      case 0:
-        direction = Maze.Direction.LEFT;
-        break;
-      case 1:
-        direction = Maze.Direction.RIGHT;
-        break;
-      case 2:
-        direction = Maze.Direction.UP;
-        break;
-      case 3:
-        direction = Maze.Direction.DOWN;
-        break;
-    }
-    return direction;
-  }
-
-  /**
    * Moves Chap in the direction stated by one tile on the board.
    *
    * @param direction Represents the direction to move Chap.

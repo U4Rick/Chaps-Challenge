@@ -25,6 +25,32 @@ public class NPC extends Entity {
     super(npcLocation);
   }
 
+  /**
+   * Chooses a random direction that the NPC will move.
+   * @return The random direction that the NPC will move.
+   */
+  public Maze.Direction moveRandom() {
+    //choose random direction
+    Maze.Direction direction = Maze.Direction.LEFT;
+    int directionValue = (int)(Math.random()*4);
+    assert(directionValue > -1 && directionValue < 4);
+    switch(directionValue) {
+      case 0:
+        direction = Maze.Direction.LEFT;
+        break;
+      case 1:
+        direction = Maze.Direction.RIGHT;
+        break;
+      case 2:
+        direction = Maze.Direction.UP;
+        break;
+      case 3:
+        direction = Maze.Direction.DOWN;
+        break;
+    }
+    return direction;
+  }
+
   @Override
   public final String toString() { return "npc"; }
 }
