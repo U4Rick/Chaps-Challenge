@@ -1,11 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Levels;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadLevel;
 
 /**
  * Run the game.
@@ -50,7 +50,7 @@ public class Main extends GUI {
 
     @Override
     public void createMaze() {
-        this.maze = loadLevel(1);
+        this.maze = Levels.loadLevel(1);
     }
 
     @Override

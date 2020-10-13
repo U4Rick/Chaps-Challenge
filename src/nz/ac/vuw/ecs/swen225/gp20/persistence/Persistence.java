@@ -15,9 +15,9 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
-import javax.json.stream.JsonParsingException;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
@@ -32,106 +32,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
  */
 public class Persistence {
   
-  /**
-   * Loads a level number.
-   * @param levelNum the number of the level to load.
-   * @return the maze loaded.
-   */
-  public static Maze loadLevel(int levelNum) {
-    String levelName = "levels/level" + levelNum + ".json";
-    
-    File levelFile = new File(levelName);
-    
-    return loadLevelFromFile(levelFile);
-  }
-
-  /**
-   * Reads the maze from a file.
-   * 
-   * @param levelFile The json file containing the level.
-   * @return The maze read in from the file.
-   */
-  public static Maze loadLevelFromFile(File levelFile) {
-
-    try {
-      JsonReader reader = Json.createReader(new FileReader(levelFile));
-
-      JsonObject level = reader.readObject();
-      
-      int levelNum = level.getInt("number");
-
-      int width = level.getInt("width");
-      int height = level.getInt("height");
-      
-      int levelTime = level.getInt("time");
-
-      Tile[][] levelArray = new Tile[width][height];
-
-      // fill array with accessibles first
-      for (int x = 0; x < levelArray.length; x++) {
-        for (int y = 0; y < levelArray[x].length; y++) {
-          levelArray[x][y] = new FreeTile();
-        }
-      }
-
-      // load walls
-      TileObject[] wallTiles = getObjectValues(level, "walls", false);
-
-      for (TileObject wall : wallTiles) {
-        levelArray[wall.x][wall.y] = new WallTile();
-      }
-
-      // load locked doors
-      TileObject[] lockedDoorTiles = getObjectValues(level, "locked_doors", true);
-
-      for (TileObject door : lockedDoorTiles) {
-        levelArray[door.x][door.y] = new DoorTile(door.colour);
-      }
-
-      // load keys
-      TileObject[] keyTiles = getObjectValues(level, "keys", true);
-
-      for (TileObject key : keyTiles) {
-        levelArray[key.x][key.y] = new KeyTile(key.colour);
-      }
-
-      // load treasures
-      TileObject[] treasureTiles = getObjectValues(level, "treasures", false);
-
-      for (TileObject treasure : treasureTiles) {
-        levelArray[treasure.x][treasure.y] = new TreasureTile();
-      }
-
-      // load exit tile
-      JsonObject exit = level.getJsonObject("exit");
-      Point exitPos = new Point(exit.getInt("x"), exit.getInt("y"));
-      levelArray[exitPos.x][exitPos.y] = new ExitTile();
-
-      // load starting position
-      JsonObject startPos = level.getJsonObject("starting_position");
-      Point chapPos = new Point(startPos.getInt("x"), startPos.getInt("y"));
-
-      // load exit lock
-      JsonObject exitLock = level.getJsonObject("exit_lock");
-      levelArray[exitLock.getInt("x")][exitLock.getInt("y")] = new ExitLockTile();
-
-      // load info tile
-      JsonObject infoTile = level.getJsonObject("info");
-      levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile("");
-
-      // make maze
-      return new Maze(levelNum, chapPos, exitPos, treasureTiles.length, levelTime, levelArray);
-    } catch (FileNotFoundException e) {
-      // file was not found - maybe display something to user?
-    } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
-      // error in the file
-      e.printStackTrace();
-    }
-    // if error, return null
-    return null;
-  }
-  
-  private static TileObject[] getObjectValues(JsonObject levelObject, String levelKey, boolean colour) {
+  static TileObject[] getObjectValues(JsonObject levelObject, String levelKey, boolean colour) {
 	// load keys
 	  JsonArray objects = levelObject.getJsonArray(levelKey);
 	  
@@ -160,7 +61,7 @@ public class Persistence {
    * @param colour The string representing the name of the colour.
    * @return The colour obtained.
    */
-  private static Colours getColourFromString(String colour) {
+  static Colours getColourFromString(String colour) {
 
     switch (colour) {
       case "red":
@@ -183,7 +84,7 @@ public class Persistence {
    * @param colour The string representing the name of the colour.
    * @return The colour obtained.
    */
-  private static String getColourNameFromColour(Colours colour) {
+  static String getColourNameFromColour(Colours colour) {
 
     switch (colour) {
       case RED:
@@ -310,7 +211,7 @@ public class Persistence {
 
       File levelFile = new File(levelName);
 
-      Maze maze = loadLevelFromFile(levelFile);
+      Maze maze = Levels.loadLevelFromFile(levelFile);
 
       Map<Point, TreasureTile> treasures = new HashMap<>();
       Map<Point, KeyTile> keys = new HashMap<>();
@@ -386,26 +287,4 @@ public class Persistence {
     }
     return null;
   }
-}
-
-/**
- * 
- * @author Tristan
- *
- */
-class TileObject {
-	public int x;
-	public int y;
-	public Colours colour;
-	
-	public TileObject(int x, int y) {
-		this.x = x;
-		this.y = y;
-		this.colour = null;
-	}
-	public TileObject(int x, int y, Colours colour) {
-		this.x = x;
-		this.y = y;
-		this.colour = colour;
-	}
 }

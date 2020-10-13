@@ -24,7 +24,7 @@ class PersistenceTest {
     public void Test_success_01() {
         File testFile = createTestFile();
 
-        Maze testMaze = Persistence.loadLevelFromFile(testFile);
+        Maze testMaze = Levels.loadLevelFromFile(testFile);
 
         assert testMaze != null;
         Tile[][] board = testMaze.getBoard();

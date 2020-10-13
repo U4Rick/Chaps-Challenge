@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Levels;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
@@ -445,7 +446,7 @@ public abstract class GUI {
 			if (isState) {
 				maze = Persistence.loadGameState(toLoadFrom);
 			} else {
-				maze = Persistence.loadLevelFromFile(toLoadFrom);
+				maze = Levels.loadLevelFromFile(toLoadFrom);
 
 			}
 			if (maze != null) {
