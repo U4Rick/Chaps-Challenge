@@ -176,7 +176,7 @@ public class Persistence {
         .build();
 
     JsonObject level = Json.createObjectBuilder()
-        .add("number", maze.getLevelNumber())
+        .add("level_number", maze.getLevelNumber())
         .add("locked_doors", lockedDoorsBuilder.build())
         .add("keys", keysBuilder.build())
         .add("treasures", treasuresBuilder.build())
@@ -207,11 +207,7 @@ public class Persistence {
 
       JsonObject gameState = reader.readObject();
 
-      String levelName = "levels/" + gameState.getInt("number") + ".json";
-
-      File levelFile = new File(levelName);
-
-      Maze maze = Levels.loadLevelFromFile(levelFile);
+      Maze maze = Levels.loadLevel(gameState.getInt("level_number"));
 
       Map<Point, TreasureTile> treasures = new HashMap<>();
       Map<Point, KeyTile> keys = new HashMap<>();

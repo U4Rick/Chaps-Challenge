@@ -4,7 +4,11 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.InputMismatchException;
+import java.util.ServiceLoader;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -12,6 +16,7 @@ import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitLockTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
@@ -34,7 +39,7 @@ public class Levels {
 	    
 	    File levelFile = new File(levelName);
 	    
-	    return Levels.loadLevelFromFile(levelFile);
+	    return loadLevelFromFile(levelFile);
 	  }
 
 	/**
@@ -121,6 +126,27 @@ public class Levels {
 	    }
 	    // if error, return null
 	    return null;
+	  }
+	  
+	  private NPC loadActor(int levelNum) {
+		  File actorFile = new File("levels/level" + levelNum + ".jar");
+		  
+		  try {
+			URL[] url = new URL[] {actorFile.toURI().toURL()};
+			
+			URLClassLoader classLoader = new URLClassLoader(url);
+			
+			ServiceLoader<NPC> serviceLoader = ServiceLoader.load(NPC.class, classLoader);
+			
+			for (NPC npc : serviceLoader) {
+				return npc;
+			}
+			
+		} catch (MalformedURLException e) {
+			// error with the url
+		}
+		  
+		  return null;
 	  }
 
 }
