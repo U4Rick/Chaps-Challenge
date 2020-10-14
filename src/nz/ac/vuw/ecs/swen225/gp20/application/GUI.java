@@ -20,16 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.Timer;
+import javax.swing.*;
 
 /**
  * Builds the Graphic User Interface.
@@ -48,7 +39,6 @@ public abstract class GUI {
 	public final Color mainColor =  new Color(76, 175, 80);
 	public final Color textColorNormal = new Color(255, 255, 255);
 	public final Color barColorNormal = new Color(139, 195, 74);
-	public final Color barColorHover = new Color(76, 175, 80);
 
 	public final Font controllerElementsFont = new Font("Calibri", Font.BOLD, 16);
 
@@ -277,18 +267,29 @@ public abstract class GUI {
 
 	/**
 	 * Actions to be processed on every gameTimer tick.
+	 * Does actions for game end.
 	 */
 	public void onGameTimeTick() {
-		if (timeLeft >= 1) {
-			timeLeft--;
-			getMaze().setTimeLeft(timeLeft);
-			repaintAll();
-
-		} else {
+		timeLeft--;
+		getMaze().setTimeLeft(timeLeft);
+		repaintAll();
+		if (timeLeft == 0) {
 			canMove = false;
+			gameTimer.stop();
 			//TODO: stop game
-			//TODO: JDialog game over
-			getRecord().writeToFile();
+
+			JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
+			option.setMessage("Game Over!");
+			JDialog dialog = option.createDialog("You ran out of time!");
+			dialog.pack();
+			dialog.setVisible(true);
+			int choice = (Integer) option.getValue();
+			if (choice == JOptionPane.OK_OPTION) {
+				dialog.setVisible(false);
+			}
+
+			getRecord().writeToFile(); //need to discuss how this works
+
 			//TODO: load replay into field
 		}
 	}
@@ -417,6 +418,7 @@ public abstract class GUI {
 		gameSaveItem.setEnabled(false);
 	}
 
+
 	/**
 	 *  Load the replay file and reset the replay object.
 	 */
@@ -455,9 +457,29 @@ public abstract class GUI {
 				levelCounter.setText(String.valueOf(maze.getLevelNumber()));
 			}
 			else {
-				//TODO: JDialog broken load
+				JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
+				option.setMessage("There was an error reading the file.\nPlease try again.");
+				JDialog dialog = option.createDialog("File Error");
+				dialog.pack();
+				dialog.setVisible(true);
+				int choiceDialog = (Integer) option.getValue();
+				if (choiceDialog == JOptionPane.OK_OPTION) {
+					dialog.setVisible(false);
+				}
 			}
 		}
+	}
+
+	/**
+	 * Load the level file to play from.
+	 * @param levelNum Number of the level.
+	 */
+	public void persistenceLoad(int levelNum) {
+		Maze maze;
+		maze = Levels.loadLevel(levelNum);
+		setMaze(maze);
+		game = new BoardRenderer(getMaze(), gamePanelDim);
+		levelCounter.setText(String.valueOf(maze.getLevelNumber()));
 	}
 
 
@@ -507,7 +529,15 @@ public abstract class GUI {
 			}
 		}
 		else {
-			//TODO: JDialog saying no active replay
+			JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
+			option.setMessage("No active replay file loaded in!");
+			JDialog dialog = option.createDialog("Please load replay!");
+			dialog.pack();
+			dialog.setVisible(true);
+			int choice = (Integer) option.getValue();
+			if (choice == JOptionPane.OK_OPTION) {
+				dialog.setVisible(false);
+			}
 		}
 	}
 

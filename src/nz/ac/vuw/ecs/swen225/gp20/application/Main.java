@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Levels;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 
@@ -33,7 +32,6 @@ public class Main extends GUI {
      * @param args Runtime arguments.
      */
     public static void main(String[] args) {
-        System.out.println("Hello world!");
         Main main  =  new Main();
         main.run();
     }
