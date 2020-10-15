@@ -1,14 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.entities;
 
+import com.google.common.base.Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Icon;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
 
 /**
  * Represents an object that is a character that moves around the map.
@@ -36,11 +36,15 @@ abstract public class Entity extends Icon {
    * @param isChap For checking if the entity being moved is Chap so the extra Chap logic is applied to entity.
    * @throws IllegalStateException If going to new direction will cause Chap to go out of bounds, will throw an IllegalStateException.
    * @throws IllegalArgumentException If the direction provided is not left, right, up or down, then is an invalid direction.
+   * @return True if Chap has reached the exit tile and won, false is not.
    */
-  public void moveEntity(Maze.Direction direction, Entity entity, Maze maze, boolean isChap) throws IllegalStateException, IllegalArgumentException {
+  public boolean moveEntity(Maze.Direction direction, Entity entity, Maze maze, boolean isChap) throws IllegalStateException, IllegalArgumentException {
     //checking preconditions
-    if(maze == null) throw new IllegalStateException();
-    if(entity == null || maze.getBoard() == null) throw new IllegalStateException();
+    //checking that parameters are not null.
+    Preconditions.checkNotNull(maze);
+    Preconditions.checkNotNull(entity);
+    Preconditions.checkNotNull(maze.getBoard());
+
     Chap chap = null;
     if(isChap) {
       assert(entity instanceof Chap); //make sure that entity is Chap
@@ -71,6 +75,11 @@ abstract public class Entity extends Icon {
       throw new IllegalStateException();
     }
 
+    //check if chap is on exit tile
+    if(maze.getBoard()[position.x][position.y] instanceof ExitTile) {
+      return true;
+    }
+
 
     if(!entity.canMove(maze.getBoard()[position.x][position.y])) {
       InaccessibleTile tile = (InaccessibleTile)maze.getBoard()[position.x][position.y];
@@ -93,7 +102,9 @@ abstract public class Entity extends Icon {
       accessibleTile.setEntityHere(entity);
       entity.setEntityPosition(new Point(position));  //to keep track of entity's location
     }
-    assert(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile); //check that entity is not on an invalid tile
+    Preconditions.checkState(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);//check that entity is not on an invalid tile
+   // assert(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);
+    return false;
   }
 
 

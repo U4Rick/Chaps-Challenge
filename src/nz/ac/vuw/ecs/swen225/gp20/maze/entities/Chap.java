@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.entities;
 
 //importing libraries needed
+import com.google.common.base.Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
@@ -37,7 +38,7 @@ public class Chap extends Entity {
    * @param maze The level in this maze.
    */
   public void unlockDoor(Point location, Maze maze) {
-    assert(maze.getBoard()[location.x][location.y] instanceof DoorTile);
+    Preconditions.checkArgument(maze.getBoard()[location.x][location.y] instanceof DoorTile);
 
     //check if have correct key for door
     for(Key key : keyInventory) {
@@ -54,7 +55,7 @@ public class Chap extends Entity {
    * @param key Key to add to inventory.
    */
   public void addToKeyInven(Key key) {
-    assert(key != null);
+    Preconditions.checkNotNull(key);
     keyInventory.add(key);
   }
 

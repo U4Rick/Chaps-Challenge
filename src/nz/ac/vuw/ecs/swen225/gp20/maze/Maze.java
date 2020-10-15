@@ -45,6 +45,8 @@ public class Maze {
   private final int TREASURES_NUM;
   private int treasuresPickedUp = 0;
 
+  private boolean chapWin = false;  //checks that Chap is on exit tile
+
   /**
    * Constructs the level for the game based from the level data files.
    * @param chapLocation  The initial location of Chap.
@@ -75,7 +77,7 @@ public class Maze {
    * @param direction Direction specified.
    */
   public void moveChap(Direction direction) {
-    chap.moveEntity(direction, chap, this, true);
+    chapWin = chap.moveEntity(direction, chap, this, true);
   }
 
   /**
@@ -93,7 +95,8 @@ public class Maze {
     Preconditions.checkState(board[location.x][location.y] instanceof  AccessibleTile );
     //assert(board[location.x][location.y] instanceof  AccessibleTile );
     AccessibleTile accessibleTile = (AccessibleTile)this.getBoard()[location.x][location.y];
-    assert(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile); //check that tile is a keytile or treasuretile
+    Preconditions.checkState(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile);
+    //assert(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile); //check that tile is a keytile or treasuretile
     if(accessibleTile instanceof KeyTile) {  //check if not on a treasure tile
       Item item = accessibleTile.getItemHere();
       if(item != null) {
@@ -131,7 +134,7 @@ public class Maze {
    * @throws IllegalArgumentException If the x,y coordinates are out of bounds, then is invalid coordinates.
    */
   public final Tile getTile(int x, int y) throws IllegalArgumentException {
-    assert(board != null);
+    Preconditions.checkNotNull(board);
     if(x < 0 || x > board.length || y < 0 || y > board[0].length) {
       throw new IllegalArgumentException();
     }
@@ -143,7 +146,7 @@ public class Maze {
    * @return  The coordinates of chap's position on the board.
    */
   public final Point getChapPosition() {
-    assert(chap != null);
+    Preconditions.checkNotNull(chap);
     return chap.entityPosition;
   }
 
@@ -152,7 +155,7 @@ public class Maze {
    * @return  The board used for this level.
    */
   public final Tile[][] getBoard() {
-    assert(board != null);
+    Preconditions.checkNotNull(board);
     return board;
   }
 
@@ -161,7 +164,7 @@ public class Maze {
    * @return Chap that is for this level.
    */
   public final Chap getChap() {
-    assert(chap != null);
+    Preconditions.checkNotNull(chap);
     return chap;
   }
 
@@ -208,4 +211,12 @@ public class Maze {
    * @return  The total number of treasures on the level.
    */
   public final int getTREASURES_NUM() { return TREASURES_NUM; }
+
+  /**
+   * Gets the boolean variable that checks if Chap has won.
+   * @return The boolean variable that checks if Chap has won.
+   */
+  public boolean getChapWin() {
+    return chapWin;
+  }
 }
