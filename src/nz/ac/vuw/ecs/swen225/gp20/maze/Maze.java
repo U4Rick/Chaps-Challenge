@@ -201,6 +201,12 @@ public class Maze {
   }
 
   /**
+   * Sets the int number of treasures currently picked up by Chap.
+   * @param treasuresPickedUp Number of treasures currently picked up by Chap.
+   */
+  public void setTreasuresPickedUp(int treasuresPickedUp) { this.treasuresPickedUp = treasuresPickedUp; }
+
+  /**
    * Gets the int number of treasures currently picked up by Chap.
    * @return Number of treasures currently picked up by Chap.
    */
