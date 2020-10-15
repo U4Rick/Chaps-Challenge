@@ -453,8 +453,12 @@ public abstract class GUI {
 			}
 			if (maze != null) {
 				setMaze(maze);
+				window.remove(game);
 				game = new BoardRenderer(getMaze(), gamePanelDim);
+				window.add(game,0);
 				levelCounter.setText(String.valueOf(maze.getLevelNumber()));
+				timeLeft = maze.getTimeLeft();
+				repaintAll();
 			}
 			else {
 				JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);

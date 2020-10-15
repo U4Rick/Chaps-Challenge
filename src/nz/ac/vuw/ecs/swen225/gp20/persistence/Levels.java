@@ -27,6 +27,11 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.TreasureTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.WallTile;
 
+/**
+ * A class for loading levels from the json files.
+ *
+ * @author Tristan
+ */
 public class Levels {
 
 	/**
@@ -127,8 +132,13 @@ public class Levels {
 	    // if error, return null
 	    return null;
 	  }
-	  
-	  private NPC loadActor(int levelNum) {
+
+	/**
+	 * Loads the actor for the level.
+	 * @param levelNum the level number's actor to be loaded.
+	 * @return the actor loaded.
+	 */
+	private NPC loadActor(int levelNum) {
 		  File actorFile = new File("levels/level" + levelNum + ".jar");
 		  
 		  try {
