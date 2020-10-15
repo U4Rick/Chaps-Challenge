@@ -32,6 +32,11 @@ class PersistenceTest {
         assertTrue(board[0][0] instanceof WallTile);
     }
 
+    @Test
+    public void Test_failure_01() {
+
+    }
+
     /**
      * Creates a test file with a level for testing
      * @return the file created

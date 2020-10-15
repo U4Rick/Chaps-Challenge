@@ -26,12 +26,20 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Colours;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 /**
- * 
- * @author Tristan
+ * A class for the saving and loading of the game state for the game.
  *
+ * @author Tristan
  */
 public class Persistence {
-  
+
+  /**
+   * A helper method for getting an array of the TileObjects from a json levelobject.
+   *
+   * @param levelObject The object containing the jsonarray of object.
+   * @param levelKey The name/key corresponding to the name of the objects.
+   * @param colour Whether the tileobject has colour.
+   * @return An array of TileObjects.
+   */
   static TileObject[] getObjectValues(JsonObject levelObject, String levelKey, boolean colour) {
 	// load keys
 	  JsonArray objects = levelObject.getJsonArray(levelKey);
@@ -103,8 +111,9 @@ public class Persistence {
   }
 
   /**
-   * Saves the game state to a json file for loading later. Needs to save all the
-   * things that can change.
+   * Saves the current game state to a json file for loading later.
+   * Needs to save all the things that can change in the game.
+   *
    * @param maze the maze to be saved.
    * @param file the file to be saved to.
    */
