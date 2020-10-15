@@ -53,7 +53,6 @@ public class Replay{
     public List<String> processActionsJson(){
         recordedMoves = new ArrayList<>();
 
-
         JsonArray moves = loadedActions.getJsonArray("moves");
 
         for (JsonValue jsonMove : moves) {
