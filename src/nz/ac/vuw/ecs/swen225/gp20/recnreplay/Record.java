@@ -28,10 +28,10 @@ public class Record {
 
     /**
      * Writes the movements made by the player out to a file.
+     * @param replayFile
      */
-    public File writeToFile() {
+    public void writeToFile(File replayFile) {
         try {
-            File replayFile = new File("replay.json");
             PrintWriter pw = new PrintWriter(replayFile);
 
             JsonObjectBuilder jsonObject = Json.createObjectBuilder();
@@ -56,11 +56,9 @@ public class Record {
 
             pw.write(JsonObjectMain.toString());
             pw.close();
-            return replayFile;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     /**
