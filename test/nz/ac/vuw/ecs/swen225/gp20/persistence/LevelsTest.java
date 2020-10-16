@@ -101,7 +101,7 @@ public class LevelsTest {
      * Creates a test file with a level for testing
      * @return the file created
      */
-    private File createTestFile() {
+     protected static File createTestFile() {
         File testFile = new File("testLevel.json");
         try {
             FileWriter fw = new FileWriter(testFile);
