@@ -5,6 +5,8 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.Levels;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 
+import java.io.FileNotFoundException;
+
 
 /**
  * Run the game.
@@ -48,7 +50,11 @@ public class Main extends GUI {
 
     @Override
     public void createMaze() {
-        this.maze = Levels.loadLevel(1);
+        try {
+            this.maze = Levels.loadLevel(1);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 
@@ -494,7 +495,7 @@ public abstract class GUI {
 	 * Load the level file to play from.
 	 * @param levelNum Number of the level.
 	 */
-	public void persistenceLoad(int levelNum) {
+	public void persistenceLoad(int levelNum) throws FileNotFoundException {
 		Maze maze;
 		maze = Levels.loadLevel(levelNum);
 		setMaze(maze);
