@@ -31,7 +31,9 @@ import javax.swing.*;
  */
 public abstract class GUI {
 
-	JFrame window = new JFrame();
+	private JFrame window = new JFrame();
+	private JPanel controller;
+
 
 	public final Dimension counterLabelDim = new Dimension(100, 40);
 	public final Dimension gamePanelDim = new Dimension(495, 495);
@@ -58,11 +60,10 @@ public abstract class GUI {
 	private BoardRenderer game;
 	private InventoryRenderer inventory;
 	private Timer gameTimer;
+	private Timer replayTimer;
 	public int timeLeft;
 	public boolean isPause = false;
 	public boolean canMove;
-	public boolean levelWon;
-
 
 	/**
 	 *  Initializes the maze, and builds the main window.
@@ -175,7 +176,7 @@ public abstract class GUI {
 			public void keyReleased(KeyEvent e) { }
 		});
 
-		JPanel controller = new JPanel();
+		controller = new JPanel();
 		controller.setPreferredSize(controllerPanelDim);
 		controller.setBackground(mainColor);
 
@@ -279,11 +280,17 @@ public abstract class GUI {
 		timeLeft--;
 		getMaze().setTimeLeft(timeLeft);
 		repaintAll();
-		if (timeLeft <= 0) { stopGame("Game Over!", "You ran out of time!"); }
+		if (timeLeft <= 0) { gameStop("Game Over!", "You ran out of time!"); }
 	}
 
 
-	public void stopGame(String dialogMessage, String dialogTitle) {
+	/**
+	 * Stops the game running, with a JDialog containing custom messages.
+	 * Saves and loads replay of game just played.
+	 * @param dialogMessage Message to be on JDialog.
+	 * @param dialogTitle   Title of the JDialog.
+	 */
+	public void gameStop(String dialogMessage, String dialogTitle) {
 		canMove = false;
 		gameTimer.stop();
 
@@ -298,6 +305,11 @@ public abstract class GUI {
 		}
 	}
 
+	/**
+	 * Create a new JDialog and handle closing it.
+	 * @param message   Message of the dialog.
+	 * @param title Title of the dialog.
+	 */
 	public void produceDialog(String message, String title) {
 		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
 		option.setMessage(message);
@@ -484,6 +496,9 @@ public abstract class GUI {
 				window.remove(game);
 				game = new BoardRenderer(getMaze(), gamePanelDim);
 				window.add(game,0);
+				controller.remove(inventory);
+				inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
+				controller.add(inventory);
 				levelCounter.setText(String.valueOf(maze.getLevelNumber()));
 				timeLeft = maze.getTimeLeft();
 				repaintAll();
@@ -502,7 +517,12 @@ public abstract class GUI {
 		Maze maze;
 		maze = Levels.loadLevel(levelNum);
 		setMaze(maze);
+		window.remove(game);
 		game = new BoardRenderer(getMaze(), gamePanelDim);
+		window.add(game,0);
+		controller.remove(inventory);
+		inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
+		controller.add(inventory);
 		levelCounter.setText(String.valueOf(maze.getLevelNumber()));
 	}
 
@@ -529,28 +549,14 @@ public abstract class GUI {
 		if (getRecord() != null) { getRecord().addMove(direction); } // for tests
 		if (getMaze().getChapWin()) {
 			if (getMaze().getLevelNumber() < MAX_LEVEL) {
-				changeLevel();
+				try {
+					persistenceLoad(getMaze().getLevelNumber()+1);
+				} catch (FileNotFoundException e) { e.printStackTrace(); }
+				gameStart();
 			}
-			else {
-
-			}
+			else { gameStop("You win!", "Game won!"); }
 		}
 		repaintAll();
-	}
-
-	private void changeLevel() {
-		Maze maze;
-		try {
-			maze = Levels.loadLevel(getMaze().getLevelNumber() + 1);
-			setMaze(maze);
-			window.remove(game);
-			game = new BoardRenderer(maze, gamePanelDim);
-			window.add(game, 0);
-			gameStart();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	/**
@@ -575,10 +581,10 @@ public abstract class GUI {
 			}
 			moveNum.getAndIncrement();
 			if (moveNum.get() >= getReplay().processActionsJson().size()) {
-
+				replayTimer.stop();
 			}
 		};
-		Timer replayTimer = new Timer(500, replayListener);
+		replayTimer = new Timer(500, replayListener);
 		Replay replay = getReplay();
 
 
