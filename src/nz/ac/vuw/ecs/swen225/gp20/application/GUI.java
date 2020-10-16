@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 
 /**
@@ -288,9 +289,16 @@ public abstract class GUI {
 				dialog.setVisible(false);
 			}
 
-			getRecord().writeToFile(); //need to discuss how this works
+			JFileChooser chooser = new JFileChooser();
+			int replayChoice = chooser.showSaveDialog(window);
+			if (replayChoice == JFileChooser.APPROVE_OPTION) {
+				File replayFile = chooser.getSelectedFile();
+				getRecord().writeToFile(replayFile);
+				replayLoad(replayFile);
+			}
 
-			//TODO: load replay into field
+
+
 		}
 	}
 
@@ -411,6 +419,7 @@ public abstract class GUI {
 	}
 
 	public void play() {
+
 		gameTimer.start();
 		isPause = false;
 		pauseMenuItem.setText("Pause");
@@ -428,9 +437,16 @@ public abstract class GUI {
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			File toLoadFrom = chooser.getSelectedFile();
 			Replay replay = new Replay(toLoadFrom);
-			setReplay(replay);
 			replay.loadFile(toLoadFrom);
+			setReplay(replay);
 		}
+		replayStartItem.setEnabled(true);
+	}
+
+	public void replayLoad(File file) {
+		Replay replay = new Replay(file);
+		replay.loadFile(file);
+		setReplay(replay);
 		replayStartItem.setEnabled(true);
 	}
 
@@ -494,6 +510,7 @@ public abstract class GUI {
 		JFileChooser chooser = new JFileChooser();
 		int choice = chooser.showSaveDialog(window);
 		if (choice == JFileChooser.APPROVE_OPTION) {
+			System.out.println(chooser.getCurrentDirectory());
 			File toSaveTo = chooser.getSelectedFile();
 			Persistence.saveGameState(getMaze(), toSaveTo);
 		}
@@ -513,24 +530,33 @@ public abstract class GUI {
 	 *  Runs the replay.
 	 */
 	public void runReplay() {
-		Replay replay = getReplay();
-		if (replay != null) {
-			for (String move : getReplay().processActionsJson()) {
-				switch (move) {
-					case "DOWN":
-						movePlayer(Maze.Direction.DOWN);
-						break;
-					case "RIGHT":
-						movePlayer(Maze.Direction.RIGHT);
-						break;
-					case "UP":
-						movePlayer(Maze.Direction.UP);
-						break;
-					case "LEFT":
-						movePlayer(Maze.Direction.LEFT);
-						break;
-				}
+		AtomicInteger moveNum = new AtomicInteger();
+		ActionListener replayListener = e -> {
+			switch (getReplay().processActionsJson().get(moveNum.get())) {
+				case "DOWN":
+					movePlayer(Direction.DOWN);
+					break;
+				case "RIGHT":
+					movePlayer(Direction.RIGHT);
+					break;
+				case "UP":
+					movePlayer(Direction.UP);
+					break;
+				case "LEFT":
+					movePlayer(Direction.LEFT);
+					break;
 			}
+			moveNum.getAndIncrement();
+			if (moveNum.get() >= getReplay().processActionsJson().size()) {
+
+			}
+		};
+		Timer replayTimer = new Timer(500, replayListener);
+		Replay replay = getReplay();
+
+
+		if (replay != null) {
+			replayTimer.start();
 		}
 		else {
 			JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
