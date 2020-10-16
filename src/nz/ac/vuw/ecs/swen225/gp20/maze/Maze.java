@@ -103,7 +103,7 @@ public class Maze {
         int originalSize = chap.getKeyInventory().size();
         chap.addToKeyInven((Key) item);
         board[location.x][location.y] = new FreeTile(); //change to free tile
-        assert(chap.getKeyInventory().size() == (originalSize+1) && chap.getKeyInventory().contains(item));  //check that key is in inventory
+        assert(chap.getKeyInventory().size() == (originalSize+1) && chap.getKeyInventory().containsKey(item));  //check that key is in inventory
       }
     } else {  //if Chap is going to pick up treasure
       treasuresPickedUp++;

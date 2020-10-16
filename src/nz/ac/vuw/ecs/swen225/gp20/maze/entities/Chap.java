@@ -17,8 +17,7 @@ import java.util.*;
  * @author Vic
  */
 public class Chap extends Entity {
-  //private Map<Key, Integer> keyInventory; //stores the objects that Chap has
-  private Set<Key> keyInventory; //stores the objects that Chap has
+  private Map<Key, Integer> keyInventory; //stores the objects that Chap has, keys are the key part and number of keys are the value part
 
   /**
    * Constructor for the Chap object.
@@ -26,8 +25,12 @@ public class Chap extends Entity {
    */
   public Chap(Point chapsLocation) {
     super(chapsLocation);
-   // keyInventory = new HashMap<Key, Integer>();
-    keyInventory = new HashSet<Key>();
+    keyInventory = new HashMap<>();
+
+    //add the the possible keys
+    for(Maze.Colours colour : Maze.Colours.values()) {
+      keyInventory.put(new Key(colour), 0);
+    }
   }
 
 
@@ -41,13 +44,17 @@ public class Chap extends Entity {
     Preconditions.checkArgument(maze.getBoard()[location.x][location.y] instanceof DoorTile);
 
     //check if have correct key for door
-    for(Key key : keyInventory) {
+    for(Key key : keyInventory.keySet()) {
       if(key.getKeyColour() == ((DoorTile)maze.getBoard()[location.x][location.y]).getDoorColour()) {
         //unlock door
         maze.getBoard()[location.x][location.y] = new FreeTile();
+        //remove key
+        subValue(key);
         break;
       }
     }
+
+    //TODO add postconditions for this function, check key is removed
   }
 
   /**
@@ -56,22 +63,46 @@ public class Chap extends Entity {
    */
   public void addToKeyInven(Key key) {
     Preconditions.checkNotNull(key);
-    //check if already has key of same colour in inventory
-    ///if()
-   // keyInventory.put(key, 0);
-    keyInventory.add(key);
+    //go to key and increment colour
+    addValue(key);
+
+    //TODO postconditions
+  }
+
+  /**
+   * Increment value
+   * @param key Key key to find in the map
+   */
+  private void addValue(Key key) {
+    for(Key invenKey : keyInventory.keySet()) {   //TODO test this
+      if(invenKey.getKeyColour() == key.getKeyColour()) {
+        int value = keyInventory.get(invenKey);
+        keyInventory.put(invenKey, value+1);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Decrement value
+   * @param key Key key to find in the map
+   */
+  private void subValue(Key key) {
+    for(Key invenKey : keyInventory.keySet()) {   //TODO test this
+      if(invenKey.getKeyColour() == key.getKeyColour()) {
+        int value = keyInventory.get(invenKey);
+        keyInventory.put(invenKey, value-1);
+        break;
+      }
+    }
   }
 
   /**
    * Gets the key inventory from Chap.
    * @return Key inventory from Chap.
    */
-  /*public Map<Key, Integer> getKeyInventory() {
+  public Map<Key, Integer> getKeyInventory() {
     return Collections.unmodifiableMap(keyInventory);
-  }*/
-
-  public Set<Key> getKeyInventory() {
-    return Collections.unmodifiableSet(keyInventory);
   }
 
   @Override
