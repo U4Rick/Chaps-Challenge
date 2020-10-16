@@ -56,6 +56,7 @@ public abstract class GUI {
 	private JMenuItem replayStartItem;
 
 	private BoardRenderer game;
+	private InventoryRenderer inventory;
 	private Timer gameTimer;
 	public int timeLeft;
 	public boolean isPause = false;
@@ -206,7 +207,7 @@ public abstract class GUI {
 		treasuresCounter = new JLabel();
 		setControllerElementDetails(treasuresCounter);
 
-		InventoryRenderer inventory = new InventoryRenderer(getMaze(), controllerPanelDim.width-20); //TODO: fix that -20 stuff, is for centering panel
+		inventory = new InventoryRenderer(getMaze(), controllerPanelDim.width-20);
 
 		controller.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -278,23 +279,22 @@ public abstract class GUI {
 		timeLeft--;
 		getMaze().setTimeLeft(timeLeft);
 		repaintAll();
-		if (timeLeft <= 0) {
-			canMove = false;
-			gameTimer.stop();
-			//TODO: stop game
-
-			produceDialog("Game Over!", "You ran out of time!");
-
-			JFileChooser chooser = new JFileChooser();
-			int replayChoice = chooser.showSaveDialog(window);
-			if (replayChoice == JFileChooser.APPROVE_OPTION) {
-				File replayFile = chooser.getSelectedFile();
-				getRecord().writeToFile(replayFile);
-				replayLoad(replayFile);
-			}
+		if (timeLeft <= 0) { stopGame("Game Over!", "You ran out of time!"); }
+	}
 
 
+	public void stopGame(String dialogMessage, String dialogTitle) {
+		canMove = false;
+		gameTimer.stop();
 
+		produceDialog(dialogMessage, dialogTitle);
+
+		JFileChooser chooser = new JFileChooser();
+		int replayChoice = chooser.showSaveDialog(window);
+		if (replayChoice == JFileChooser.APPROVE_OPTION) {
+			File replayFile = chooser.getSelectedFile();
+			getRecord().writeToFile(replayFile);
+			replayLoad(replayFile);
 		}
 	}
 
@@ -451,6 +451,10 @@ public abstract class GUI {
 		replayStartItem.setEnabled(true);
 	}
 
+	/**
+	 * Load the replay from a specified file.
+	 * @param file  File to load from.
+	 */
 	public void replayLoad(File file) {
 		Replay replay = new Replay(file);
 		replay.loadFile(file);
@@ -648,6 +652,8 @@ public abstract class GUI {
 		timeCounter.setText(String.valueOf(timeLeft));
 		game.revalidate();
 		game.repaint();
+		inventory.revalidate();
+		inventory.repaint();
 	}
 
 

@@ -20,23 +20,10 @@ public class Main extends GUI {
     Record record;
 
     /**
-     * maybe delete?
-     */
-    private void run() {
-        while (true) {
-
-        }
-
-    }
-
-    /**
      * Run the game.
      * @param args Runtime arguments.
      */
-    public static void main(String[] args) {
-        Main main  =  new Main();
-        main.run();
-    }
+    public static void main(String[] args) { Main main  =  new Main(); }
 
     @Override
     public Maze getMaze() {
