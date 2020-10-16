@@ -26,6 +26,11 @@ public class Chap extends Entity {
   public Chap(Point chapsLocation) {
     super(chapsLocation);
     keyInventory = new HashMap<>();
+
+    //add the the possible keys
+    for(Maze.Colours colour : Maze.Colours.values()) {
+      keyInventory.put(new Key(colour), 0);
+    }
   }
 
 
@@ -43,9 +48,13 @@ public class Chap extends Entity {
       if(key.getKeyColour() == ((DoorTile)maze.getBoard()[location.x][location.y]).getDoorColour()) {
         //unlock door
         maze.getBoard()[location.x][location.y] = new FreeTile();
+        //remove key
+        subValue(key);
         break;
       }
     }
+
+    //TODO add postconditions for this function, check key is removed
   }
 
   /**
@@ -54,29 +63,38 @@ public class Chap extends Entity {
    */
   public void addToKeyInven(Key key) {
     Preconditions.checkNotNull(key);
-    //check if already has key of same colour in inventory
-    boolean keyExists = false;
+    //go to key and increment colour
+    addValue(key);
+
+    //TODO postconditions
+  }
+
+  /**
+   * Increment value
+   * @param key Key key to find in the map
+   */
+  private void addValue(Key key) {
     for(Key invenKey : keyInventory.keySet()) {   //TODO test this
       if(invenKey.getKeyColour() == key.getKeyColour()) {
         int value = keyInventory.get(invenKey);
         keyInventory.put(invenKey, value+1);
-        keyExists = true;
         break;
       }
     }
-    if(!keyExists) {
-      keyInventory.put(key,1);
-    }
+  }
 
-    //check that key was added
-    keyExists = false;
-    for(Key invenKey : keyInventory.keySet()) {
+  /**
+   * Decrement value
+   * @param key Key key to find in the map
+   */
+  private void subValue(Key key) {
+    for(Key invenKey : keyInventory.keySet()) {   //TODO test this
       if(invenKey.getKeyColour() == key.getKeyColour()) {
-        keyExists = true;
+        int value = keyInventory.get(invenKey);
+        keyInventory.put(invenKey, value-1);
         break;
       }
     }
-    Preconditions.checkState(keyExists);
   }
 
   /**
