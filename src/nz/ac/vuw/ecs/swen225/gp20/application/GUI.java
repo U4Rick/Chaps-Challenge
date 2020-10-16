@@ -44,6 +44,8 @@ public abstract class GUI {
 
 	public final Font controllerElementsFont = new Font("Calibri", Font.BOLD, 16);
 
+	public static final int MAX_LEVEL = 2;
+
 	//Swing elements that need to be accessed for updates
 	private JLabel treasuresCounter;
 	private JLabel keysCounter;
@@ -58,6 +60,7 @@ public abstract class GUI {
 	public int timeLeft;
 	public boolean isPause = false;
 	public boolean canMove;
+	public boolean levelWon;
 
 
 	/**
@@ -524,7 +527,27 @@ public abstract class GUI {
 	public void movePlayer(Direction direction) {
 		getMaze().moveChap(direction);
 		if (getRecord() != null) { getRecord().addMove(direction); } // for tests
+		if (getMaze().getChapWin()) {
+			if (getMaze().getLevelNumber() < MAX_LEVEL) {
+				changeLevel();
+			}
+		}
 		repaintAll();
+	}
+
+	private void changeLevel() {
+		Maze maze;
+		try {
+			maze = Levels.loadLevel(getMaze().getLevelNumber() + 1);
+			setMaze(maze);
+			window.remove(game);
+			game = new BoardRenderer(maze, gamePanelDim);
+			window.add(game, 0);
+			gameStart();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
