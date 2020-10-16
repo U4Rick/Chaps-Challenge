@@ -278,20 +278,12 @@ public abstract class GUI {
 		timeLeft--;
 		getMaze().setTimeLeft(timeLeft);
 		repaintAll();
-		if (timeLeft == 0) {
+		if (timeLeft <= 0) {
 			canMove = false;
 			gameTimer.stop();
 			//TODO: stop game
 
-			JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
-			option.setMessage("Game Over!");
-			JDialog dialog = option.createDialog("You ran out of time!");
-			dialog.pack();
-			dialog.setVisible(true);
-			int choice = (Integer) option.getValue();
-			if (choice == JOptionPane.OK_OPTION) {
-				dialog.setVisible(false);
-			}
+			produceDialog("Game Over!", "You ran out of time!");
 
 			JFileChooser chooser = new JFileChooser();
 			int replayChoice = chooser.showSaveDialog(window);
@@ -303,6 +295,18 @@ public abstract class GUI {
 
 
 
+		}
+	}
+
+	public void produceDialog(String message, String title) {
+		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
+		option.setMessage(message);
+		JDialog dialog = option.createDialog(title);
+		dialog.pack();
+		dialog.setVisible(true);
+		int choice = (Integer) option.getValue();
+		if (choice == JOptionPane.OK_OPTION) {
+			dialog.setVisible(false);
 		}
 	}
 
@@ -481,15 +485,7 @@ public abstract class GUI {
 				repaintAll();
 			}
 			else {
-				JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
-				option.setMessage("There was an error reading the file.\nPlease try again.");
-				JDialog dialog = option.createDialog("File Error");
-				dialog.pack();
-				dialog.setVisible(true);
-				int choiceDialog = (Integer) option.getValue();
-				if (choiceDialog == JOptionPane.OK_OPTION) {
-					dialog.setVisible(false);
-				}
+				produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
 			}
 		}
 	}
@@ -530,6 +526,9 @@ public abstract class GUI {
 		if (getMaze().getChapWin()) {
 			if (getMaze().getLevelNumber() < MAX_LEVEL) {
 				changeLevel();
+			}
+			else {
+
 			}
 		}
 		repaintAll();
@@ -583,15 +582,7 @@ public abstract class GUI {
 			replayTimer.start();
 		}
 		else {
-			JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
-			option.setMessage("No active replay file loaded in!");
-			JDialog dialog = option.createDialog("Please load replay!");
-			dialog.pack();
-			dialog.setVisible(true);
-			int choice = (Integer) option.getValue();
-			if (choice == JOptionPane.OK_OPTION) {
-				dialog.setVisible(false);
-			}
+			produceDialog("No active replay file loaded in!", "Please load replay!");
 		}
 	}
 
