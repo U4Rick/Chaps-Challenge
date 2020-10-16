@@ -3,6 +3,7 @@
     "width": 20,
     "height": 18,
     "time": 90,
+    "info_text": "test",
     "walls": [
         {
             "x": 6,

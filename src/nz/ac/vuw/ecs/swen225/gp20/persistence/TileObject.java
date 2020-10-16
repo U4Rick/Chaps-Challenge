@@ -17,7 +17,7 @@ class TileObject {
 	 * @param x x value of the object.
 	 * @param y y value of the object.
 	 */
-	public TileObject(int x, int y) {
+	protected TileObject(int x, int y) {
 		this.x = x;
 		this.y = y;
 		this.colour = null;
@@ -29,7 +29,7 @@ class TileObject {
 	 * @param y y value of the object.
 	 * @param colour colour value of the object.
 	 */
-	public TileObject(int x, int y, Colours colour) {
+	protected TileObject(int x, int y, Colours colour) {
 		this.x = x;
 		this.y = y;
 		this.colour = colour;

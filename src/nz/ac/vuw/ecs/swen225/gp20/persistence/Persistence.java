@@ -40,7 +40,7 @@ public class Persistence {
    * @param colour Whether the tileobject has colour.
    * @return An array of TileObjects.
    */
-  static TileObject[] getObjectValues(JsonObject levelObject, String levelKey, boolean colour) {
+  protected static TileObject[] getObjectValues(JsonObject levelObject, String levelKey, boolean colour) {
 	// load keys
 	  JsonArray objects = levelObject.getJsonArray(levelKey);
 	  
@@ -69,7 +69,7 @@ public class Persistence {
    * @param colour The string representing the name of the colour.
    * @return The colour obtained.
    */
-  static Colours getColourFromString(String colour) {
+  protected static Colours getColourFromString(String colour) {
 
     switch (colour) {
       case "red":
@@ -92,7 +92,7 @@ public class Persistence {
    * @param colour The string representing the name of the colour.
    * @return The colour obtained.
    */
-  static String getColourNameFromColour(Colours colour) {
+  protected static String getColourNameFromColour(Colours colour) {
 
     switch (colour) {
       case RED:
