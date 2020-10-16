@@ -9,9 +9,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import java.awt.Point;
-import java.util.Collections;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Represents Chap who is the hero of the game. Chap can move, interact with entities and is controlled by the player.
@@ -19,6 +17,7 @@ import java.util.HashSet;
  * @author Vic
  */
 public class Chap extends Entity {
+  //private Map<Key, Integer> keyInventory; //stores the objects that Chap has
   private Set<Key> keyInventory; //stores the objects that Chap has
 
   /**
@@ -27,7 +26,8 @@ public class Chap extends Entity {
    */
   public Chap(Point chapsLocation) {
     super(chapsLocation);
-    keyInventory = new HashSet<>();
+   // keyInventory = new HashMap<Key, Integer>();
+    keyInventory = new HashSet<Key>();
   }
 
 
@@ -56,6 +56,9 @@ public class Chap extends Entity {
    */
   public void addToKeyInven(Key key) {
     Preconditions.checkNotNull(key);
+    //check if already has key of same colour in inventory
+    ///if()
+   // keyInventory.put(key, 0);
     keyInventory.add(key);
   }
 
@@ -63,6 +66,10 @@ public class Chap extends Entity {
    * Gets the key inventory from Chap.
    * @return Key inventory from Chap.
    */
+  /*public Map<Key, Integer> getKeyInventory() {
+    return Collections.unmodifiableMap(keyInventory);
+  }*/
+
   public Set<Key> getKeyInventory() {
     return Collections.unmodifiableSet(keyInventory);
   }

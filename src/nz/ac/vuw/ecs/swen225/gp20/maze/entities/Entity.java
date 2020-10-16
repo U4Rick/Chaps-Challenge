@@ -75,11 +75,6 @@ abstract public class Entity extends Icon {
       throw new IllegalStateException();
     }
 
-    //check if chap is on exit tile
-    if(maze.getBoard()[position.x][position.y] instanceof ExitTile) {
-      return true;
-    }
-
 
     if(!entity.canMove(maze.getBoard()[position.x][position.y])) {
       InaccessibleTile tile = (InaccessibleTile)maze.getBoard()[position.x][position.y];
@@ -102,6 +97,12 @@ abstract public class Entity extends Icon {
       accessibleTile.setEntityHere(entity);
       entity.setEntityPosition(new Point(position));  //to keep track of entity's location
     }
+
+    //check if chap is on exit tile
+    if(maze.getBoard()[position.x][position.y] instanceof ExitTile) {
+      return true;
+    }
+
     Preconditions.checkState(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);//check that entity is not on an invalid tile
    // assert(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);
     return false;

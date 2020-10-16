@@ -18,12 +18,12 @@ abstract public class Icon {
    * Uses lazy initialisation.
    * @return the icon of the entity
    */
-  public Image getIcon() throws IOException{
+  public Image getIcon() {//throws IOException{
     if(icon == null){
       try {
         icon = ImageIO.read(new File("./resources/" + this.toString() + ".png"));
       } catch (IOException e) {
-        throw new IOException();
+        //throw new IOException();
       }
     }
     return icon;
