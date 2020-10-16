@@ -19,6 +19,9 @@ public class Replay{
     private List<String> recordedMoves;
     private int playbackDelay = 1;
     private JsonObject loadedActions;
+    private JsonObject currentLevelObj;
+    private String currentLevel;
+
     private File file;
     private Maze maze;
 
@@ -54,12 +57,19 @@ public class Replay{
         recordedMoves = new ArrayList<>();
 
         JsonArray moves = loadedActions.getJsonArray("moves");
+        JsonArray levelArray = loadedActions.getJsonArray("level");
+
+        for (JsonValue jsonLevel : levelArray) {
+            JsonObject levelArr = jsonLevel.asJsonObject(); //loads the level name
+            currentLevel = levelArr.getString("level");
+        }
 
         for (JsonValue jsonMove : moves) {
             JsonObject move = jsonMove.asJsonObject();
-            String direction = move.getString("move");
+            String direction = move.getString("move");  //loads the moves to make
             recordedMoves.add(direction);
         }
+//        System.out.println(currentLevel);
         return recordedMoves;
 
     }

@@ -37,6 +37,9 @@ public class Record {
             JsonObjectBuilder jsonObject = Json.createObjectBuilder();
             JsonArrayBuilder moves = Json.createArrayBuilder();
 
+            JsonArrayBuilder level = Json.createArrayBuilder();
+            //todo write the current level to a jsonArray and make object "level : level1" etc
+
             for (Maze.Direction action : this.moves) {
                 switch (action) {
                     case RIGHT:
