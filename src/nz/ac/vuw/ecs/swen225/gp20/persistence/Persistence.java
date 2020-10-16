@@ -236,11 +236,14 @@ public class Persistence {
         keys.put(new Point(key.x, key.y), new KeyTile(key.colour));
       }
 
+      //load doors still on map
       TileObject[] doorTiles = getObjectValues(gameState, "locked_doors", true);
 
       for (TileObject door : doorTiles) {
         doors.put(new Point(door.x, door.y), new DoorTile(door.colour));
       }
+
+      int treasuresPickedUp = 0;
 
       Tile[][] board = maze.getBoard();
 
@@ -249,6 +252,8 @@ public class Persistence {
           if (board[x][y] instanceof TreasureTile) {
             if (!treasures.containsKey(new Point(x, y))) {
               board[x][y] = new FreeTile();
+              //this treasure originally on the level has been picked up
+              treasuresPickedUp++;
             }
           } else if (board[x][y] instanceof KeyTile) {
             if (!keys.containsKey(new Point(x, y))) {
@@ -284,6 +289,8 @@ public class Persistence {
 
       int timeLeft = gameState.getInt("time_left");
       maze.setTimeLeft(timeLeft);
+
+      maze.setTreasuresPickedUp(treasuresPickedUp);
 
       return maze;
 
