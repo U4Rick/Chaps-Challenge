@@ -4,9 +4,10 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -20,6 +21,8 @@ public class InventoryRenderer extends JPanel {
     private final int PANEL_HEIGHT;
     private final int TILE_SIZE;
     private final Chap chap;
+    private Image bg;
+    private Image circle;
 
     /**
      * Constructs a new renderer to display the inventory.
@@ -35,29 +38,49 @@ public class InventoryRenderer extends JPanel {
         setPreferredSize(size);
         setLayout(null);
         chap = importMaze.getChap();
+
+        try {
+            bg = ImageIO.read(new File("./resources/green.png"));
+            circle = ImageIO.read(new File("./resources/circle.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void paintComponent(Graphics g){
-        Map<Key, Integer> inventory = /*chap.getKeyInventory(); //*/new HashMap<>();
+        // Redraw the background.
+        g.drawImage(bg,0,0,PANEL_WIDTH, PANEL_HEIGHT, null);
+        for (int i = 0; i < NUM_SLOTS; i++) {
+            g.drawImage(circle, i * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
+        }
 
-        // FIXME: temp hard code
-        inventory.put(new Key(Maze.Colours.BLUE), 2);
-        inventory.put(new Key(Maze.Colours.GREEN), 1);
-        inventory.put(new Key(Maze.Colours.YELLOW), 1);
-        inventory.put(new Key(Maze.Colours.RED), 1);
+        Map<Key, Integer> inventory = chap.getKeyInventory();
 
-        int x = 0;
         for (Key key : inventory.keySet()) {
+            int x;
+            switch(key.getKeyColour()) {
+                case YELLOW:
+                    x = 1;
+                    break;
+                case GREEN:
+                    x = 2;
+                    break;
+                case BLUE:
+                    x = 3;
+                    break;
+                default:
+                    x = 0; // RED key position.
+            }
+
             int numKeys = inventory.get(key);
             if(numKeys > 0){
                 g.drawImage(key.getIcon(), x * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
                 if(numKeys > 1){
-                    // Draw number on top. FIXME: currently drawing chap
+                    // Draw number on top. FIXME: currently drawing chap, needs to draw text instead
                     g.drawImage(chap.getIcon(), x * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
                 }
             }
-            x++;
         }
     }
 }
