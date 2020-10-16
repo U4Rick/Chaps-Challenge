@@ -39,10 +39,14 @@ public class Levels {
 	   * @param levelNum the number of the level to load.
 	   * @return the maze loaded.
 	   */
-	  public static Maze loadLevel(int levelNum) {
+	  public static Maze loadLevel(int levelNum) throws FileNotFoundException {
 	    String levelName = "levels/level" + levelNum + ".json";
 	    
 	    File levelFile = new File(levelName);
+
+	    if (!levelFile.exists()) {
+	    	throw new FileNotFoundException("Level file doesn't exist");
+	    }
 	    
 	    return loadLevelFromFile(levelFile);
 	  }
