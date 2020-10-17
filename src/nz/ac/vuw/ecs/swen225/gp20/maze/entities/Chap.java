@@ -45,12 +45,17 @@ public class Chap extends Entity {
     //check if have correct key for door
     for(Colour colour : keyInventory.keySet()) {
       if(colour == ((DoorTile)maze.getBoard()[location.x][location.y]).getDoorColour()) {
-        //unlock door
-        maze.getBoard()[location.x][location.y] = new FreeTile();
-        keyInventory.replace(colour, keyInventory.get(colour)-1);  //remove key
-        break;
+        //check that have more than zero keys to unlock door
+        if(keyInventory.get(colour) > 0) {
+          //unlock door
+          maze.getBoard()[location.x][location.y] = new FreeTile();
+          keyInventory.replace(colour, keyInventory.get(colour) - 1);  //remove key
+          assert(keyInventory.get(colour) >= 0); //check that there are not less than 0 keys
+          break;
+        }
       }
     }
+
 
     //TODO add postconditions for this function, check key is removed
   }
