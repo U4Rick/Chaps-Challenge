@@ -7,6 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -31,6 +32,9 @@ public abstract class MonkeyAI {
 
     //Variance to prevent AI actions from being deterministic
     static final int VARIANCE = 20;
+
+    //Need to store which tiles we attempted to visit and should not revisit to not get stuck in a loop.
+    final HashSet<Tile> blacklistedTiles = new HashSet<>();
 
     /**
      * Instantiates a new Monkey ai.
@@ -138,6 +142,10 @@ public abstract class MonkeyAI {
     private int assignReward(Chap chap, Tile tile) {
         //Get enum representation of the Tile's class name
         TileType tileType = TileType.valueOf(tile.getClass().getSimpleName().toUpperCase());
+
+        if (blacklistedTiles.contains(tile)) {
+            return -100;
+        }
 
         //Return associated reward
         switch (tileType) {
