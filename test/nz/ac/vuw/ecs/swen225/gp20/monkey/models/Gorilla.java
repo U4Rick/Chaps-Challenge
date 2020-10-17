@@ -13,20 +13,18 @@ import java.util.ArrayList;
  */
 public class Gorilla extends MonkeyAI {
 
-    //Need to store which tiles we attempted to visit and should not revisit to not get stuck in a loop.
-    final ArrayList<Tile> blacklistedTiles = new ArrayList<>();
 
     /**
      * Instantiates a new Gorilla model MonkeyAI with preset reward weightings.
      */
     public Gorilla() {
         super(50,
-                20,
-                20,
+                0,
                 0,
                 100,
                 100,
-                20,
+                100,
+                0,
                 100);
     }
 
@@ -38,6 +36,8 @@ public class Gorilla extends MonkeyAI {
         //Add to blacklist if not accessible to prevent getting stuck in a loop
         if (!destinationTile.isAccessible()) {
             blacklistedTiles.add(destinationTile);
+/*            System.out.println("added" + destinationTile);
+            System.out.println(blacklistedTiles.size());*/
         }
 
         return direction;
