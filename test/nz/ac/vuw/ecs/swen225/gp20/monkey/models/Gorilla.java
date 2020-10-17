@@ -1,10 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
-
-import java.util.ArrayList;
 
 /**
  * An AI that tries to push through walls where possible.

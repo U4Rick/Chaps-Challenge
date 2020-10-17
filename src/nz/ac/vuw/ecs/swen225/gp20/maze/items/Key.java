@@ -1,7 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.items;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 
 /**
  * Represents the key item in the game
@@ -9,13 +8,13 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
  * @author Vic
  */
 public class Key extends Item {
-  private Maze.Colours keyColour;
+  private Colour keyColour;
 
   /**
    * Constructor for the Key object.
    * @param keyColour The colour of the key, is associated with a door in the level
    */
-  public Key(Maze.Colours keyColour) {
+  public Key(Colour keyColour) {
     this.keyColour = keyColour;
   }
 
@@ -23,7 +22,7 @@ public class Key extends Item {
    * Gets the colour of this key
    * @return  The colour of this key
    */
-  public Maze.Colours getKeyColour() { return keyColour; }
+  public Colour getKeyColour() { return keyColour; }
 
   @Override
   public String toString() {

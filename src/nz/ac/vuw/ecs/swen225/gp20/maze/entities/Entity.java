@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.entities;
 
 import com.google.common.base.Preconditions;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Icon;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
@@ -38,7 +39,7 @@ abstract public class Entity extends Icon {
    * @throws IllegalArgumentException If the direction provided is not left, right, up or down, then is an invalid direction.
    * @return True if Chap has reached the exit tile and won, false is not.
    */
-  public boolean moveEntity(Maze.Direction direction, Entity entity, Maze maze, boolean isChap) throws IllegalStateException, IllegalArgumentException {
+  public boolean moveEntity(Direction direction, Entity entity, Maze maze, boolean isChap) throws IllegalStateException, IllegalArgumentException {
     //checking preconditions
     //checking that parameters are not null.
     Preconditions.checkNotNull(maze);

@@ -1,10 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import java.util.Random;
-
-import static nz.ac.vuw.ecs.swen225.gp20.maze.Maze.*;
 
 /**
  * An AI that plays based on purely random inputs.

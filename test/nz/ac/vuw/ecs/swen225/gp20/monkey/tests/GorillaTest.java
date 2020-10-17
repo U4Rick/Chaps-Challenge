@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.tests;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Gorilla;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.MonkeyAI;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +34,7 @@ public class GorillaTest {
     @Test
     void exampleTest() {
         for (int i = 0; i < 1_000_000; i++) {
-            Maze.Direction direction = monkeyAI.selectMove(main.getMaze());
+            Direction direction = monkeyAI.selectMove(main.getMaze());
             main.movePlayer(direction);
         }
     }
@@ -47,7 +47,7 @@ public class GorillaTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Maze.Direction direction = monkeyAI.selectMove(main.getMaze());
+            Direction direction = monkeyAI.selectMove(main.getMaze());
             main.movePlayer(direction);
         }
     }

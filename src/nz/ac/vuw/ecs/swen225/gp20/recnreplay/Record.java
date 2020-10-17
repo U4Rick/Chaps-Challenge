@@ -1,12 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnreplay;
 
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 
 import javax.json.*;
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +15,7 @@ import java.util.List;
  */
 public class Record {
 
-    public List<Maze.Direction> moves;
+    public List<Direction> moves;
 
     /**
      * Constructs a record object.
@@ -40,7 +38,7 @@ public class Record {
             JsonArrayBuilder level = Json.createArrayBuilder();
             //todo write the current level to a jsonArray and make object "level : level1" etc
 
-            for (Maze.Direction action : this.moves) {
+            for (Direction action : this.moves) {
                 switch (action) {
                     case RIGHT:
                     case DOWN:
@@ -69,7 +67,7 @@ public class Record {
      *
      * @return the list of moves
      */
-    public List<Maze.Direction> getMoves() {
+    public List<Direction> getMoves() {
         return moves;
     }
 
@@ -78,7 +76,7 @@ public class Record {
      *
      * @param moves the list of moves.
      */
-    public void setMoves(List<Maze.Direction> moves) {
+    public void setMoves(List<Direction> moves) {
         this.moves = moves;
     }
 
@@ -87,7 +85,7 @@ public class Record {
      *
      * @param dir the direction of the movement
      */
-    public void addMove(Maze.Direction dir) {
+    public void addMove(Direction dir) {
         this.moves.add(dir);
     }
 

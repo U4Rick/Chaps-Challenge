@@ -1,6 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Colours;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 
 /**
  * A helper class for storing tile object data
@@ -10,7 +10,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Colours;
 class TileObject {
 	public int x;
 	public int y;
-	public Colours colour;
+	public Colour colour;
 
 	/**
 	 * Constructor to be used if the object doesn't have a colour value.
@@ -29,7 +29,7 @@ class TileObject {
 	 * @param y y value of the object.
 	 * @param colour colour value of the object.
 	 */
-	protected TileObject(int x, int y, Colours colour) {
+	protected TileObject(int x, int y, Colour colour) {
 		this.x = x;
 		this.y = y;
 		this.colour = colour;

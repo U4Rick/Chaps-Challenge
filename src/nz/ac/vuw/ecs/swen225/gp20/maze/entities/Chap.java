@@ -2,11 +2,11 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.entities;
 
 //importing libraries needed
 import com.google.common.base.Preconditions;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import java.awt.Point;
 import java.util.*;
@@ -28,7 +28,7 @@ public class Chap extends Entity {
     keyInventory = new HashMap<>();
 
     //add the the possible keys
-    for(Maze.Colours colour : Maze.Colours.values()) {
+    for(Colour colour : Colour.values()) {
       keyInventory.put(new Key(colour), 0);
     }
   }

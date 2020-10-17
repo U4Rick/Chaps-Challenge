@@ -1,14 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.tests;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Baboon;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.MonkeyAI;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Testing suite for the Baboon model AI, which uses purely random movement to play the game.

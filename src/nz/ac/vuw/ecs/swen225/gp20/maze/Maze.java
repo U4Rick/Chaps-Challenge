@@ -1,8 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 //importing libraries needed
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
-import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
@@ -18,19 +18,6 @@ import com.google.common.base.Preconditions;
  * @author Vic
  */
 public class Maze {
-  /**
-   * Used to represent the direction for the movement of Chap
-   */
-  public enum Direction {
-    UP, DOWN, LEFT, RIGHT
-  }
-
-  /**
-   * Used to represent the colours of the keys and the doors
-   */
-  public enum Colours {
-    RED, YELLOW, GREEN, BLUE
-  }
 
   private Tile[][] board; //2d array of tiles,
   private Point exitLocation; //where exit is located at on the map
