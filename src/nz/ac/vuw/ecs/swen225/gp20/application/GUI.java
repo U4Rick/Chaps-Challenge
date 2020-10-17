@@ -64,6 +64,7 @@ public abstract class GUI {
 	public int timeLeft;
 	public boolean isPause = false;
 	public boolean canMove;
+	private int lastKeyPressed;
 
 	/**
 	 *  Initializes the maze, and builds the main window.
@@ -171,7 +172,10 @@ public abstract class GUI {
 			@Override
 			public void keyTyped(KeyEvent e) { }
 			@Override
-			public void keyPressed(KeyEvent e) { processKeyEvent(e); }
+			public void keyPressed(KeyEvent e) {
+				lastKeyPressed = e.getKeyCode();
+				processKeyEvent(e);
+			}
 			@Override
 			public void keyReleased(KeyEvent e) { }
 		});
@@ -250,7 +254,7 @@ public abstract class GUI {
 
 		gameSaveItem.addActionListener(e -> persistenceSave());
 
-		pauseMenuItem.addActionListener(e -> togglePause());
+		pauseMenuItem.addActionListener(e -> openPauseDialog());
 
 		quitMenuItem.addActionListener(e -> System.exit(0));
 
@@ -284,6 +288,21 @@ public abstract class GUI {
 	}
 
 
+
+	public void openPauseDialog() {
+		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
+		option.setMessage("Game is paused.");
+		JDialog dialog = option.createDialog("Paused");
+		dialog.pack();
+		dialog.setVisible(true);
+		int choice = (Integer) option.getValue();
+		if (choice == JOptionPane.OK_OPTION || lastKeyPressed == KeyEvent.VK_ESCAPE) {
+			dialog.setVisible(false);
+		}
+	}
+
+
+
 	/**
 	 * Stops the game running, with a JDialog containing custom messages.
 	 * Saves and loads replay of game just played.
@@ -311,6 +330,7 @@ public abstract class GUI {
 	 * @param title Title of the dialog.
 	 */
 	public void produceDialog(String message, String title) {
+		pause();
 		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
 		option.setMessage(message);
 		JDialog dialog = option.createDialog(title);
@@ -318,6 +338,7 @@ public abstract class GUI {
 		dialog.setVisible(true);
 		int choice = (Integer) option.getValue();
 		if (choice == JOptionPane.OK_OPTION) {
+			play();
 			dialog.setVisible(false);
 		}
 	}
@@ -343,7 +364,8 @@ public abstract class GUI {
 
 				//resume a saved game
 				case KeyEvent.VK_R:
-					System.out.println("r");
+					persistenceLoad(true);
+					gameStart();
 					break;
 
 
@@ -355,27 +377,24 @@ public abstract class GUI {
 
 				//start a new game at level 1
 				case KeyEvent.VK_1:
-					System.out.println("1");
+					try {
+						persistenceLoad(1);
+						gameStart();
+					} catch (FileNotFoundException fileNotFoundException) {
+						fileNotFoundException.printStackTrace();
+					}
 					break;
 
 
 			}
 		} else {
-			switch (e.getKeyCode()) {
-				//pause the game
-				case KeyEvent.VK_ESCAPE:
-					togglePause(false);
-					break;
-
-				//resume the game
-				case KeyEvent.VK_SPACE:
-					togglePause(true);
-					break;
-
-				//if not anything else, assume user is trying to move chap
-				default:
-					checkMove(e);
-					break;
+			//pause the game
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				openPauseDialog();
+			}
+			//if not anything else, assume user is trying to move chap
+			else {
+				checkMove(e);
 			}
 		}
 	}
@@ -406,29 +425,6 @@ public abstract class GUI {
 		timeCounter.setText(String.valueOf(timeLeft));
 	}
 
-	/**
-	 * Perform necessary actions on pause/play of game.
-	 */
-	public void togglePause() {
-		if (isPause) {
-			play();
-		}
-		else {
-			pause();
-		}
-	}
-
-	/**
-	 * Perform necessary actions on pause/play of game, with a predefined game state.
-	 */
-	public void togglePause(boolean toggle) {
-		if (!toggle) {
-			play();
-		}
-		else {
-			pause();
-		}
-	}
 
 	public void pause() {
 		gameTimer.stop();
