@@ -1,16 +1,15 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
-
-import static nz.ac.vuw.ecs.swen225.gp20.maze.Maze.*;
 
 /**
  * Abstract class representing the contractual requirements of MonkeyAI players.
@@ -31,6 +30,9 @@ public abstract class MonkeyAI {
 
     //Variance to prevent AI actions from being deterministic
     static final int VARIANCE = 20;
+
+    //Need to store which tiles we attempted to visit and should not revisit to not get stuck in a loop.
+    final HashSet<Tile> blacklistedTiles = new HashSet<>();
 
     /**
      * Instantiates a new Monkey ai.
@@ -139,6 +141,10 @@ public abstract class MonkeyAI {
         //Get enum representation of the Tile's class name
         TileType tileType = TileType.valueOf(tile.getClass().getSimpleName().toUpperCase());
 
+        if (blacklistedTiles.contains(tile)) {
+            return -100;
+        }
+
         //Return associated reward
         switch (tileType) {
             case FREETILE:
@@ -176,7 +182,13 @@ public abstract class MonkeyAI {
      * @return True if Chap has matching key, otherwise False.
      */
     private boolean checkMatchingKey(Chap chap, DoorTile doorTile) {
-        Set<Key> keyInventory = chap.getKeyInventory().keySet();
+        Colour doorColour = doorTile.getDoorColour();
+        Integer integer = chap.getKeyInventory().get(new Key(doorColour));
+
+        System.out.println(integer);
+
+        return false;
+/*        Set<Key> keyInventory = chap.getKeyInventory().keySet();
 
         //For each key in chaps key inventory
         for (Key key : keyInventory) {
@@ -190,7 +202,7 @@ public abstract class MonkeyAI {
                 return true;
             }
         }
-        return false;
+        return false;*/
     }
 
     /**

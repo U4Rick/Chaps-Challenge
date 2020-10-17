@@ -17,11 +17,10 @@ import javax.json.JsonReader;
 import javax.json.JsonValue;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
-import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Colours;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
@@ -53,7 +52,7 @@ public class Persistence {
 	    int objectY = object.getInt("y");
 	    
 	    if (colour) {
-	    	Colours objColour = getColourFromString(object.getString("colour"));
+	    	Colour objColour = getColourFromString(object.getString("colour"));
 	    	objArray[i] = new TileObject(objectX, objectY, objColour);
 	    } else {
 	    	objArray[i] = new TileObject(objectX, objectY);
@@ -69,17 +68,17 @@ public class Persistence {
    * @param colour The string representing the name of the colour.
    * @return The colour obtained.
    */
-  protected static Colours getColourFromString(String colour) {
+  protected static Colour getColourFromString(String colour) {
 
     switch (colour) {
       case "red":
-        return Colours.RED;
+        return Colour.RED;
       case "yellow":
-        return Colours.YELLOW;
+        return Colour.YELLOW;
       case "green":
-        return Colours.GREEN;
+        return Colour.GREEN;
       case "blue":
-        return Colours.BLUE;
+        return Colour.BLUE;
       default:
         // invalid colour, throw error
         throw new InputMismatchException("Invalid colour");
@@ -92,7 +91,7 @@ public class Persistence {
    * @param colour The string representing the name of the colour.
    * @return The colour obtained.
    */
-  protected static String getColourNameFromColour(Colours colour) {
+  protected static String getColourNameFromColour(Colour colour) {
 
     switch (colour) {
       case RED:

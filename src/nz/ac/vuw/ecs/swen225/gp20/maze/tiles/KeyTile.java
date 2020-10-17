@@ -1,9 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 
 /**
  * Represents the tile in the game that contains a key.
@@ -11,13 +10,13 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
  * @author Vic
  */
 public class KeyTile extends AccessibleTile {
-  private Maze.Colours keyColour;
+  private Colour keyColour;
 
   /**
    * Constructor for key tile.
    * @param keyColour The colour associated with this door, key to unlock this door will have the same colour.
    */
-  public KeyTile(Maze.Colours keyColour) {
+  public KeyTile(Colour keyColour) {
     this.keyColour = keyColour;
   }
 
@@ -26,7 +25,7 @@ public class KeyTile extends AccessibleTile {
     return true;
   }
 
-  public Maze.Colours getKeyColour() { return keyColour; }
+  public Colour getKeyColour() { return keyColour; }
 
   @Override
   public Item getItemHere() {

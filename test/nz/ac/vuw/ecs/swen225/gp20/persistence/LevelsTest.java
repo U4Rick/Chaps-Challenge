@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
@@ -38,7 +39,7 @@ public class LevelsTest {
         Tile[][] board = getBoard(testFile);
 
         assertTrue(board[4][3] instanceof DoorTile);
-        assertTrue(((DoorTile)board[4][3]).getDoorColour() == Maze.Colours.BLUE);
+        assertTrue(((DoorTile)board[4][3]).getDoorColour() == Colour.BLUE);
     }
 
     @Test
@@ -47,7 +48,7 @@ public class LevelsTest {
         Tile[][] board = getBoard(testFile);
 
         assertTrue(board[7][2] instanceof KeyTile);
-        assertTrue(((KeyTile)board[7][2]).getKeyColour() == Maze.Colours.BLUE);
+        assertTrue(((KeyTile)board[7][2]).getKeyColour() == Colour.BLUE);
     }
 
     @Test

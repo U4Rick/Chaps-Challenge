@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.tests;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.Main;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.Baboon;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.models.MonkeyAI;
 import org.junit.jupiter.api.BeforeAll;
@@ -47,16 +47,4 @@ class BaboonTest {
             }
         }
     }
-/*    @Test
-    void exampleTimeDelayTest() {
-        for (int i = 0; i < 20; i++) {
-            try {
-                TimeUnit.MILLISECONDS.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Direction direction = monkeyAI.selectMove(main.getMaze());
-            main.movePlayer(direction);
-        }
-    }*/
 }

@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
 /**
- * An AI that avoids keys and treasures but still tries to open doors and reach the exit.
+ * An AI that picks up keys but ignores treasures, while trying to reach the exit.
  *
  * @author Matt
  */
@@ -12,12 +12,12 @@ public class Lemur extends MonkeyAI {
      */
     public Lemur() {
         super(50,
-                0,
+                100,
                 0,
                 100,
                 0,
-                80,
-                0,
-                90);
+                60,
+                100,
+                0);
     }
 }
