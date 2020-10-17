@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * Testing suite for the Gorilla model AI, which tries to push through doors and walls.
@@ -32,6 +34,19 @@ public class GorillaTest {
     @Test
     void exampleTest() {
         for (int i = 0; i < 1_000_000; i++) {
+            Maze.Direction direction = monkeyAI.selectMove(main.getMaze());
+            main.movePlayer(direction);
+        }
+    }
+
+    @Test
+    void exampleTimeDelayTest() {
+        for (int i = 0; i < 1_000; i++) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Maze.Direction direction = monkeyAI.selectMove(main.getMaze());
             main.movePlayer(direction);
         }
