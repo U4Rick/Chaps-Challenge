@@ -1,11 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 //importing libraries needed
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import java.awt.Point;
@@ -85,13 +85,11 @@ public class Maze {
     Preconditions.checkState(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile);
     //assert(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile); //check that tile is a keytile or treasuretile
     if(accessibleTile instanceof KeyTile) {  //check if not on a treasure tile
-      Item item = accessibleTile.getItemHere();
-      if(item != null) {
-        int originalSize = chap.getKeyInventory().size();
-        chap.addToKeyInven((Key) item);
-        board[location.x][location.y] = new FreeTile(); //change to free tile
-        assert(chap.getKeyInventory().size() == (originalSize+1) && chap.getKeyInventory().containsKey(item));  //check that key is in inventory
-      }
+      Colour colour = ((KeyTile) accessibleTile).getKeyColour();
+      int originalSize = chap.getKeyInventory().get(colour);
+      chap.addToKeyInven(colour);
+      board[location.x][location.y] = new FreeTile(); //change to free tile
+      assert(chap.getKeyInventory().get(colour) == originalSize+1);  //check that value in map is incremented
     } else {  //if Chap is going to pick up treasure
       treasuresPickedUp++;
 

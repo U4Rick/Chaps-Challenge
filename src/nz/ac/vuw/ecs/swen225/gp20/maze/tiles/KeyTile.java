@@ -1,9 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
 import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
-
 /**
  * Represents the tile in the game that contains a key.
  *
@@ -25,12 +22,11 @@ public class KeyTile extends AccessibleTile {
     return true;
   }
 
+  /**
+   * Gets the key colour associated with this tile.
+   * @return  Key colour associated with this tile.
+   */
   public Colour getKeyColour() { return keyColour; }
-
-  @Override
-  public Item getItemHere() {
-    return new Key(keyColour);
-  }
 
   @Override
   public String toString() { return keyColour.toString().toLowerCase()+"_key_tile"; }

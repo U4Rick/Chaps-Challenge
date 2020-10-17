@@ -18,6 +18,7 @@ import java.awt.*;
  */
 abstract public class Entity extends Icon {
   public Point entityPosition; //the position of the entity on the board, to avoid having to search through the board to find a specific entity
+  private Direction lastMove = null; //the direction of the last move that the entity has done
 
   /**
    * Constructor for entity
@@ -97,6 +98,7 @@ abstract public class Entity extends Icon {
       AccessibleTile accessibleTile = (AccessibleTile)maze.getBoard()[position.x][position.y];
       accessibleTile.setEntityHere(entity);
       entity.setEntityPosition(new Point(position));  //to keep track of entity's location
+      lastMove = direction; //update last move variable
     }
 
     //check if chap is on exit tile
@@ -131,4 +133,16 @@ abstract public class Entity extends Icon {
    * @param newLocation The new x,y coordinates.
    */
   public void setEntityPosition(Point newLocation) { entityPosition = newLocation; }
+
+  /**
+   * Gets the direction of the last move done by this entity.
+   * @return  Direction of the last move done by this entity.
+   */
+  public Direction getLastMove() { return lastMove; }
+
+  /**
+   * Sets the direction of the last move done by this entity.
+   * @param direction Direction of the last move done by this entity.
+   */
+  public void setLastMove(Direction direction) { this.lastMove = direction;}
 }
