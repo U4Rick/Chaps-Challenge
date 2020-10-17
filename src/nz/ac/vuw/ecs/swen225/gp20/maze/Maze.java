@@ -8,9 +8,13 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
-import java.awt.Point;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 import com.google.common.base.Preconditions;
+
+import javax.imageio.ImageIO;
 
 /**
  * Represents the map used in the game for each level.
@@ -110,6 +114,33 @@ public class Maze {
   }
 
   //getters and setters
+
+  static public Image getKeyIcon(Colour colour) throws IllegalArgumentException {
+    String name;
+    switch(colour) {
+      case RED:
+        name = "red_key_item";
+        break;
+      case BLUE:
+        name = "blue_key_item";
+        break;
+      case GREEN:
+        name = "green_key_item";
+        break;
+      case YELLOW:
+        name = "yellow_key_item";
+        break;
+      default:
+        throw new IllegalArgumentException();
+    }
+    Image icon = null;
+      try {
+        icon = ImageIO.read(new File("./resources/" + name + ".png"));
+      } catch (IOException e) {
+        //throw new IOException();
+      }
+    return icon;
+  }
 
   /**
    * Gets tile from board located at x,y.
