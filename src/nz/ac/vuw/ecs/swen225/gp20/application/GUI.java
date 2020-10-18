@@ -16,11 +16,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.awt.event.*;
+import java.io.*;
+import java.nio.file.Path;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 
@@ -70,7 +69,13 @@ public abstract class GUI {
 	 *  Initializes the maze, and builds the main window.
 	 */
 	public GUI() {
-		createMaze();
+		if (!processStartFile()) {
+			try {
+				persistenceLoad(1, true);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 		canMove = false;
 		buildWindow();
 		repaintAll();
@@ -270,6 +275,15 @@ public abstract class GUI {
 		window.setJMenuBar(menu);
 		window.getContentPane().setBackground(mainColor);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		window.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				processToFile(false, false);
+				super.windowClosing(e);
+			}
+		});
+
 		window.setResizable(false);
 		window.pack();
 		window.setLocationRelativeTo(null);
@@ -288,8 +302,11 @@ public abstract class GUI {
 	}
 
 
-
+	/**
+	 * Open the dialog for game pause and handle it closing.
+	 */
 	public void openPauseDialog() {
+		if (gameTimer != null) { gameTimer.stop(); }
 		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
 		option.setMessage("Game is paused.");
 		JDialog dialog = option.createDialog("Paused");
@@ -297,6 +314,7 @@ public abstract class GUI {
 		dialog.setVisible(true);
 		int choice = (Integer) option.getValue();
 		if (choice == JOptionPane.OK_OPTION || lastKeyPressed == KeyEvent.VK_ESCAPE) {
+			if (gameTimer != null) { gameTimer.start(); }
 			dialog.setVisible(false);
 		}
 	}
@@ -330,7 +348,7 @@ public abstract class GUI {
 	 * @param title Title of the dialog.
 	 */
 	public void produceDialog(String message, String title) {
-		pause();
+		//pause();
 		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
 		option.setMessage(message);
 		JDialog dialog = option.createDialog(title);
@@ -338,7 +356,7 @@ public abstract class GUI {
 		dialog.setVisible(true);
 		int choice = (Integer) option.getValue();
 		if (choice == JOptionPane.OK_OPTION) {
-			play();
+			//play();
 			dialog.setVisible(false);
 		}
 	}
@@ -352,13 +370,15 @@ public abstract class GUI {
 			switch (e.getKeyCode()) {
 				//exit the game, the current game state will be lost, the next time the game is started, it will resume from the last unfinished level
 				case KeyEvent.VK_X:
-					System.out.println("x");
+					processToFile(true, true);
+					System.exit(0);
 					break;
 
 
 				//exit the game, saves the game state, game will resume next time the application will be started
 				case KeyEvent.VK_S:
-					System.out.println("s");
+					processToFile(true, false);
+					System.exit(0);
 					break;
 
 
@@ -371,14 +391,19 @@ public abstract class GUI {
 
 				//start a new game at the last unfinished level
 				case KeyEvent.VK_P:
-					System.out.println("p");
+					try {
+						persistenceLoad(getMaze().getLevelNumber(), false);
+						gameStart();
+					} catch (FileNotFoundException fileNotFoundException) {
+						fileNotFoundException.printStackTrace();
+					}
 					break;
 
 
 				//start a new game at level 1
 				case KeyEvent.VK_1:
 					try {
-						persistenceLoad(1);
+						persistenceLoad(1, false);
 						gameStart();
 					} catch (FileNotFoundException fileNotFoundException) {
 						fileNotFoundException.printStackTrace();
@@ -414,6 +439,61 @@ public abstract class GUI {
 	}
 
 	/**
+	 * Process the final game state to a final for next opening.
+	 * @param hasContent    True if something needs to be stored, false is not
+	 * @param freshLevel    True if opening new level, false if opening save
+	 */
+	public void processToFile(boolean hasContent, boolean freshLevel) {
+		File file = new File("../chapschallenge/status.txt");
+		StringBuilder b = new StringBuilder();
+
+		if (!hasContent) {
+			b.append("clean");
+		}
+		else if (freshLevel) {
+			b.append("level").append("\n");
+			b.append(getMaze().getLevelNumber());
+		}
+		else {
+			b.append("save").append("\n");
+			b.append(persistenceSaveClose());
+		}
+
+		try {
+			FileWriter w = new FileWriter(file);
+			w.write(b.toString());
+			w.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (hasContent) {
+			produceDialog("Information stored, ready on next application start", "Stored Information");
+		}
+	}
+
+	public boolean processStartFile() {
+		try {
+			Scanner sc = new Scanner(new FileReader("../chapschallenge/status.txt"));
+			String initialLine = sc.nextLine();
+			if (initialLine.equals("clean")) {
+				return false;
+			}
+			else if (initialLine.equals("level")) {
+				persistenceLoad(Integer.parseInt(sc.next()), true);
+				return true;
+			}
+			else if (initialLine.equals("save")) {
+				File file = new File(sc.nextLine());
+				persistenceLoad(file);
+				return true;
+			}
+			else { return false; }
+		} catch (FileNotFoundException e) {
+			return false;
+		}
+	}
+
+	/**
 	 * Start the game process.
 	 */
 	public void gameStart() {
@@ -423,24 +503,6 @@ public abstract class GUI {
 		setRecord(new Record());
 		pauseMenuItem.setEnabled(true);
 		timeCounter.setText(String.valueOf(timeLeft));
-	}
-
-
-	public void pause() {
-		gameTimer.stop();
-		isPause = true;
-		pauseMenuItem.setText("Play");
-		canMove = false;
-		gameSaveItem.setEnabled(true);
-	}
-
-	public void play() {
-
-		gameTimer.start();
-		isPause = false;
-		pauseMenuItem.setText("Pause");
-		canMove = true;
-		gameSaveItem.setEnabled(false);
 	}
 
 
@@ -509,17 +571,35 @@ public abstract class GUI {
 	 * Load the level file to play from.
 	 * @param levelNum Number of the level.
 	 */
-	public void persistenceLoad(int levelNum) throws FileNotFoundException {
+	public void persistenceLoad(int levelNum, boolean startOfGame) throws FileNotFoundException {
 		Maze maze;
 		maze = Levels.loadLevel(levelNum);
 		setMaze(maze);
-		window.remove(game);
-		game = new BoardRenderer(getMaze(), gamePanelDim);
-		window.add(game,0);
-		controller.remove(inventory);
-		inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
-		controller.add(inventory);
-		levelCounter.setText(String.valueOf(maze.getLevelNumber()));
+		if (!startOfGame) {
+			window.remove(game);
+			game = new BoardRenderer(getMaze(), gamePanelDim);
+			window.add(game,0);
+			controller.remove(inventory);
+			inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
+			controller.add(inventory);
+			levelCounter.setText(String.valueOf(maze.getLevelNumber()));
+		}
+	}
+
+	/**
+	 *
+	 * @param file
+	 */
+	public void persistenceLoad(File file){
+		Maze maze;
+		maze = Persistence.loadGameState(file);
+		if (maze != null) {
+			setMaze(maze);
+			timeLeft = maze.getTimeLeft();
+		}
+		else {
+			produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
+		}
 	}
 
 
@@ -527,6 +607,7 @@ public abstract class GUI {
 	 * Save the current game state to a file
 	 */
 	public void persistenceSave() {
+		gameTimer.stop();
 		JFileChooser chooser = new JFileChooser();
 		int choice = chooser.showSaveDialog(window);
 		if (choice == JFileChooser.APPROVE_OPTION) {
@@ -534,6 +615,23 @@ public abstract class GUI {
 			File toSaveTo = chooser.getSelectedFile();
 			Persistence.saveGameState(getMaze(), toSaveTo);
 		}
+		gameTimer.start();
+	}
+
+	/**
+	 * Save the current game state to a file, used at window close with game save.
+	 */
+	public String persistenceSaveClose() {
+		gameTimer.stop();
+		JFileChooser chooser = new JFileChooser();
+		int choice = chooser.showSaveDialog(window);
+		if (choice == JFileChooser.APPROVE_OPTION) {
+			System.out.println(chooser.getCurrentDirectory());
+			File toSaveTo = chooser.getSelectedFile();
+			Persistence.saveGameState(getMaze(), toSaveTo);
+			return chooser.getSelectedFile().getPath();
+		}
+		return null;
 	}
 
 	/**
@@ -546,7 +644,7 @@ public abstract class GUI {
 		if (getMaze().getChapWin()) {
 			if (getMaze().getLevelNumber() < MAX_LEVEL) {
 				try {
-					persistenceLoad(getMaze().getLevelNumber()+1);
+					persistenceLoad(getMaze().getLevelNumber()+1, false);
 				} catch (FileNotFoundException e) { e.printStackTrace(); }
 				gameStart();
 			}
@@ -657,12 +755,6 @@ public abstract class GUI {
 		inventory.revalidate();
 		inventory.repaint();
 	}
-
-
-	/**
-	 *  Creates maze object.
-	 */
-	protected abstract void createMaze();
 
 	/**
 	 *  Gets the record object.

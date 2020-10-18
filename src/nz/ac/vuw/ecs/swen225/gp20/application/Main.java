@@ -36,15 +36,6 @@ public class Main extends GUI {
     }
 
     @Override
-    public void createMaze() {
-        try {
-            this.maze = Levels.loadLevel(1);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     protected Record getRecord() {
         return record;
     }
