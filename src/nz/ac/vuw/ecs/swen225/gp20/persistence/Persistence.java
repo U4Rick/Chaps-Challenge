@@ -18,7 +18,6 @@ import javax.json.JsonValue;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 
@@ -164,18 +163,14 @@ public class Persistence {
         .build();
 
     JsonArrayBuilder chapInventoryArray = Json.createArrayBuilder();
-    for (Item item : maze.getChap().getKeyInventory().keySet()) {
+    for (Colour key : maze.getChap().getKeyInventory().keySet()) {
 
-      JsonObject object = null;
-      if (item instanceof Key) {
-        object = Json.createObjectBuilder()
-            .add("item_type", "key")
-            .add("colour", getColourNameFromColour(((Key) item).getKeyColour()))
-            .build();
-      }
-      if (object != null) {
-        chapInventoryArray.add(object);
-      }
+      JsonObject object =  Json.createObjectBuilder()
+        .add("item_type", "key")
+        .add("colour", getColourNameFromColour(key))
+        .build();
+      
+      chapInventoryArray.add(object);
     }
 
     JsonObject chap = Json.createObjectBuilder()
@@ -282,7 +277,7 @@ public class Persistence {
 
       JsonArray inventory = chapObject.getJsonArray("inventory");
       for (JsonValue keyValue : inventory) {
-        Key key = new Key(getColourFromString(keyValue.asJsonObject().getString("colour")));
+        Colour key = getColourFromString(keyValue.asJsonObject().getString("colour"));
         chap.addToKeyInven(key);
       }
 
