@@ -33,7 +33,7 @@ public class BoardRenderer extends JPanel {
         BOARD_HEIGHT = maze.getBoard()[0].length;
         TILE_SIZE = size.width/DISPLAY_DIMENSION;
 
-        // Set as actual display size in case size parameter did not divide well. FIXME: good code style?
+        // Set as actual display size in case size parameter did not divide well.
         setPreferredSize(new Dimension(DISPLAY_DIMENSION * TILE_SIZE, DISPLAY_DIMENSION * TILE_SIZE));
         setLayout(null);
 
@@ -44,7 +44,9 @@ public class BoardRenderer extends JPanel {
             e.printStackTrace();
         }
 
-        this.setFont(new Font("Calibri", Font.BOLD, 32)); // TODO: choose right font/size for info display.
+        // Display setup.
+        this.setFont(new Font("Calibri", Font.BOLD, 32));
+        this.setForeground(Color.white);
     }
 
     @Override
@@ -91,9 +93,24 @@ public class BoardRenderer extends JPanel {
 
         // If chap is on info tile, display info.
         if(maze.getTile(maze.getChapPosition().x, maze.getChapPosition().y) instanceof InfoTile){
-            String infoText = "YOU STEPPED ON THE INFO TILE."; // TODO: get text from maze/level.
+            String infoText = "YOU STEPPED ON THE INFO\nTILE."; // TODO: temp, need to get text from maze/level.
             g.drawImage(infoIcon, 25, 300, 445, 165, null);
-            g.drawString(infoText, 30, 350); // FIXME: check position when game can run.
+            drawMultilineString(g, infoText, 50, 330);
+        }
+    }
+
+    /**
+     * Draws a string containing the \n character on multiple lines.
+     *
+     * @param g the graphics object to draw on.
+     * @param text the text to be drawn.
+     * @param x the x position where the text starts.
+     * @param y the y position of the top of the text.
+     */
+    void drawMultilineString(Graphics g, String text, int x, int y) {
+        int lineHeight = g.getFontMetrics().getHeight();
+        for (String line : text.split("\n")){
+            g.drawString(line, x, y += lineHeight);
         }
     }
 }
