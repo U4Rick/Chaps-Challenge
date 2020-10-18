@@ -25,7 +25,7 @@ abstract public class Entity extends Icon {
    * @param entityPosition x,y coordinates of entity in the board.
    */
   public Entity(Point entityPosition) {
-    assert(entityPosition != null);
+    Preconditions.checkNotNull(entityPosition);
     this.entityPosition = entityPosition;
   }
 
@@ -41,7 +41,6 @@ abstract public class Entity extends Icon {
    * @return True if Chap has reached the exit tile and won, false is not.
    */
   public boolean moveEntity(Direction direction, Entity entity, Maze maze, boolean isChap) throws IllegalStateException, IllegalArgumentException {
-    //checking preconditions
     //checking that parameters are not null.
     Preconditions.checkNotNull(maze);
     Preconditions.checkNotNull(entity);
@@ -49,7 +48,7 @@ abstract public class Entity extends Icon {
 
     Chap chap = null;
     if(isChap) {
-      assert(entity instanceof Chap); //make sure that entity is Chap
+      Preconditions.checkArgument(entity instanceof Chap);  //make sure that entity is Chap
       chap = (Chap)entity;
     }
     Point entityLocation = entity.getEntityPosition();
@@ -77,8 +76,8 @@ abstract public class Entity extends Icon {
       throw new IllegalStateException();
     }
 
-
     if(!entity.canMove(maze.getBoard()[position.x][position.y])) {
+      Preconditions.checkArgument(maze.getBoard()[position.x][position.y] instanceof InaccessibleTile);
       InaccessibleTile tile = (InaccessibleTile)maze.getBoard()[position.x][position.y];
       if(isChap && tile.isLockedDoor()) { //check that tile is a locked door
         chap.unlockDoor(position, maze);
@@ -86,6 +85,8 @@ abstract public class Entity extends Icon {
     }
 
     else {    //if entity can move onto tile
+      Preconditions.checkArgument(maze.getBoard()[position.x][position.y] instanceof AccessibleTile);
+
       //pick up item on tile if is an item tile
       if(isChap && maze.getBoard()[position.x][position.y].isAccessible()) {
         if(((AccessibleTile)maze.getBoard()[position.x][position.y]).isItem()) {
@@ -106,8 +107,7 @@ abstract public class Entity extends Icon {
       return true;
     }
 
-    Preconditions.checkState(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);//check that entity is not on an invalid tile
-   // assert(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);
+    assert(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);  //check that entity is not on an invalid tile
     return false;
   }
 
@@ -118,7 +118,7 @@ abstract public class Entity extends Icon {
    * @param tile The tile to check if entity can move into.
    */
   public boolean canMove(Tile tile) {
-    assert(tile != null);
+    Preconditions.checkNotNull(tile);
     return tile.isAccessible();
   }
 

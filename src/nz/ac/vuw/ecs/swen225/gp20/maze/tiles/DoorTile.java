@@ -10,6 +10,10 @@ import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 public class DoorTile extends InaccessibleTile {
   private Colour doorColour; //the colour of the door, 0 for red, 1 for blue, 2 for yellow
 
+  /**
+   * Constructor for DoorTile.
+   * @param doorColour The colour of the door, this colour is used for doors and keys.
+   */
   public DoorTile(Colour doorColour) {
     this.doorColour = doorColour;
   }

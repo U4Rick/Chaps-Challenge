@@ -26,7 +26,7 @@ public class Chap extends Entity {
     super(chapsLocation);
     keyInventory = new HashMap<>();
 
-    //add the the possible keys
+    //add the possible keys
     for(Colour colour : Colour.values()) {
       keyInventory.put(colour, 0);
     }
@@ -43,21 +43,16 @@ public class Chap extends Entity {
     Preconditions.checkArgument(maze.getBoard()[location.x][location.y] instanceof DoorTile);
 
     //check if have correct key for door
-    for(Colour colour : keyInventory.keySet()) {
-      if(colour == ((DoorTile)maze.getBoard()[location.x][location.y]).getDoorColour()) {
-        //check that have more than zero keys to unlock door
-        if(keyInventory.get(colour) > 0) {
-          //unlock door
-          maze.getBoard()[location.x][location.y] = new FreeTile();
-          keyInventory.replace(colour, keyInventory.get(colour) - 1);  //remove key
-          assert(keyInventory.get(colour) >= 0); //check that there are not less than 0 keys
-          break;
-        }
-      }
+    Colour colour = ((DoorTile)maze.getBoard()[location.x][location.y]).getDoorColour();
+    //check that have more than zero keys to unlock door
+    if(keyInventory.get(colour) > 0) {
+      //unlock door
+      maze.getBoard()[location.x][location.y] = new FreeTile();
+      int originalValue = keyInventory.get(colour);
+      keyInventory.replace(colour, keyInventory.get(colour) - 1);  //remove key
+      assert(keyInventory.get(colour) >= 0); //check that there are not less than 0 keys
+      assert (keyInventory.get(colour) == originalValue-1); //check that number of keys is smaller by one
     }
-
-
-    //TODO add postconditions for this function, check key is removed
   }
 
   /**
@@ -66,8 +61,6 @@ public class Chap extends Entity {
    */
   public void addToKeyInven(Colour colour) {
     keyInventory.replace(colour, keyInventory.get(colour)+1);  //add key
-
-    //TODO postconditions
   }
 
   /**
