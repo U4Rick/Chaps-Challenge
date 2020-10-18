@@ -333,7 +333,7 @@ public abstract class GUI {
 
 		produceDialog(dialogMessage, dialogTitle);
 
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 		int replayChoice = chooser.showSaveDialog(window);
 		if (replayChoice == JFileChooser.APPROVE_OPTION) {
 			File replayFile = chooser.getSelectedFile();
@@ -510,7 +510,7 @@ public abstract class GUI {
 	 *  Load the replay file and reset the replay object.
 	 */
 	public void replayLoad() {
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 		int choice = chooser.showOpenDialog(window);
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			File toLoadFrom = chooser.getSelectedFile();
@@ -538,7 +538,7 @@ public abstract class GUI {
 	 *                  If false, load a fresh version of a level.
 	 */
 	public void persistenceLoad(boolean isState) {
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 		int choice = chooser.showOpenDialog(window);
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			File toLoadFrom = chooser.getSelectedFile();
@@ -608,7 +608,7 @@ public abstract class GUI {
 	 */
 	public void persistenceSave() {
 		gameTimer.stop();
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 		int choice = chooser.showSaveDialog(window);
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			System.out.println(chooser.getCurrentDirectory());
@@ -623,7 +623,7 @@ public abstract class GUI {
 	 */
 	public String persistenceSaveClose() {
 		gameTimer.stop();
-		JFileChooser chooser = new JFileChooser();
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 		int choice = chooser.showSaveDialog(window);
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			System.out.println(chooser.getCurrentDirectory());
