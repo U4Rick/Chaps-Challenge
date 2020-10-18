@@ -82,7 +82,7 @@ public class Maze {
     if(keyImages == null) {
       keyImages = new HashMap<>();
       for (Colour c : Colour.values()) {
-        Image icon = ImageIO.read(new File("./resources/" + c.toString() + "key_item.png"));
+        Image icon = ImageIO.read(new File("./resources/" + c.toString() + "_key_item.png"));
         keyImages.put(c, icon);
       }
     }
