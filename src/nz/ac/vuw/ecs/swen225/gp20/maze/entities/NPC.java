@@ -2,7 +2,9 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.entities;
 
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.awt.Point;
 
 /**
  * Represents a nonChap entity in the level.
@@ -10,19 +12,25 @@ import java.awt.*;
  * @author Vic
  */
 public class NPC extends Entity {
-  /**
-   * Used to represent the behaviour the NPC needs to do, TODO possibly will not be used, delete if not used
-   */
-  public enum behaviourMode {
-    MEAN, NICE;
-  }
 
+  int currentMovement;  //current index position in movementList
+  List<Direction> movementList; //stores list of movements
   /**
    * Constructor for npc
    * @param npcLocation x,y coordinates of npc in the board.
    */
-  NPC(Point npcLocation) {
+  public NPC(Point npcLocation, List<Direction> movementList) {
     super(npcLocation);
+    currentMovement = 0;
+    this.movementList = new ArrayList<>();
+    this.movementList.addAll(movementList);
+  }
+
+  public Direction getNextMove() {
+    if(currentMovement == movementList.size()) {
+      currentMovement = 0;
+    }
+    return movementList.get(currentMovement++);
   }
 
   /**

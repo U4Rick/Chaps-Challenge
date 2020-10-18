@@ -7,10 +7,12 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Preconditions;
@@ -89,6 +91,15 @@ public class Maze {
   }
 
   /**
+   * Creates NPC character for maze
+   */
+  public void createNPC(Point spawnPoint, List<Direction> movementList) {
+    //TODO add contract that all movements in movementList must be valid
+    npc = new NPC(spawnPoint, movementList);
+  }
+
+
+  /**
    * Moves Chap with the direction specified.
    * @param direction Direction specified.
    */
@@ -100,7 +111,7 @@ public class Maze {
    * Moves the NPC.
    */
   public void moveNPC() {
-    //TODO implement this in separate branch for NPC.
+    npc.moveEntity(npc.getNextMove(), npc, this, false);
   }
 
   /**
