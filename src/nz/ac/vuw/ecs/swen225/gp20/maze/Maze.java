@@ -1,16 +1,21 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 //importing libraries needed
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
-import java.awt.Point;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.common.base.Preconditions;
+
+import javax.imageio.ImageIO;
 
 /**
  * Represents the map used in the game for each level.
@@ -31,8 +36,11 @@ public class Maze {
 
   private final int TREASURES_NUM;
   private int treasuresPickedUp = 0;
+  private int treasuresLeft;  //for postconditions check
 
   private boolean chapWin = false;  //checks that Chap is on exit tile
+
+  static private Map<Colour, Image> keyImages = null;
 
   /**
    * Constructs the level for the game based from the level data files.
@@ -42,7 +50,19 @@ public class Maze {
    * @param board The 2d array that represents the board for the level.
    * @throws IllegalStateException If chap is being set onto an inaccessible tile, then there is something wrong with the level.
    */
-  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, int timeAvailable, Tile[][] board) throws IllegalStateException{
+  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, int timeAvailable, Tile[][] board) throws IllegalStateException, IOException {
+    //check that parameters are not null
+    Preconditions.checkNotNull(chapLocation);
+    Preconditions.checkNotNull(exitLocation);
+    //check that all tiles on board exist
+    for (Tile[] tiles : board) {
+      Preconditions.checkNotNull(tiles);
+      for (int y = 0; y < board[0].length; y++) {
+        Preconditions.checkNotNull(tiles[y]);
+      }
+    }
+
+    //set variables
     this.levelNumber = levelNumber;
     this.chap = new Chap(chapLocation);
     this.exitLocation = exitLocation;
@@ -52,10 +72,19 @@ public class Maze {
     this.board = board;
 
     //set tile's entity at chap pos to chap
-    if(board[chapLocation.x][chapLocation.y].isAccessible()) {
-      ((AccessibleTile)board[chapLocation.x][chapLocation.y]).setEntityHere(chap);
+    if(this.board[chapLocation.x][chapLocation.y].isAccessible()) {
+      ((AccessibleTile)this.board[chapLocation.x][chapLocation.y]).setEntityHere(chap);
     } else {
       throw new IllegalStateException();
+    }
+
+    //initialise key images if it doesn't exist
+    if(keyImages == null) {
+      keyImages = new HashMap<>();
+      for (Colour c : Colour.values()) {
+        Image icon = ImageIO.read(new File("./resources/" + c.toString() + "key_item.png"));
+        keyImages.put(c, icon);
+      }
     }
   }
 
@@ -64,7 +93,7 @@ public class Maze {
    * @param direction Direction specified.
    */
   public void moveChap(Direction direction) {
-    chapWin = chap.moveEntity(direction, chap, this, true);
+      chapWin = chap.moveEntity(direction, chap, this, true);
   }
 
   /**
@@ -79,23 +108,33 @@ public class Maze {
    * @param location The tile to pick the item from.
    */
   public void pickUpItem(Point location) {
-    Preconditions.checkState(board[location.x][location.y] instanceof  AccessibleTile );
-    //assert(board[location.x][location.y] instanceof  AccessibleTile );
+    Preconditions.checkState(board[location.x][location.y] instanceof  AccessibleTile );  //check that tile is an accessibletile
     AccessibleTile accessibleTile = (AccessibleTile)this.getBoard()[location.x][location.y];
-    Preconditions.checkState(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile);
-    //assert(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile); //check that tile is a keytile or treasuretile
+    Preconditions.checkState(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile); //check that tile is a keytile or treasuretile
     if(accessibleTile instanceof KeyTile) {  //check if not on a treasure tile
-      Item item = accessibleTile.getItemHere();
-      if(item != null) {
-        int originalSize = chap.getKeyInventory().size();
-        chap.addToKeyInven((Key) item);
-        board[location.x][location.y] = new FreeTile(); //change to free tile
-        assert(chap.getKeyInventory().size() == (originalSize+1) && chap.getKeyInventory().containsKey(item));  //check that key is in inventory
-      }
+      Colour colour = ((KeyTile) accessibleTile).getKeyColour();
+      int originalSize = chap.getKeyInventory().get(colour);
+      chap.addToKeyInven(colour);
+      board[location.x][location.y] = new FreeTile(); //change to free tile
+      assert(chap.getKeyInventory().get(colour) == originalSize+1);  //check that value in map is incremented
     } else {  //if Chap is going to pick up treasure
       treasuresPickedUp++;
+      treasuresLeft--;
 
       board[location.x][location.y] = new FreeTile(); //change to free tile
+
+      //check that number of treasures picked up is not zero or negative
+      assert(treasuresPickedUp > 0);
+      int treasuresOnBoard = 0; //check that number of treasures on board has reduced by one
+      for (Tile[] tiles : board) {
+        for (int y = 0; y < board[0].length; y++) {
+          if (tiles[y] instanceof TreasureTile) treasuresOnBoard++;
+        }
+      }
+      assert(treasuresOnBoard == treasuresLeft);
+      //check that total number of treasures is consistent
+      assert(treasuresPickedUp+treasuresLeft == TREASURES_NUM);
+
 
       if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit
         //find all exit locks and change them into free tiles once all treasures have been picked up.
@@ -112,6 +151,17 @@ public class Maze {
   }
 
   //getters and setters
+
+  /**
+   * Gets the image that represents the key stated in the parameter.
+   * @param colour The colour of the key that the image represents.
+   * @return  The image object of the key.
+   */
+  static public Image getKeyIcon(Colour colour) {
+    Image img = keyImages.get(colour);
+    assert(img != null);
+    return keyImages.get(colour);
+  }
 
   /**
    * Gets tile from board located at x,y.

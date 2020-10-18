@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -132,7 +133,13 @@ public class Levels {
 	    } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
 	      // error in the file
 	      e.printStackTrace();
-	    }
+	    } catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    // if error, return null
 	    return null;
 	  }

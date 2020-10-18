@@ -19,7 +19,7 @@ public class BoardRenderer extends JPanel {
     private final int BOARD_HEIGHT;
     private final int TILE_SIZE;
     private final Maze maze;
-    private Image level1_info;
+    private Image infoIcon;
 
     /**
      * Constructs a new renderer to display the current board.
@@ -37,12 +37,14 @@ public class BoardRenderer extends JPanel {
         setPreferredSize(new Dimension(DISPLAY_DIMENSION * TILE_SIZE, DISPLAY_DIMENSION * TILE_SIZE));
         setLayout(null);
 
-        // Info display.
+        // Info display background.
         try {
-            level1_info = ImageIO.read(new File("./resources/level1_info.png"));
+            infoIcon = ImageIO.read(new File("./resources/info_scroll.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.setFont(new Font("Calibri", Font.BOLD, 32)); // TODO: choose right font/size for info display.
     }
 
     @Override
@@ -89,7 +91,9 @@ public class BoardRenderer extends JPanel {
 
         // If chap is on info tile, display info.
         if(maze.getTile(maze.getChapPosition().x, maze.getChapPosition().y) instanceof InfoTile){
-            g.drawImage(level1_info, 25, 300, 445, 165, null);
+            String infoText = "YOU STEPPED ON THE INFO TILE."; // TODO: get text from maze/level.
+            g.drawImage(infoIcon, 25, 300, 445, 165, null);
+            g.drawString(infoText, 30, 350); // FIXME: check position when game can run.
         }
     }
 }
