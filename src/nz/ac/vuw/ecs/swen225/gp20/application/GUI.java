@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Levels;
@@ -25,14 +26,13 @@ import javax.swing.*;
 /**
  * Builds the Graphic User Interface.
  *
- * @author Keely Haskett
+ * @author Keely Haskett 300473212
  */
 public abstract class GUI {
 
 	private final JFrame window = new JFrame();
 
-
-
+	//Constant values, for designing the UI.
 	public final Dimension counterLabelDim = new Dimension(100, 40);
 	public final Dimension gamePanelDim = new Dimension(495, 495);
 	public final Dimension controllerPanelDim = new Dimension(200, 500);
@@ -60,8 +60,8 @@ public abstract class GUI {
 	private Timer gameTimer;
 	private Timer replayTimer;
 
-	public int timeLeft;
-	public boolean canMove;
+	private int timeLeft;
+	private boolean canMove;
 	private int lastKeyPressed;
 
 	/**
@@ -419,6 +419,8 @@ public abstract class GUI {
 				case "LEFT":
 					movePlayer(Direction.LEFT);
 					break;
+				default:
+					break;
 			}
 
 			moveNum.getAndIncrement();
@@ -488,6 +490,9 @@ public abstract class GUI {
 						produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
 					}
 
+					break;
+
+				default:
 					break;
 
 
@@ -616,10 +621,8 @@ public abstract class GUI {
 			b.append(persistenceSaveClose());
 		}
 
-		try {
-			FileWriter w = new FileWriter(file);
+		try (FileWriter w = new FileWriter(file)) {
 			w.write(b.toString());
-			w.close();
 		} catch (IOException e) {
 			produceDialog("There was an error writing to the file.\nPlease try again.", "File Error");
 		}
@@ -634,20 +637,23 @@ public abstract class GUI {
 	 * @return  Returns true if new game is created, false if not.
 	 */
 	public boolean processStartFile() {
-		try {
-			Scanner sc = new Scanner(new FileReader("../chapschallenge/status.txt"));
+		try (Scanner sc = new Scanner(new FileReader("../chapschallenge/status.txt"))) {
 			String initialLine = sc.nextLine();
 			switch (initialLine) {
 				case "level":
 					persistenceLoad(Integer.parseInt(sc.next()), true);
+					sc.close();
 					return true;
 				case "save":
 					File file = new File(sc.nextLine());
 					persistenceLoad(file);
+					sc.close();
 					return true;
 				default:
+					sc.close();
 					return false;
 			}
+
 		} catch (FileNotFoundException e) {
 			produceDialog("There was an error finding status.txt", "File Error");
 			return false;
@@ -788,7 +794,7 @@ public abstract class GUI {
 	protected abstract Record getRecord();
 
 	/**
-	 * Sets the replay object.
+	 * Sets the record object.
 	 * @param record    Record to set with.
 	 */
 	protected abstract void setRecord(Record record);

@@ -1,29 +1,26 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Levels;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
-
-import java.io.FileNotFoundException;
 
 
 /**
  * Run the game.
  *
- * @author Keely Haskett
+ * @author Keely Haskett 300473212
  */
 public class Main extends GUI {
 
-    Maze maze;
-    Replay replay;
-    Record record;
+    private Maze maze;
+    private Replay replay;
+    private Record record;
 
     /**
      * Run the game.
      * @param args Runtime arguments.
      */
-    public static void main(String[] args) { Main main  =  new Main(); }
+    public static void main(String[] args) { new Main(); }
 
     @Override
     public Maze getMaze() {
