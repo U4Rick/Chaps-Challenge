@@ -18,7 +18,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.*;
 import java.io.*;
-import java.nio.file.Path;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
@@ -30,8 +29,8 @@ import javax.swing.*;
  */
 public abstract class GUI {
 
-	private JFrame window = new JFrame();
-	private JPanel controller;
+	private final JFrame window = new JFrame();
+
 
 
 	public final Dimension counterLabelDim = new Dimension(100, 40);
@@ -53,15 +52,15 @@ public abstract class GUI {
 	private JLabel levelCounter;
 	private JLabel timeCounter;
 	private JMenuItem pauseMenuItem;
-	private JMenuItem gameSaveItem;
 	private JMenuItem replayStartItem;
-
+	private JPanel controller;
+	private GridBagConstraints controllerConst;
 	private BoardRenderer game;
 	private InventoryRenderer inventory;
 	private Timer gameTimer;
 	private Timer replayTimer;
+
 	public int timeLeft;
-	public boolean isPause = false;
 	public boolean canMove;
 	private int lastKeyPressed;
 
@@ -73,7 +72,7 @@ public abstract class GUI {
 			try {
 				persistenceLoad(1, true);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
 			}
 		}
 		canMove = false;
@@ -81,6 +80,10 @@ public abstract class GUI {
 		repaintAll();
 	}
 
+
+	///////////////////////////////////////
+	///              BUILD              ///
+	///////////////////////////////////////
 
 	/**
 	 *  Builds the window with a JMenuBar, a Renderer panel and a Controller panel.
@@ -108,7 +111,7 @@ public abstract class GUI {
 		gameLoad.add(gameLoadLevel);
 		gameLoad.add(gameLoadState);
 
-		gameSaveItem = new JMenuItem("Save");
+		JMenuItem gameSaveItem = new JMenuItem("Save");
 		setMenuDetails(gameSaveItem);
 
 		gameMenu.add(gameStartItem);
@@ -220,36 +223,36 @@ public abstract class GUI {
 		inventory = new InventoryRenderer(getMaze(), controllerPanelDim.width-20);
 
 		controller.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
+		controllerConst = new GridBagConstraints();
 
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.insets = controllerPanelStandardInsets;
-		controller.add(timeLabel, constraints);
+		controllerConst.gridx = 0;
+		controllerConst.gridy = 0;
+		controllerConst.insets = controllerPanelStandardInsets;
+		controller.add(timeLabel, controllerConst);
 
-		constraints.gridy++;
-		controller.add(timeCounter, constraints);
+		controllerConst.gridy++;
+		controller.add(timeCounter, controllerConst);
 
-		constraints.gridy++;
-		controller.add(levelLabel, constraints);
+		controllerConst.gridy++;
+		controller.add(levelLabel, controllerConst);
 
-		constraints.gridy++;
-		controller.add(levelCounter, constraints);
+		controllerConst.gridy++;
+		controller.add(levelCounter, controllerConst);
 
-		constraints.gridy++;
-		controller.add(keysLabel, constraints);
+		controllerConst.gridy++;
+		controller.add(keysLabel, controllerConst);
 
-		constraints.gridy++;
-		controller.add(keysCounter, constraints);
+		controllerConst.gridy++;
+		controller.add(keysCounter, controllerConst);
 
-		constraints.gridy++;
-		controller.add(treasuresLabel, constraints);
+		controllerConst.gridy++;
+		controller.add(treasuresLabel, controllerConst);
 
-		constraints.gridy++;
-		controller.add(treasuresCounter, constraints);
+		controllerConst.gridy++;
+		controller.add(treasuresCounter, controllerConst);
 
-		constraints.gridy++;
-		controller.add(inventory, constraints);
+		controllerConst.gridy++;
+		controller.add(inventory, controllerConst);
 
 		gameStartItem.addActionListener(e -> gameStart());
 
@@ -281,24 +284,12 @@ public abstract class GUI {
 			public void windowClosing(WindowEvent e) {
 				processToFile(false, false);
 				super.windowClosing(e);
-			}
-		});
+			}});
 
 		window.setResizable(false);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
-	}
-
-	/**
-	 * Actions to be processed on every gameTimer tick.
-	 * Does actions for game end.
-	 */
-	public void onGameTimeTick() {
-		timeLeft--;
-		getMaze().setTimeLeft(timeLeft);
-		repaintAll();
-		if (timeLeft <= 0) { gameStop("Game Over!", "You ran out of time!"); }
 	}
 
 
@@ -307,6 +298,7 @@ public abstract class GUI {
 	 */
 	public void openPauseDialog() {
 		if (gameTimer != null) { gameTimer.stop(); }
+
 		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
 		option.setMessage("Game is paused.");
 		JDialog dialog = option.createDialog("Paused");
@@ -319,7 +311,50 @@ public abstract class GUI {
 		}
 	}
 
+	/**
+	 * Create a new JDialog and handle closing it.
+	 * @param message   Message of the dialog.
+	 * @param title Title of the dialog.
+	 */
+	public void produceDialog(String message, String title) {
+		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
+		option.setMessage(message);
+		JDialog dialog = option.createDialog(title);
+		dialog.pack();
+		dialog.setVisible(true);
+		int choice = (Integer) option.getValue();
+		if (choice == JOptionPane.OK_OPTION) {
+			dialog.setVisible(false);
+		}
+	}
 
+
+	///////////////////////////////////////
+	///            GAMEPLAY             ///
+	///////////////////////////////////////
+
+	/**
+	 * Actions to be processed on every gameTimer tick.
+	 * Does actions for game end.
+	 */
+	public void onGameTimeTick() {
+		timeLeft--;
+		getMaze().setTimeLeft(timeLeft);
+		repaintAll();
+		if (timeLeft <= 0) { gameStop("Game Over!", "You ran out of time!"); }
+	}
+
+	/**
+	 * Start the game process.
+	 */
+	public void gameStart() {
+		timeLeft = getMaze().getTimeAvailable();
+		gameTimer.start();
+		canMove = true;
+		setRecord(new Record());
+		pauseMenuItem.setEnabled(true);
+		timeCounter.setText(String.valueOf(timeLeft));
+	}
 
 	/**
 	 * Stops the game running, with a JDialog containing custom messages.
@@ -343,23 +378,70 @@ public abstract class GUI {
 	}
 
 	/**
-	 * Create a new JDialog and handle closing it.
-	 * @param message   Message of the dialog.
-	 * @param title Title of the dialog.
+	 * Helper method to move the player and repaint the renderer.
+	 * @param direction Direction to move player.
 	 */
-	public void produceDialog(String message, String title) {
-		//pause();
-		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
-		option.setMessage(message);
-		JDialog dialog = option.createDialog(title);
-		dialog.pack();
-		dialog.setVisible(true);
-		int choice = (Integer) option.getValue();
-		if (choice == JOptionPane.OK_OPTION) {
-			//play();
-			dialog.setVisible(false);
+	public void movePlayer(Direction direction) {
+		getMaze().moveChap(direction);
+
+		if (getRecord() != null) { getRecord().addMove(direction); }
+
+		if (getMaze().getChapWin()) {
+			//if there's another level to progress to
+			if (getMaze().getLevelNumber() < MAX_LEVEL) {
+				try {
+					persistenceLoad(getMaze().getLevelNumber()+1, false);
+				} catch (FileNotFoundException e) { produceDialog("There was an error reading the file.\nPlease try again.", "File Error"); }
+
+				gameStart();
+			}
+			else { gameStop("You win!", "Game won!"); }
+		}
+		repaintAll();
+	}
+
+	/**
+	 *  Runs the replay.
+	 */
+	public void runReplay() {
+		AtomicInteger moveNum = new AtomicInteger();
+		ActionListener replayListener = e -> {
+			switch (getReplay().processActionsJson().get(moveNum.get())) {
+				case "DOWN":
+					movePlayer(Direction.DOWN);
+					break;
+				case "RIGHT":
+					movePlayer(Direction.RIGHT);
+					break;
+				case "UP":
+					movePlayer(Direction.UP);
+					break;
+				case "LEFT":
+					movePlayer(Direction.LEFT);
+					break;
+			}
+
+			moveNum.getAndIncrement();
+			if (moveNum.get() >= getReplay().processActionsJson().size()) {
+				replayTimer.stop();
+			}
+		};
+
+		replayTimer = new Timer(500, replayListener);
+		Replay replay = getReplay();
+
+		if (replay != null) {
+			replayTimer.start();
+		}
+		else {
+			produceDialog("No active replay file loaded in!", "Please load replay!");
 		}
 	}
+
+
+	///////////////////////////////////////
+	///           KEY EVENTS            ///
+	///////////////////////////////////////
 
 	/**
 	 * Process any KeyEvent encountered.
@@ -374,13 +456,11 @@ public abstract class GUI {
 					System.exit(0);
 					break;
 
-
 				//exit the game, saves the game state, game will resume next time the application will be started
 				case KeyEvent.VK_S:
 					processToFile(true, false);
 					System.exit(0);
 					break;
-
 
 				//resume a saved game
 				case KeyEvent.VK_R:
@@ -388,26 +468,26 @@ public abstract class GUI {
 					gameStart();
 					break;
 
-
 				//start a new game at the last unfinished level
 				case KeyEvent.VK_P:
 					try {
 						persistenceLoad(getMaze().getLevelNumber(), false);
 						gameStart();
-					} catch (FileNotFoundException fileNotFoundException) {
-						fileNotFoundException.printStackTrace();
+					} catch (FileNotFoundException ignored) {
+						produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
 					}
-					break;
 
+					break;
 
 				//start a new game at level 1
 				case KeyEvent.VK_1:
 					try {
 						persistenceLoad(1, false);
 						gameStart();
-					} catch (FileNotFoundException fileNotFoundException) {
-						fileNotFoundException.printStackTrace();
+					} catch (FileNotFoundException ignored) {
+						produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
 					}
+
 					break;
 
 
@@ -417,6 +497,7 @@ public abstract class GUI {
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				openPauseDialog();
 			}
+
 			//if not anything else, assume user is trying to move chap
 			else {
 				checkMove(e);
@@ -437,6 +518,82 @@ public abstract class GUI {
 			}
 		}
 	}
+
+	/**
+	 * Get Direction enum value from KeyEvent.
+	 * @param e KeyEvent to get direction from
+	 * @return  Returns Direction if applicable, or null if not.
+	 */
+	public Direction getDirectionFromKey(KeyEvent e) {
+		Direction direction;
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_A:
+				direction = Direction.LEFT;
+				break;
+			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_D:
+				direction = Direction.RIGHT;
+				break;
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_W:
+				direction = Direction.UP;
+				break;
+			case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_S:
+				direction = Direction.DOWN;
+				break;
+			default:
+				direction = null;
+		}
+		return direction;
+	}
+
+
+	///////////////////////////////////////
+	///        STYLING + PAINTING       ///
+	///////////////////////////////////////
+
+	/**
+	 * Sets the visual details of elements in the controller.
+	 * @param label JLabel to set
+	 */
+	private void setControllerElementDetails(JLabel label) {
+		label.setPreferredSize(counterLabelDim);
+		label.setFont(controllerElementsFont);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setForeground(textColorNormal);
+	}
+
+	/**
+	 * Sets the visual details of elements of the JMenuBar.
+	 * @param menu JComponent to set
+	 */
+	private void setMenuDetails (JComponent menu) {
+		menu.setForeground(textColorNormal);
+		menu.setBackground(barColorNormal);
+		menu.setFont(controllerElementsFont);
+		menu.setOpaque(true);
+	}
+
+	/**
+	 * Update and repaint all components which tend to  change regularly, such as panel repainting and counter texts.
+	 */
+	public void repaintAll() {
+		treasuresCounter.setText(String.valueOf(getMaze().getTREASURES_NUM() - getMaze().getTreasuresPickedUp()));
+		keysCounter.setText(String.valueOf(getMaze().getChap().getKeyInventory().size()));
+		levelCounter.setText(String.valueOf(getMaze().getLevelNumber()));
+		timeCounter.setText(String.valueOf(timeLeft));
+		game.revalidate();
+		game.repaint();
+		inventory.revalidate();
+		inventory.repaint();
+	}
+
+
+	///////////////////////////////////////
+	///          FILE HANDLING          ///
+	///////////////////////////////////////
 
 	/**
 	 * Process the final game state to a final for next opening.
@@ -464,47 +621,38 @@ public abstract class GUI {
 			w.write(b.toString());
 			w.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			produceDialog("There was an error writing to the file.\nPlease try again.", "File Error");
 		}
 		if (hasContent) {
-			produceDialog("Information stored, ready on next application start", "Stored Information");
-		}
-	}
-
-	public boolean processStartFile() {
-		try {
-			Scanner sc = new Scanner(new FileReader("../chapschallenge/status.txt"));
-			String initialLine = sc.nextLine();
-			if (initialLine.equals("clean")) {
-				return false;
-			}
-			else if (initialLine.equals("level")) {
-				persistenceLoad(Integer.parseInt(sc.next()), true);
-				return true;
-			}
-			else if (initialLine.equals("save")) {
-				File file = new File(sc.nextLine());
-				persistenceLoad(file);
-				return true;
-			}
-			else { return false; }
-		} catch (FileNotFoundException e) {
-			return false;
+			produceDialog("Game preferences, ready on next application start", "Stored Preferences");
 		}
 	}
 
 	/**
-	 * Start the game process.
+	 * Process the start file, status.txt, and process any actions it requires from the last
+	 * time the application was run.
+	 * @return  Returns true if new game is created, false if not.
 	 */
-	public void gameStart() {
-		timeLeft = getMaze().getTimeAvailable();
-		gameTimer.start();
-		canMove = true;
-		setRecord(new Record());
-		pauseMenuItem.setEnabled(true);
-		timeCounter.setText(String.valueOf(timeLeft));
+	public boolean processStartFile() {
+		try {
+			Scanner sc = new Scanner(new FileReader("../chapschallenge/status.txt"));
+			String initialLine = sc.nextLine();
+			switch (initialLine) {
+				case "level":
+					persistenceLoad(Integer.parseInt(sc.next()), true);
+					return true;
+				case "save":
+					File file = new File(sc.nextLine());
+					persistenceLoad(file);
+					return true;
+				default:
+					return false;
+			}
+		} catch (FileNotFoundException e) {
+			produceDialog("There was an error finding status.txt", "File Error");
+			return false;
+		}
 	}
-
 
 	/**
 	 *  Load the replay file and reset the replay object.
@@ -518,6 +666,7 @@ public abstract class GUI {
 			replay.loadFile(toLoadFrom);
 			setReplay(replay);
 		}
+
 		replayStartItem.setEnabled(true);
 	}
 
@@ -556,7 +705,7 @@ public abstract class GUI {
 				window.add(game,0);
 				controller.remove(inventory);
 				inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
-				controller.add(inventory);
+				controller.add(inventory, controllerConst);
 				levelCounter.setText(String.valueOf(maze.getLevelNumber()));
 				timeLeft = maze.getTimeLeft();
 				repaintAll();
@@ -581,27 +730,21 @@ public abstract class GUI {
 			window.add(game,0);
 			controller.remove(inventory);
 			inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
-			controller.add(inventory);
+			controller.add(inventory, controllerConst);
 			levelCounter.setText(String.valueOf(maze.getLevelNumber()));
 		}
 	}
 
 	/**
-	 *
-	 * @param file
+	 * Load a save from specific file.
+	 * @param file  File to load save from.
 	 */
 	public void persistenceLoad(File file){
 		Maze maze;
 		maze = Persistence.loadGameState(file);
-		if (maze != null) {
-			setMaze(maze);
-			timeLeft = maze.getTimeLeft();
-		}
-		else {
-			produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
-		}
+		if (maze != null) { setMaze(maze); }
+		else { produceDialog("There was an error reading the file.\nPlease try again.", "File Error"); }
 	}
-
 
 	/**
 	 * Save the current game state to a file
@@ -634,127 +777,9 @@ public abstract class GUI {
 		return null;
 	}
 
-	/**
-	 * Helper method to move the player and repaint the renderer.
-	 * @param direction Direction to move player.
-	 */
-	public void movePlayer(Direction direction) {
-		getMaze().moveChap(direction);
-		if (getRecord() != null) { getRecord().addMove(direction); } // for tests
-		if (getMaze().getChapWin()) {
-			if (getMaze().getLevelNumber() < MAX_LEVEL) {
-				try {
-					persistenceLoad(getMaze().getLevelNumber()+1, false);
-				} catch (FileNotFoundException e) { e.printStackTrace(); }
-				gameStart();
-			}
-			else { gameStop("You win!", "Game won!"); }
-		}
-		repaintAll();
-	}
-
-	/**
-	 *  Runs the replay.
-	 */
-	public void runReplay() {
-		AtomicInteger moveNum = new AtomicInteger();
-		ActionListener replayListener = e -> {
-			switch (getReplay().processActionsJson().get(moveNum.get())) {
-				case "DOWN":
-					movePlayer(Direction.DOWN);
-					break;
-				case "RIGHT":
-					movePlayer(Direction.RIGHT);
-					break;
-				case "UP":
-					movePlayer(Direction.UP);
-					break;
-				case "LEFT":
-					movePlayer(Direction.LEFT);
-					break;
-			}
-			moveNum.getAndIncrement();
-			if (moveNum.get() >= getReplay().processActionsJson().size()) {
-				replayTimer.stop();
-			}
-		};
-		replayTimer = new Timer(500, replayListener);
-		Replay replay = getReplay();
-
-
-		if (replay != null) {
-			replayTimer.start();
-		}
-		else {
-			produceDialog("No active replay file loaded in!", "Please load replay!");
-		}
-	}
-
-	/**
-	 * Sets the visual details of elements in the controller.
-	 * @param label JLabel to set
-	 */
-	private void setControllerElementDetails(JLabel label) {
-		label.setPreferredSize(counterLabelDim);
-		label.setFont(controllerElementsFont);
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setForeground(textColorNormal);
-	}
-
-	/**
-	 * Sets the visual details of elements of the JMenuBar.
-	 * @param menu JComponent to set
-	 */
-	private void setMenuDetails (JComponent menu) {
-		menu.setForeground(textColorNormal);
-		menu.setBackground(barColorNormal);
-		menu.setFont(controllerElementsFont);
-		menu.setOpaque(true);
-	}
-
-	/**
-	 * Get Direction enum value from KeyEvent.
-	 * @param e KeyEvent to get direction from
-	 * @return  Returns Direction if applicable, or null if not.
-	 */
-	public Direction getDirectionFromKey(KeyEvent e) {
-		Direction direction;
-		switch (e.getKeyCode()) {
-			case KeyEvent.VK_LEFT:
-			case KeyEvent.VK_A:
-				direction = Direction.LEFT;
-				break;
-			case KeyEvent.VK_RIGHT:
-			case KeyEvent.VK_D:
-				direction = Direction.RIGHT;
-				break;
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_W:
-				direction = Direction.UP;
-				break;
-			case KeyEvent.VK_DOWN:
-			case KeyEvent.VK_S:
-				direction = Direction.DOWN;
-				break;
-			default:
-				direction = null;
-		}
-		return direction;
-	}
-
-	/**
-	 * Update and repaint all components which tend to  change regularly, such as panel repainting and counter texts.
-	 */
-	public void repaintAll() {
-		treasuresCounter.setText(String.valueOf(getMaze().getTREASURES_NUM() - getMaze().getTreasuresPickedUp()));
-		keysCounter.setText(String.valueOf(getMaze().getChap().getKeyInventory().size()));
-		levelCounter.setText(String.valueOf(getMaze().getLevelNumber()));
-		timeCounter.setText(String.valueOf(timeLeft));
-		game.revalidate();
-		game.repaint();
-		inventory.revalidate();
-		inventory.repaint();
-	}
+	///////////////////////////////////////
+	///            OVERRIDES            ///
+	///////////////////////////////////////
 
 	/**
 	 *  Gets the record object.
