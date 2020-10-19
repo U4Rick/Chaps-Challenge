@@ -15,18 +15,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class LevelsTest {
-  
-  //@TempDir
-  //public static TemporaryFolder tempFolder = new TemporaryFolder();
+
 
   @Test
-  public void Test_success_walls() {
-    File testFile = createTestFile();
+  public void Test_success_walls(@TempDir Path tempDir) {
+    File testFile = createTestFile(tempDir);
     Tile[][] board = getBoard(testFile);
 
     assertTrue(board[0][0] instanceof WallTile);
@@ -34,8 +33,8 @@ public class LevelsTest {
   }
 
   @Test
-  public void Test_success_size() {
-    File testFile = createTestFile();
+  public void Test_success_size(@TempDir Path tempDir) {
+    File testFile = createTestFile(tempDir);
     Tile[][] board = getBoard(testFile);
 
     assertTrue(board.length == 11);
@@ -43,8 +42,8 @@ public class LevelsTest {
   }
 
   @Test
-  public void Test_success_lockedDoor() {
-    File testFile = createTestFile();
+  public void Test_success_lockedDoor(@TempDir Path tempDir) {
+    File testFile = createTestFile(tempDir);
     Tile[][] board = getBoard(testFile);
 
     assertTrue(board[4][3] instanceof DoorTile);
@@ -52,8 +51,8 @@ public class LevelsTest {
   }
 
   @Test
-  public void Test_success_keys() {
-    File testFile = createTestFile();
+  public void Test_success_keys(@TempDir Path tempDir) {
+    File testFile = createTestFile(tempDir);
     Tile[][] board = getBoard(testFile);
 
     assertTrue(board[7][2] instanceof KeyTile);
@@ -61,8 +60,8 @@ public class LevelsTest {
   }
 
   @Test
-  public void Test_success_variousTiles() {
-    File testFile = createTestFile();
+  public void Test_success_variousTiles(@TempDir Path tempDir) {
+    File testFile = createTestFile(tempDir);
     Tile[][] board = getBoard(testFile);
 
     assertTrue(board[10][0] instanceof ExitTile);
@@ -71,8 +70,8 @@ public class LevelsTest {
   }
 
   @Test
-  public void Test_success_chapPos() {
-    File testFile = createTestFile();
+  public void Test_success_chapPos(@TempDir Path tempDir) {
+    File testFile = createTestFile(tempDir);
     Tile[][] board = getBoard(testFile);
 
     assertTrue(board[5][5] instanceof FreeTile);
@@ -84,8 +83,8 @@ public class LevelsTest {
   }
 
   @Test
-  public void Test_success_treasures() {
-    File testFile = createTestFile();
+  public void Test_success_treasures(@TempDir Path tempDir) {
+    File testFile = createTestFile(tempDir);
     Tile[][] board = getBoard(testFile);
 
     assertTrue(board[0][8] instanceof TreasureTile);
@@ -112,11 +111,10 @@ public class LevelsTest {
    * 
    * @return the file created
    */
-  protected static File createTestFile() {
+  protected static File createTestFile(Path tempDir) {
     
     try {
-      //tempFolder.create();
-      File testFile = new File("");//tempFolder.newFile("testLevel.json");
+      File testFile = File.createTempFile("testLevel", ".json", tempDir.toFile());
 
       FileWriter fw = new FileWriter(testFile);
   
