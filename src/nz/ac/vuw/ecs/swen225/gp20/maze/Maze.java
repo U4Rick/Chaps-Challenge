@@ -10,6 +10,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class Maze {
 
   private boolean chapWin = false;  //checks that Chap is on exit tile
 
-  static private Map<Colour, Image> keyImages = null;
+  static private Map<Colour, Image> keyImages = new HashMap<>();
 
   /**
    * Constructs the level for the game based from the level data files.
@@ -50,7 +51,7 @@ public class Maze {
    * @param board The 2d array that represents the board for the level.
    * @throws IllegalStateException If chap is being set onto an inaccessible tile, then there is something wrong with the level.
    */
-  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, int timeAvailable, Tile[][] board) throws IllegalStateException, IOException {
+  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum,  int timeAvailable, Tile[][] board) throws IllegalStateException, IOException {
     //check that parameters are not null
     Preconditions.checkNotNull(chapLocation);
     Preconditions.checkNotNull(exitLocation);
@@ -69,7 +70,12 @@ public class Maze {
     this.timeAvailable = timeAvailable;
     this.timeLeft = timeAvailable;
     TREASURES_NUM = treasuresNum;
-    this.board = board;
+    treasuresLeft = TREASURES_NUM;
+    //this.board = board;
+    this.board = new Tile[board.length][board[0].length];
+    for(int x = 0; x < board.length; x++) {
+      System.arraycopy(board[x], 0, this.board[x], 0, board[0].length);
+    }
 
     //set tile's entity at chap pos to chap
     if(this.board[chapLocation.x][chapLocation.y].isAccessible()) {
@@ -79,12 +85,9 @@ public class Maze {
     }
 
     //initialise key images if it doesn't exist
-    if(keyImages == null) {
-      keyImages = new HashMap<>();
-      for (Colour c : Colour.values()) {
-        Image icon = ImageIO.read(new File("./resources/" + c.toString() + "_key_item.png"));
-        keyImages.put(c, icon);
-      }
+    for (Colour c : Colour.values()) {
+      Image icon = ImageIO.read(new File("./resources/" + c.toString() + "_key_item.png"));
+      keyImages.put(c, icon);
     }
   }
 
@@ -193,7 +196,12 @@ public class Maze {
    */
   public final Tile[][] getBoard() {
     Preconditions.checkNotNull(board);
-    return board;
+    //create separate board to return
+    Tile[][] b = new Tile[board.length][board[0].length];
+    for(int x = 0; x < board.length; x++) {
+      System.arraycopy(board[x], 0, b[x], 0, board[0].length);
+    }
+    return b;
   }
 
   /**
