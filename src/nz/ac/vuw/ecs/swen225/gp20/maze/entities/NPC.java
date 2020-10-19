@@ -10,12 +10,6 @@ import java.awt.*;
  * @author Vic
  */
 public class NPC extends Entity {
-  /**
-   * Used to represent the behaviour the NPC needs to do, TODO possibly will not be used, delete if not used
-   */
-  public enum behaviourMode {
-    MEAN, NICE;
-  }
 
   /**
    * Constructor for npc
@@ -23,32 +17,6 @@ public class NPC extends Entity {
    */
   NPC(Point npcLocation) {
     super(npcLocation);
-  }
-
-  /**
-   * Chooses a random direction that the NPC will move.
-   * @return The random direction that the NPC will move.
-   */
-  public Direction moveRandom() {
-    //choose random direction
-    Direction direction = Direction.LEFT;
-    int directionValue = (int)(Math.random()*4);
-    assert(directionValue > -1 && directionValue < 4);
-    switch(directionValue) {
-      case 0:
-        direction = Direction.LEFT;
-        break;
-      case 1:
-        direction = Direction.RIGHT;
-        break;
-      case 2:
-        direction = Direction.UP;
-        break;
-      case 3:
-        direction = Direction.DOWN;
-        break;
-    }
-    return direction;
   }
 
   @Override
