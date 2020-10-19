@@ -71,6 +71,8 @@ public class Levels {
 	      int height = level.getInt("height");
 	      
 	      int levelTime = level.getInt("time");
+	      
+	      String infoText = level.getString("info_text");
 	
 	      Tile[][] levelArray = new Tile[width][height];
 	
