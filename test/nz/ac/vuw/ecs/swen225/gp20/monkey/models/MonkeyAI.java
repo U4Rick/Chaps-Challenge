@@ -4,7 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
+//import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import java.awt.*;
@@ -183,9 +183,9 @@ public abstract class MonkeyAI {
      */
     private boolean checkMatchingKey(Chap chap, DoorTile doorTile) {
         Colour doorColour = doorTile.getDoorColour();
-        Integer integer = chap.getKeyInventory().get(new Key(doorColour));
+        //Integer integer = chap.getKeyInventory().get(new Key(doorColour));
 
-        System.out.println(integer);
+       // System.out.println(integer);
 
         return false;
 /*        Set<Key> keyInventory = chap.getKeyInventory().keySet();
