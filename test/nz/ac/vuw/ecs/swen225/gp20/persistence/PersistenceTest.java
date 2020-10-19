@@ -4,17 +4,19 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 
 class PersistenceTest {
 
     @Test
-    public void Test_saveState() throws IOException {
-      File levelFile = LevelsTest.createTestFile();
+    public void Test_saveState(@TempDir Path path) throws IOException {
+      File levelFile = LevelsTest.createTestFile(path);
       Maze maze = Levels.loadLevelFromFile(levelFile);
       
       maze.getChap().setEntityPosition(new Point(5, 0));
@@ -28,7 +30,7 @@ class PersistenceTest {
       //unlock door
       maze.getChap().unlockDoor(new Point(4, 3), maze);
       
-      File gameStateFile = LevelsTest.tempFolder.newFile("state.json");
+      File gameStateFile = File.createTempFile("gameState", ".json", path.toFile());
       Persistence.saveGameState(maze, gameStateFile);
       
       Maze maze2 = Persistence.loadGameState(gameStateFile, levelFile);
