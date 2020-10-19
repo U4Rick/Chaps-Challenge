@@ -7,11 +7,13 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Preconditions;
@@ -29,7 +31,7 @@ public class Maze {
   private Point exitLocation; //where exit is located at on the map
 
   private Chap chap;  //it's Chap!
-  private NPC npc;  //it's a man
+  private List<NPC> npcs; //it's the actors
 
   private int levelNumber; //name of the current maze
   private int timeAvailable;  //amount of time available to solve the maze at beginning of level
@@ -51,7 +53,7 @@ public class Maze {
    * @param board The 2d array that represents the board for the level.
    * @throws IllegalStateException If chap is being set onto an inaccessible tile, then there is something wrong with the level.
    */
-  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum,  int timeAvailable, Tile[][] board) throws IllegalStateException, IOException {
+  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, int timeAvailable, Tile[][] board, List<NPC> npcs) throws IllegalStateException, IOException {
     //check that parameters are not null
     Preconditions.checkNotNull(chapLocation);
     Preconditions.checkNotNull(exitLocation);
@@ -102,8 +104,10 @@ public class Maze {
   /**
    * Moves the NPC.
    */
-  public void moveNPC() {
-    //TODO implement this in separate branch for NPC.
+  public void moveNPCs() {
+    for (NPC npc : npcs) {
+      npc.moveEntity(npc.getNextMove(), npc, this, false);
+    }
   }
 
   /**
