@@ -30,7 +30,7 @@ public class Maze {
   private Point exitLocation; //where exit is located at on the map
 
   private Chap chap;  //it's Chap!
-  private NPC npc;  //it's a man
+  private List<NPC> npcs; //it's the actors
 
   private int levelNumber; //name of the current maze
   private int timeAvailable;  //amount of time available to solve the maze at beginning of level
@@ -52,7 +52,7 @@ public class Maze {
    * @param board The 2d array that represents the board for the level.
    * @throws IllegalStateException If chap is being set onto an inaccessible tile, then there is something wrong with the level.
    */
-  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, int timeAvailable, Tile[][] board) throws IllegalStateException, IOException {
+  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, int timeAvailable, Tile[][] board, List<NPC> npcs) throws IllegalStateException, IOException {
     //check that parameters are not null
     Preconditions.checkNotNull(chapLocation);
     Preconditions.checkNotNull(exitLocation);
@@ -72,6 +72,7 @@ public class Maze {
     this.timeLeft = timeAvailable;
     TREASURES_NUM = treasuresNum;
     this.board = board;
+    this.npcs = npcs;
 
     //set tile's entity at chap pos to chap
     if(this.board[chapLocation.x][chapLocation.y].isAccessible()) {
@@ -91,15 +92,6 @@ public class Maze {
   }
 
   /**
-   * Creates NPC character for maze
-   */
-  public void createNPC(Point spawnPoint, List<Direction> movementList) {
-    //TODO add contract that all movements in movementList must be valid
-    npc = new NPC(spawnPoint, movementList);
-  }
-
-
-  /**
    * Moves Chap with the direction specified.
    * @param direction Direction specified.
    */
@@ -110,8 +102,10 @@ public class Maze {
   /**
    * Moves the NPC.
    */
-  public void moveNPC() {
-    npc.moveEntity(npc.getNextMove(), npc, this, false);
+  public void moveNPCs() {
+    for (NPC npc : npcs) {
+      npc.moveEntity(npc.getNextMove(), npc, this, false);
+    }
   }
 
   /**
