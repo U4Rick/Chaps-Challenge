@@ -96,6 +96,7 @@ public abstract class GUI {
 		JMenuBar menu = new JMenuBar();
 		menu.setBackground(barColorNormal);
 		menu.setOpaque(true);
+		menu.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		JMenu gameMenu = new JMenu("Game");
 		setMenuDetails(gameMenu);
@@ -151,9 +152,32 @@ public abstract class GUI {
 		setMenuDetails(helpMenu);
 		JMenu helpStartLoad = new JMenu("Start/Load");
 		setMenuDetails(helpStartLoad);
-
+		JMenuItem startRule = new JMenuItem("Click start to begin the game from loaded level or save.");
+		setMenuDetails(startRule);
+		JMenuItem loadRule = new JMenuItem("Through the load menu, you can load a game from either a level or a save file.");
+		setMenuDetails(loadRule);
+		JMenuItem saveRule = new JMenuItem("Click save to save your current game.");
+		setMenuDetails(saveRule);
+		helpStartLoad.add(startRule);
+		helpStartLoad.add(loadRule);
+		helpStartLoad.add(saveRule);
 		JMenu helpGameplay = new JMenu("Gameplay");
 		setMenuDetails(helpGameplay);
+		JMenuItem timeRule = new JMenuItem("Complete the level by finding the golden lily-pad before time's up!");
+		setMenuDetails(timeRule);
+		JMenuItem treasuresRule = new JMenuItem("Collect all the treasures to unlock the golden lily-pad area.");
+		setMenuDetails(treasuresRule);
+		JMenuItem fishRule = new JMenuItem("Collect fish to feed crocodiles of the same colour and unlock new areas.");
+		setMenuDetails(fishRule);
+		JMenuItem infoRule = new JMenuItem("Stand on the ? to receive helpful tips about the level!");
+		setMenuDetails(infoRule);
+		JMenuItem enemyRule = new JMenuItem("Watch out for enemies! Game over if they touch you!");
+		setMenuDetails(enemyRule);
+		helpGameplay.add(timeRule);
+		helpGameplay.add(treasuresRule);
+		helpGameplay.add(fishRule);
+		helpGameplay.add(infoRule);
+		helpGameplay.add(enemyRule);
 		JMenu helpReplay = new JMenu("Replay");
 		setMenuDetails(helpReplay);
 
@@ -161,28 +185,12 @@ public abstract class GUI {
 		helpMenu.add(helpGameplay);
 		helpMenu.add(helpReplay);
 
-		menu.setLayout(new GridBagLayout());
-		GridBagConstraints menuConstraints = new GridBagConstraints();
-		menuConstraints.gridy = 0;
-		menuConstraints.gridx = 0;
-		menuConstraints.anchor = GridBagConstraints.LINE_START;
-		menu.add(gameMenu, menuConstraints);
 
-		menuConstraints.gridx++;
-		menu.add(pauseMenuItem, menuConstraints);
-
-		menuConstraints.gridx++;
-		menu.add(quitMenuItem, menuConstraints);
-
-		menuConstraints.gridx++;
-		menuConstraints.insets = new Insets(0, 360, 0,130);
-		menu.add(replayMenu, menuConstraints);
-
-		menuConstraints.gridx++;
-		menuConstraints.gridwidth = 10;
-		menuConstraints.insets = new Insets(0, 0, 0,0);
-		menuConstraints.anchor = GridBagConstraints.LINE_END;
-		menu.add(helpMenu, menuConstraints);
+		menu.add(gameMenu);
+		menu.add(pauseMenuItem);
+		menu.add(quitMenuItem);
+		menu.add(replayMenu);
+		menu.add(helpMenu);
 
 
 		game = new BoardRenderer(getMaze(), gamePanelDim);
