@@ -78,9 +78,6 @@ public class Levels {
 
       final int levelTime = level.getInt("time");
 
-      // TODO: use info text in the maze?
-      String infoText = level.getString("info_text");
-
       Tile[][] levelArray = new Tile[width][height];
 
       // fill array with accessibles first
@@ -156,9 +153,12 @@ public class Levels {
       JsonObject exitLock = level.getJsonObject("exit_lock");
       levelArray[exitLock.getInt("x")][exitLock.getInt("y")] = new ExitLockTile();
 
+      //get info text from the level
+      String infoText = level.getString("info_text");
+
       // load info tile
       JsonObject infoTile = level.getJsonObject("info");
-      levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile("");
+      levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile(infoText);
 
       // make maze
       return new Maze(levelNum, chapPos, exitPos, treasureTiles.length, levelTime, levelArray);
