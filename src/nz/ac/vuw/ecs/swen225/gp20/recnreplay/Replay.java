@@ -57,10 +57,10 @@ public class Replay{
         recordedMoves = new ArrayList<>();
 
         JsonArray moves = loadedActions.getJsonArray("moves");
-        JsonArray levelArray = loadedActions.getJsonArray("level");
+        JsonArray levelArray = loadedActions.getJsonArray("levels");
 
         for (JsonValue jsonLevel : levelArray) {
-            JsonObject levelArr = jsonLevel.asJsonObject(); //loads the level name
+            JsonObject levelArr = jsonLevel.asJsonObject(); //loads the level file name
             currentLevel = levelArr.getString("level");
         }
 
