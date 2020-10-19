@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Levels;
@@ -53,16 +52,20 @@ public abstract class GUI {
 	private JLabel timeCounter;
 	private JMenuItem pauseMenuItem;
 	private JMenuItem replayStartItem;
+	private JSlider replaySlider;
 	private JPanel controller;
 	private GridBagConstraints controllerConst;
 	private BoardRenderer game;
 	private InventoryRenderer inventory;
 	private Timer gameTimer;
 	private Timer replayTimer;
+	private ActionListener replayListener;
 
 	private int timeLeft;
 	private boolean canMove;
 	private int lastKeyPressed;
+	private int replaySpeed;
+
 
 	/**
 	 *  Initializes the maze, and builds the main window.
@@ -135,13 +138,20 @@ public abstract class GUI {
 		JMenuItem replayLoadItem = new JMenuItem("Load");
 		setMenuDetails(replayLoadItem);
 
+		replaySlider = new JSlider(1, 20);
+		replaySlider.setValue(2);
+		replaySlider.setPaintLabels(true);
+		replaySlider.setPaintTicks(true);
+		replaySlider.setMinorTickSpacing(1);
+
 		replayMenu.add(replayStartItem);
 		replayMenu.add(replayLoadItem);
-
+		replayMenu.add(replaySlider);
 		JMenu helpMenu = new JMenu("Help");
 		setMenuDetails(helpMenu);
 		JMenu helpStartLoad = new JMenu("Start/Load");
 		setMenuDetails(helpStartLoad);
+
 		JMenu helpGameplay = new JMenu("Gameplay");
 		setMenuDetails(helpGameplay);
 		JMenu helpReplay = new JMenu("Replay");
@@ -270,6 +280,8 @@ public abstract class GUI {
 
 		replayLoadItem.addActionListener(e -> replayLoad());
 
+		replaySlider.addChangeListener(e -> replayTimer = new Timer(1000/replaySlider.getValue(), replayListener));
+
 		window.setLayout(new FlowLayout());
 		window.add(game);
 		window.add(controller);
@@ -351,7 +363,7 @@ public abstract class GUI {
 		timeLeft = getMaze().getTimeAvailable();
 		gameTimer.start();
 		canMove = true;
-		setRecord(new Record());
+		setRecord(new Record(getMaze().getLevelNumber()));
 		pauseMenuItem.setEnabled(true);
 		timeCounter.setText(String.valueOf(timeLeft));
 	}
@@ -404,8 +416,8 @@ public abstract class GUI {
 	 *  Runs the replay.
 	 */
 	public void runReplay() {
-		AtomicInteger moveNum = new AtomicInteger();
-		ActionListener replayListener = e -> {
+		AtomicInteger moveNum = new AtomicInteger(0);
+		replayListener = e -> {
 			switch (getReplay().processActionsJson().get(moveNum.get())) {
 				case "DOWN":
 					movePlayer(Direction.DOWN);
@@ -430,6 +442,7 @@ public abstract class GUI {
 		};
 
 		replayTimer = new Timer(500, replayListener);
+		replaySlider.setEnabled(true);
 		Replay replay = getReplay();
 
 		if (replay != null) {
