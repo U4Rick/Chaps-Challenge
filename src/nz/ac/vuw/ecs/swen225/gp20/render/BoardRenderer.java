@@ -92,10 +92,10 @@ public class BoardRenderer extends JPanel {
         }
 
         // If chap is on info tile, display info.
-        if(maze.getTile(maze.getChapPosition().x, maze.getChapPosition().y) instanceof InfoTile){
-            String infoText = "YOU STEPPED ON THE INFO\nTILE."; // TODO: temp, need to get text from maze/level.
+        Tile chapTile = maze.getTile(maze.getChapPosition().x, maze.getChapPosition().y);
+        if(chapTile instanceof InfoTile){
             g.drawImage(infoIcon, 25, 300, 445, 165, null);
-            drawMultilineString(g, infoText, 50, 330);
+            drawMultilineString(g, ((InfoTile)chapTile).getInformation(), 50, 330);
         }
     }
 
