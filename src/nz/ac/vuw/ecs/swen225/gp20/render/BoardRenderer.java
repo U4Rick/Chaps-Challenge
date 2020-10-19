@@ -95,7 +95,7 @@ public class BoardRenderer extends JPanel {
         Tile chapTile = maze.getTile(maze.getChapPosition().x, maze.getChapPosition().y);
         if(chapTile instanceof InfoTile){
             g.drawImage(infoIcon, 25, 300, 445, 165, null);
-            drawMultilineString(g, ((InfoTile)chapTile).getInformation(), 50, 330);
+            drawMultilineString(g, ((InfoTile)chapTile).getInformation(), 75, 330);
         }
     }
 

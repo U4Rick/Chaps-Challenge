@@ -3,7 +3,7 @@
     "width": 20,
     "height": 18,
     "time": 90,
-    "info_text": "Now you have to dodge the actors!",
+    "info_text": "Now you have to dodge \nthe actors!",
     "walls": [
         {
             "x": 6,
