@@ -28,22 +28,22 @@ public class Record {
 
     /**
      * Writes the movements made by the player out to a file.
+     *
      * @param replayFile
      */
     public void writeToFile(File replayFile) {
         try {
             PrintWriter pw = new PrintWriter(replayFile);
 
-            JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-            JsonArrayBuilder moves = Json.createArrayBuilder();
+            JsonObjectBuilder jsonObject = Json.createObjectBuilder();  // creates main json object
 
-            JsonArrayBuilder levels = Json.createArrayBuilder();
+            JsonArrayBuilder levels = Json.createArrayBuilder();    //array for current level
+            JsonArrayBuilder moves = Json.createArrayBuilder();     //array for recorded movements
 
             levels.add(Json.createObjectBuilder()
-                .add("level", levelNumber)
-            .build());
-            jsonObject.add("levels",levels);
-            //todo write the current level to a jsonArray and make object "level : level1" etc
+                    .add("level", levelNumber)
+                    .build());
+            jsonObject.add("levels", levels);       //builds level object and adds to array
 
             for (Direction action : this.moves) {
                 switch (action) {
@@ -51,7 +51,7 @@ public class Record {
                     case DOWN:
                     case LEFT:
                     case UP:
-                        moves.add(Json.createObjectBuilder()
+                        moves.add(Json.createObjectBuilder()    //sort through movements and create individual objects
                                 .add("move", action.toString())
                                 .build());
                         break;
@@ -59,10 +59,11 @@ public class Record {
                         break;
                 }
             }
-            jsonObject.add("moves", moves);
-            JsonObject JsonObjectMain = jsonObject.build();
 
-            pw.write(JsonObjectMain.toString());
+            jsonObject.add("moves", moves);     //add movement array to main object
+            JsonObject JsonObjectMain = jsonObject.build();     //builds main object
+
+            pw.write(JsonObjectMain.toString());    //writes out level and moves
             pw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
