@@ -19,11 +19,9 @@ public class Replay{
     private List<String> recordedMoves;
     private int playbackDelay = 1;
     private JsonObject loadedActions;
-    private JsonObject currentLevelObj;
-    private int currentLevel;
+    public int currentLevel;
 
     private File file;
-    private Maze maze;
 
     /**
      * Constructs the replay with relevant maze.
