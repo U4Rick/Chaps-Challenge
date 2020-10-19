@@ -157,8 +157,8 @@ public class Persistence {
     for (Colour key : maze.getChap().getKeyInventory().keySet()) {
 
       JsonObject object = Json.createObjectBuilder()
-          .add("item_type", "key")
-          .add("colour", getColourNameFromColour(key))
+          .add("key_colour", getColourNameFromColour(key))
+          .add("number", maze.getChap().getKeyInventory().get(key))
           .build();
 
       chapInventoryArray.add(object);
@@ -295,8 +295,11 @@ public class Persistence {
 
       JsonArray inventory = chapObject.getJsonArray("inventory");
       for (JsonValue keyValue : inventory) {
-        Colour key = getColourFromString(keyValue.asJsonObject().getString("colour"));
-        chap.addToKeyInven(key);
+        Colour key = getColourFromString(keyValue.asJsonObject().getString("key_colour"));
+        int keyNum = keyValue.asJsonObject().getInt("number");
+        for (int i=0;i<keyNum;i++) {
+          chap.addToKeyInven(key);
+        }
       }
 
       int timeLeft = gameState.getInt("time_left");

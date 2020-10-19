@@ -5,20 +5,16 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.Extensions;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.awt.*;
+import java.awt.Point;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class LevelsTest {
 

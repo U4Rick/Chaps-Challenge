@@ -165,6 +165,9 @@ abstract public class Entity extends Icon {
       }
       return iconMap.get(Direction.UP);
     } else {
+      if(lastMove == null){
+        return iconMap.get(Direction.UP);
+      }
       return iconMap.get(lastMove);
     }
   }

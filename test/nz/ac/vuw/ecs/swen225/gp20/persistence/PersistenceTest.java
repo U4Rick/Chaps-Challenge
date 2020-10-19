@@ -8,7 +8,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.awt.Point;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 
