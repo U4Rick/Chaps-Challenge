@@ -5,10 +5,10 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.extension.Extensions;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.awt.*;
 import java.io.File;
@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class LevelsTest {
   
-  @Rule
-  public static TemporaryFolder tempFolder = new TemporaryFolder();
+  //@TempDir
+  //public static TemporaryFolder tempFolder = new TemporaryFolder();
 
   @Test
   public void Test_success_walls() {
@@ -115,8 +115,8 @@ public class LevelsTest {
   protected static File createTestFile() {
     
     try {
-      tempFolder.create();
-      File testFile = tempFolder.newFile("testLevel.json");
+      //tempFolder.create();
+      File testFile = new File("");//tempFolder.newFile("testLevel.json");
 
       FileWriter fw = new FileWriter(testFile);
   
