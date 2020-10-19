@@ -1,6 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Levels;
@@ -351,7 +351,7 @@ public abstract class GUI {
 		timeLeft = getMaze().getTimeAvailable();
 		gameTimer.start();
 		canMove = true;
-		setRecord(new Record());
+		setRecord(new Record(getMaze().getLevelNumber()));
 		pauseMenuItem.setEnabled(true);
 		timeCounter.setText(String.valueOf(timeLeft));
 	}

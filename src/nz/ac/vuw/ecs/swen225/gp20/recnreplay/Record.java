@@ -38,6 +38,11 @@ public class Record {
             JsonArrayBuilder moves = Json.createArrayBuilder();
 
             JsonArrayBuilder levels = Json.createArrayBuilder();
+
+            levels.add(Json.createObjectBuilder()
+                .add("level", levelNumber)
+            .build());
+            jsonObject.add("levels",levels);
             //todo write the current level to a jsonArray and make object "level : level1" etc
 
             for (Direction action : this.moves) {
