@@ -16,12 +16,14 @@ import java.util.List;
 public class Record {
 
     public List<Direction> moves;
+    public int levelNumber;
 
     /**
      * Constructs a record object.
      */
-    public Record() {
+    public Record(int levelNum) {
         this.moves = new ArrayList<>();
+        this.levelNumber = levelNum;
     }
 
     /**
@@ -35,7 +37,12 @@ public class Record {
             JsonObjectBuilder jsonObject = Json.createObjectBuilder();
             JsonArrayBuilder moves = Json.createArrayBuilder();
 
-            JsonArrayBuilder level = Json.createArrayBuilder();
+            JsonArrayBuilder levels = Json.createArrayBuilder();
+
+            levels.add(Json.createObjectBuilder()
+                .add("level", levelNumber)
+            .build());
+            jsonObject.add("levels",levels);
             //todo write the current level to a jsonArray and make object "level : level1" etc
 
             for (Direction action : this.moves) {
