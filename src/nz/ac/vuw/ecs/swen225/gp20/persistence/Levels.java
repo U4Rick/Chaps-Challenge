@@ -5,17 +5,24 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.ServiceLoader;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.json.JsonValue;
 import javax.json.stream.JsonParsingException;
 
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
@@ -72,6 +79,7 @@ public class Levels {
 	      
 	      int levelTime = level.getInt("time");
 	      
+	      //TODO: use info text in the maze?
 	      String infoText = level.getString("info_text");
 	
 	      Tile[][] levelArray = new Tile[width][height];
@@ -110,7 +118,31 @@ public class Levels {
 	      for (TileObject treasure : treasureTiles) {
 	        levelArray[treasure.x][treasure.y] = new TreasureTile();
 	      }
-	
+	      
+	      // load actors
+	      List<NPC> actors = new ArrayList<NPC>();
+	      NPC actorBase = loadActor(levelNum);
+	      if (actorBase != null) {
+		      Constructor<NPC> actorConstruct = (Constructor<NPC>) actorBase.getClass().getConstructor(Point.class, Direction[].class);
+		      
+		      JsonArray actorArray = level.getJsonArray("actors");
+		      
+		      for (JsonValue actorValue : actorArray) {
+		    	  JsonObject actor = actorValue.asJsonObject();
+		    	  
+		    	  int x = actor.getInt("x");
+		    	  int y = actor.getInt("y");
+		    	  
+		    	  Direction[] actorPath = getActorPath(actor.getJsonArray("path"));
+		    	  
+				NPC newActor = actorConstruct.newInstance(new Point(x, y), actorPath);
+				
+				actors.add(newActor);
+				
+				((FreeTile)levelArray[x][y]).setEntityHere(newActor);
+					
+		      }
+	      }
 	      // load exit tile
 	      JsonObject exit = level.getJsonObject("exit");
 	      Point exitPos = new Point(exit.getInt("x"), exit.getInt("y"));
@@ -135,9 +167,9 @@ public class Levels {
 	    } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
 	      // error in the file
 	      e.printStackTrace();
-	    } catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	    } catch (InstantiationException | IllegalStateException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+	    	//reflection error, most likely an issue with the NPC
+	    	e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -146,12 +178,38 @@ public class Levels {
 	    return null;
 	  }
 
+	  private static Direction[] getActorPath(JsonArray path) {
+			Direction[] directions = new Direction[path.size()];
+			
+			for (int i=0;i<path.size();i++) {
+				directions[i] = getDirectionFromString(path.getString(i));
+			}
+			
+			return directions;
+		}
+		
+		private static Direction getDirectionFromString(String dir) {
+			switch (dir) {
+				case "left":
+					return Direction.LEFT;
+				case "right":
+					return Direction.RIGHT;
+				case "up":
+					return Direction.UP;
+				case "down":
+					return Direction.DOWN;
+				default:
+					return null;
+			}
+		}
+
+
 	/**
 	 * Loads the actor for the level.
 	 * @param levelNum the level number's actor to be loaded.
 	 * @return the actor loaded.
 	 */
-	private NPC loadActor(int levelNum) {
+	private static NPC loadActor(int levelNum) {
 		  File actorFile = new File("levels/level" + levelNum + ".jar");
 		  
 		  try {
