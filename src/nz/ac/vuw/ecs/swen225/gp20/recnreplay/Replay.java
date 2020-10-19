@@ -20,7 +20,7 @@ public class Replay{
     private int playbackDelay = 1;
     private JsonObject loadedActions;
     private JsonObject currentLevelObj;
-    private String currentLevel;
+    private int currentLevel;
 
     private File file;
     private Maze maze;
@@ -43,7 +43,7 @@ public class Replay{
         try {
             InputStream fis = new FileInputStream(file);
 
-            JsonReader reader = Json.createReader(fis);     //reads in json
+            JsonReader reader = Json.createReader(fis);     //reads in json replay for the level and movements
             loadedActions = reader.readObject();
             reader.close();
         } catch (FileNotFoundException e) {
@@ -55,13 +55,14 @@ public class Replay{
      */
     public List<String> processActionsJson(){
         recordedMoves = new ArrayList<>();
+        currentLevel = 0;
 
-        JsonArray moves = loadedActions.getJsonArray("moves");
-        JsonArray levelArray = loadedActions.getJsonArray("level");
+        JsonArray moves = loadedActions.getJsonArray("moves");      //load in json arrays
+        JsonArray levelArray = loadedActions.getJsonArray("levels");
 
         for (JsonValue jsonLevel : levelArray) {
-            JsonObject levelArr = jsonLevel.asJsonObject(); //loads the level name
-            currentLevel = levelArr.getString("level");
+            JsonObject levelArr = jsonLevel.asJsonObject(); //loads the level file name
+            currentLevel = levelArr.getInt("level");
         }
 
         for (JsonValue jsonMove : moves) {
@@ -69,9 +70,8 @@ public class Replay{
             String direction = move.getString("move");  //loads the moves to make
             recordedMoves.add(direction);
         }
-//        System.out.println(currentLevel);
-        return recordedMoves;
 
+        return recordedMoves;
     }
 
     /**

@@ -9,7 +9,11 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Represents an object that is a character that moves around the map.
@@ -19,6 +23,7 @@ import java.awt.*;
 abstract public class Entity extends Icon {
   public Point entityPosition; //the position of the entity on the board, to avoid having to search through the board to find a specific entity
   private Direction lastMove = null; //the direction of the last move that the entity has done
+  private Map<Direction, Image> iconMap = new HashMap<>();
 
   /**
    * Constructor for entity
@@ -145,4 +150,25 @@ abstract public class Entity extends Icon {
    * @param direction Direction of the last move done by this entity.
    */
   public void setLastMove(Direction direction) { this.lastMove = direction;}
+
+  @Override
+  public Image getIcon(){
+    if(iconMap.isEmpty()){
+      // Load icons on first call.
+      try{
+        iconMap.put(Direction.UP, ImageIO.read(new File("./resources/" + this.toString() + "_up.png")));
+        iconMap.put(Direction.DOWN, ImageIO.read(new File("./resources/" + this.toString() + "_down.png")));
+        iconMap.put(Direction.LEFT, ImageIO.read(new File("./resources/" + this.toString() + "_left.png")));
+        iconMap.put(Direction.RIGHT, ImageIO.read(new File("./resources/" + this.toString() + "_right.png")));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      return iconMap.get(Direction.UP);
+    } else {
+      if(lastMove == null){
+        return iconMap.get(Direction.UP);
+      }
+      return iconMap.get(lastMove);
+    }
+  }
 }

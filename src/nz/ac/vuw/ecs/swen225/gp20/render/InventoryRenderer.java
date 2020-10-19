@@ -1,8 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
+import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Key;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,8 +21,7 @@ public class InventoryRenderer extends JPanel {
     private final int PANEL_HEIGHT;
     private final int TILE_SIZE;
     private final Chap chap;
-    private Image bg;
-    private Image circle;
+    private Image bg, circle;
 
     /**
      * Constructs a new renderer to display the inventory.
@@ -40,45 +39,50 @@ public class InventoryRenderer extends JPanel {
         chap = importMaze.getChap();
 
         try {
+            // Background.
             bg = ImageIO.read(new File("./resources/green.png"));
             circle = ImageIO.read(new File("./resources/circle.png"));
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // TODO: throw an error?
         }
+        this.setFont(new Font("Calibri", Font.BOLD, 32));
     }
 
     @Override
     public void paintComponent(Graphics g){
         // Redraw the background.
         g.drawImage(bg,0,0,PANEL_WIDTH, PANEL_HEIGHT, null);
+        // Draw inventory slots.
         for (int i = 0; i < NUM_SLOTS; i++) {
             g.drawImage(circle, i * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
         }
 
-        Map<Key, Integer> inventory = chap.getKeyInventory();
+        Map<Colour, Integer> inventory = chap.getKeyInventory(); // Get Chap's keys.
+        for (Colour keyColour : inventory.keySet()) {
+            int xOffset;
+            Image icon = Maze.getKeyIcon(keyColour);
 
-        for (Key key : inventory.keySet()) {
-            int x;
-            switch(key.getKeyColour()) {
+            // Have set inventory position for each key colour.
+            switch(keyColour) {
                 case YELLOW:
-                    x = 1;
+                    xOffset = 1;
                     break;
                 case GREEN:
-                    x = 2;
+                    xOffset = 2;
                     break;
                 case BLUE:
-                    x = 3;
+                    xOffset = 3;
                     break;
                 default:
-                    x = 0; // RED key position.
+                    xOffset = 0; // RED key.
             }
 
-            int numKeys = inventory.get(key);
+            int numKeys = inventory.get(keyColour);
             if(numKeys > 0){
-                g.drawImage(key.getIcon(), x * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
-                if(numKeys > 1){
-                    // Draw number on top. FIXME: currently drawing chap, needs to draw text instead
-                    g.drawImage(chap.getIcon(), x * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
+                g.drawImage(icon, xOffset * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
+                if(numKeys > 1){ // FIXME: always display number?
+                    // Display number of keys if more than one.
+                    g.drawString(String.valueOf(numKeys), (xOffset * TILE_SIZE) + (int) (0.3 * TILE_SIZE), (int) (0.75 * TILE_SIZE));
                 }
             }
         }

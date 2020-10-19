@@ -1,9 +1,8 @@
 {
-    "number": 2,
+    "number": 0,
     "width": 20,
     "height": 18,
-    "time": 90,
-    "info_text": "Now you have to dodge \nthe actors!",
+    "time": 10,
     "walls": [
         {
             "x": 6,
@@ -826,23 +825,6 @@
         {
             "x": 18,
             "y": 15
-        }
-    ],
-    "actors": [
-        {
-            "x": 5,
-            "y": 12,
-            "path": ["right", "right", "down", "down", "down", "down", "left", "left", "up", "up", "up", "up"]
-        },
-        {
-            "x": 3,
-            "y": 7,
-            "path": ["left", "left", "up", "up", "right", "right", "down", "down"]
-        },
-        {
-            "x": 14,
-            "y": 14,
-            "path": ["left", "left", "down", "down", "right", "right", "up", "up", "up", "up", "right", "right", "down", "down", "left", "left"]
         }
     ]
 }

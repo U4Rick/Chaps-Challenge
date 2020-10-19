@@ -16,25 +16,22 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.awt.event.*;
+import java.io.*;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 
 /**
  * Builds the Graphic User Interface.
  *
- * @author Keely Haskett
+ * @author Keely Haskett 300473212
  */
 public abstract class GUI {
 
-	private JFrame window = new JFrame();
-	private JPanel controller;
+	private final JFrame window = new JFrame();
 
-
+	//Constant values, for designing the UI.
 	public final Dimension counterLabelDim = new Dimension(100, 40);
 	public final Dimension gamePanelDim = new Dimension(495, 495);
 	public final Dimension controllerPanelDim = new Dimension(200, 500);
@@ -54,27 +51,42 @@ public abstract class GUI {
 	private JLabel levelCounter;
 	private JLabel timeCounter;
 	private JMenuItem pauseMenuItem;
-	private JMenuItem gameSaveItem;
 	private JMenuItem replayStartItem;
-
+	private JSlider replaySlider;
+	private JPanel controller;
+	private GridBagConstraints controllerConst;
 	private BoardRenderer game;
 	private InventoryRenderer inventory;
 	private Timer gameTimer;
 	private Timer replayTimer;
-	public int timeLeft;
-	public boolean isPause = false;
-	public boolean canMove;
+	private ActionListener replayListener;
+
+	private int timeLeft;
+	private boolean canMove;
+	private int lastKeyPressed;
+	private int replaySpeed;
+
 
 	/**
 	 *  Initializes the maze, and builds the main window.
 	 */
 	public GUI() {
-		createMaze();
+		if (!processStartFile()) {
+			try {
+				persistenceLoad(1, true);
+			} catch (FileNotFoundException e) {
+				produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
+			}
+		}
 		canMove = false;
 		buildWindow();
 		repaintAll();
 	}
 
+
+	///////////////////////////////////////
+	///              BUILD              ///
+	///////////////////////////////////////
 
 	/**
 	 *  Builds the window with a JMenuBar, a Renderer panel and a Controller panel.
@@ -84,6 +96,7 @@ public abstract class GUI {
 		JMenuBar menu = new JMenuBar();
 		menu.setBackground(barColorNormal);
 		menu.setOpaque(true);
+		menu.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		JMenu gameMenu = new JMenu("Game");
 		setMenuDetails(gameMenu);
@@ -102,7 +115,7 @@ public abstract class GUI {
 		gameLoad.add(gameLoadLevel);
 		gameLoad.add(gameLoadState);
 
-		gameSaveItem = new JMenuItem("Save");
+		JMenuItem gameSaveItem = new JMenuItem("Save");
 		setMenuDetails(gameSaveItem);
 
 		gameMenu.add(gameStartItem);
@@ -126,15 +139,45 @@ public abstract class GUI {
 		JMenuItem replayLoadItem = new JMenuItem("Load");
 		setMenuDetails(replayLoadItem);
 
+		replaySlider = new JSlider(1, 20);
+		replaySlider.setValue(2);
+		replaySlider.setPaintLabels(true);
+		replaySlider.setPaintTicks(true);
+		replaySlider.setMinorTickSpacing(1);
+
 		replayMenu.add(replayStartItem);
 		replayMenu.add(replayLoadItem);
-
+		replayMenu.add(replaySlider);
 		JMenu helpMenu = new JMenu("Help");
 		setMenuDetails(helpMenu);
 		JMenu helpStartLoad = new JMenu("Start/Load");
 		setMenuDetails(helpStartLoad);
+		JMenuItem startRule = new JMenuItem("Click start to begin the game from loaded level or save.");
+		setMenuDetails(startRule);
+		JMenuItem loadRule = new JMenuItem("Through the load menu, you can load a game from either a level or a save file.");
+		setMenuDetails(loadRule);
+		JMenuItem saveRule = new JMenuItem("Click save to save your current game.");
+		setMenuDetails(saveRule);
+		helpStartLoad.add(startRule);
+		helpStartLoad.add(loadRule);
+		helpStartLoad.add(saveRule);
 		JMenu helpGameplay = new JMenu("Gameplay");
 		setMenuDetails(helpGameplay);
+		JMenuItem timeRule = new JMenuItem("Complete the level by finding the golden lily-pad before time's up!");
+		setMenuDetails(timeRule);
+		JMenuItem treasuresRule = new JMenuItem("Collect all the treasures to unlock the golden lily-pad area.");
+		setMenuDetails(treasuresRule);
+		JMenuItem fishRule = new JMenuItem("Collect fish to feed crocodiles of the same colour and unlock new areas.");
+		setMenuDetails(fishRule);
+		JMenuItem infoRule = new JMenuItem("Stand on the ? to receive helpful tips about the level!");
+		setMenuDetails(infoRule);
+		JMenuItem enemyRule = new JMenuItem("Watch out for enemies! Game over if they touch you!");
+		setMenuDetails(enemyRule);
+		helpGameplay.add(timeRule);
+		helpGameplay.add(treasuresRule);
+		helpGameplay.add(fishRule);
+		helpGameplay.add(infoRule);
+		helpGameplay.add(enemyRule);
 		JMenu helpReplay = new JMenu("Replay");
 		setMenuDetails(helpReplay);
 
@@ -142,28 +185,12 @@ public abstract class GUI {
 		helpMenu.add(helpGameplay);
 		helpMenu.add(helpReplay);
 
-		menu.setLayout(new GridBagLayout());
-		GridBagConstraints menuConstraints = new GridBagConstraints();
-		menuConstraints.gridy = 0;
-		menuConstraints.gridx = 0;
-		menuConstraints.anchor = GridBagConstraints.LINE_START;
-		menu.add(gameMenu, menuConstraints);
 
-		menuConstraints.gridx++;
-		menu.add(pauseMenuItem, menuConstraints);
-
-		menuConstraints.gridx++;
-		menu.add(quitMenuItem, menuConstraints);
-
-		menuConstraints.gridx++;
-		menuConstraints.insets = new Insets(0, 360, 0,130);
-		menu.add(replayMenu, menuConstraints);
-
-		menuConstraints.gridx++;
-		menuConstraints.gridwidth = 10;
-		menuConstraints.insets = new Insets(0, 0, 0,0);
-		menuConstraints.anchor = GridBagConstraints.LINE_END;
-		menu.add(helpMenu, menuConstraints);
+		menu.add(gameMenu);
+		menu.add(pauseMenuItem);
+		menu.add(quitMenuItem);
+		menu.add(replayMenu);
+		menu.add(helpMenu);
 
 
 		game = new BoardRenderer(getMaze(), gamePanelDim);
@@ -171,7 +198,10 @@ public abstract class GUI {
 			@Override
 			public void keyTyped(KeyEvent e) { }
 			@Override
-			public void keyPressed(KeyEvent e) { processKeyEvent(e); }
+			public void keyPressed(KeyEvent e) {
+				lastKeyPressed = e.getKeyCode();
+				processKeyEvent(e);
+			}
 			@Override
 			public void keyReleased(KeyEvent e) { }
 		});
@@ -211,36 +241,36 @@ public abstract class GUI {
 		inventory = new InventoryRenderer(getMaze(), controllerPanelDim.width-20);
 
 		controller.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
+		controllerConst = new GridBagConstraints();
 
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.insets = controllerPanelStandardInsets;
-		controller.add(timeLabel, constraints);
+		controllerConst.gridx = 0;
+		controllerConst.gridy = 0;
+		controllerConst.insets = controllerPanelStandardInsets;
+		controller.add(timeLabel, controllerConst);
 
-		constraints.gridy++;
-		controller.add(timeCounter, constraints);
+		controllerConst.gridy++;
+		controller.add(timeCounter, controllerConst);
 
-		constraints.gridy++;
-		controller.add(levelLabel, constraints);
+		controllerConst.gridy++;
+		controller.add(levelLabel, controllerConst);
 
-		constraints.gridy++;
-		controller.add(levelCounter, constraints);
+		controllerConst.gridy++;
+		controller.add(levelCounter, controllerConst);
 
-		constraints.gridy++;
-		controller.add(keysLabel, constraints);
+		controllerConst.gridy++;
+		controller.add(keysLabel, controllerConst);
 
-		constraints.gridy++;
-		controller.add(keysCounter, constraints);
+		controllerConst.gridy++;
+		controller.add(keysCounter, controllerConst);
 
-		constraints.gridy++;
-		controller.add(treasuresLabel, constraints);
+		controllerConst.gridy++;
+		controller.add(treasuresLabel, controllerConst);
 
-		constraints.gridy++;
-		controller.add(treasuresCounter, constraints);
+		controllerConst.gridy++;
+		controller.add(treasuresCounter, controllerConst);
 
-		constraints.gridy++;
-		controller.add(inventory, constraints);
+		controllerConst.gridy++;
+		controller.add(inventory, controllerConst);
 
 		gameStartItem.addActionListener(e -> gameStart());
 
@@ -250,13 +280,15 @@ public abstract class GUI {
 
 		gameSaveItem.addActionListener(e -> persistenceSave());
 
-		pauseMenuItem.addActionListener(e -> togglePause());
+		pauseMenuItem.addActionListener(e -> openPauseDialog());
 
 		quitMenuItem.addActionListener(e -> System.exit(0));
 
 		replayStartItem.addActionListener(e -> runReplay());
 
 		replayLoadItem.addActionListener(e -> replayLoad());
+
+		replaySlider.addChangeListener(e -> replayTimer = new Timer(1000/replaySlider.getValue(), replayListener));
 
 		window.setLayout(new FlowLayout());
 		window.add(game);
@@ -266,42 +298,36 @@ public abstract class GUI {
 		window.setJMenuBar(menu);
 		window.getContentPane().setBackground(mainColor);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		window.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				processToFile(false, false);
+				super.windowClosing(e);
+			}});
+
 		window.setResizable(false);
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 	}
 
-	/**
-	 * Actions to be processed on every gameTimer tick.
-	 * Does actions for game end.
-	 */
-	public void onGameTimeTick() {
-		timeLeft--;
-		getMaze().setTimeLeft(timeLeft);
-		repaintAll();
-		if (timeLeft <= 0) { gameStop("Game Over!", "You ran out of time!"); }
-	}
-
 
 	/**
-	 * Stops the game running, with a JDialog containing custom messages.
-	 * Saves and loads replay of game just played.
-	 * @param dialogMessage Message to be on JDialog.
-	 * @param dialogTitle   Title of the JDialog.
+	 * Open the dialog for game pause and handle it closing.
 	 */
-	public void gameStop(String dialogMessage, String dialogTitle) {
-		canMove = false;
-		gameTimer.stop();
+	public void openPauseDialog() {
+		if (gameTimer != null) { gameTimer.stop(); }
 
-		produceDialog(dialogMessage, dialogTitle);
-
-		JFileChooser chooser = new JFileChooser();
-		int replayChoice = chooser.showSaveDialog(window);
-		if (replayChoice == JFileChooser.APPROVE_OPTION) {
-			File replayFile = chooser.getSelectedFile();
-			getRecord().writeToFile(replayFile);
-			replayLoad(replayFile);
+		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
+		option.setMessage("Game is paused.");
+		JDialog dialog = option.createDialog("Paused");
+		dialog.pack();
+		dialog.setVisible(true);
+		int choice = (Integer) option.getValue();
+		if (choice == JOptionPane.OK_OPTION || lastKeyPressed == KeyEvent.VK_ESCAPE) {
+			if (gameTimer != null) { gameTimer.start(); }
+			dialog.setVisible(false);
 		}
 	}
 
@@ -322,6 +348,124 @@ public abstract class GUI {
 		}
 	}
 
+
+	///////////////////////////////////////
+	///            GAMEPLAY             ///
+	///////////////////////////////////////
+
+	/**
+	 * Actions to be processed on every gameTimer tick.
+	 * Does actions for game end.
+	 */
+	public void onGameTimeTick() {
+		timeLeft--;
+		getMaze().setTimeLeft(timeLeft);
+		repaintAll();
+		if (timeLeft <= 0) { gameStop("Game Over!", "You ran out of time!"); }
+	}
+
+	/**
+	 * Start the game process.
+	 */
+	public void gameStart() {
+		timeLeft = getMaze().getTimeAvailable();
+		gameTimer.start();
+		canMove = true;
+		setRecord(new Record(getMaze().getLevelNumber()));
+		pauseMenuItem.setEnabled(true);
+		timeCounter.setText(String.valueOf(timeLeft));
+	}
+
+	/**
+	 * Stops the game running, with a JDialog containing custom messages.
+	 * Saves and loads replay of game just played.
+	 * @param dialogMessage Message to be on JDialog.
+	 * @param dialogTitle   Title of the JDialog.
+	 */
+	public void gameStop(String dialogMessage, String dialogTitle) {
+		canMove = false;
+		gameTimer.stop();
+
+		produceDialog(dialogMessage, dialogTitle);
+
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
+		int replayChoice = chooser.showSaveDialog(window);
+		if (replayChoice == JFileChooser.APPROVE_OPTION) {
+			File replayFile = chooser.getSelectedFile();
+			getRecord().writeToFile(replayFile);
+			replayLoad(replayFile);
+		}
+	}
+
+	/**
+	 * Helper method to move the player and repaint the renderer.
+	 * @param direction Direction to move player.
+	 */
+	public void movePlayer(Direction direction) {
+		getMaze().moveChap(direction);
+
+		if (getRecord() != null) { getRecord().addMove(direction); }
+
+		if (getMaze().getChapWin()) {
+			//if there's another level to progress to
+			if (getMaze().getLevelNumber() < MAX_LEVEL) {
+				try {
+					persistenceLoad(getMaze().getLevelNumber()+1, false);
+				} catch (FileNotFoundException e) { produceDialog("There was an error reading the file.\nPlease try again.", "File Error"); }
+
+				gameStart();
+			}
+			else { gameStop("You win!", "Game won!"); }
+		}
+		repaintAll();
+	}
+
+	/**
+	 *  Runs the replay.
+	 */
+	public void runReplay() {
+		AtomicInteger moveNum = new AtomicInteger(0);
+		replayListener = e -> {
+			switch (getReplay().processActionsJson().get(moveNum.get())) {
+				case "DOWN":
+					movePlayer(Direction.DOWN);
+					break;
+				case "RIGHT":
+					movePlayer(Direction.RIGHT);
+					break;
+				case "UP":
+					movePlayer(Direction.UP);
+					break;
+				case "LEFT":
+					movePlayer(Direction.LEFT);
+					break;
+				default:
+					break;
+			}
+
+			moveNum.getAndIncrement();
+			if (moveNum.get() >= getReplay().processActionsJson().size()) {
+				replayTimer.stop();
+			}
+		};
+
+		replayTimer = new Timer(500, replayListener);
+		replaySlider.setEnabled(true);
+		Replay replay = getReplay();
+
+		if (replay != null) {
+			replayTimer.start();
+		}
+		else {
+			produceDialog("No active replay file loaded in!", "Please load replay!");
+		}
+	}
+
+
+	///////////////////////////////////////
+	///           KEY EVENTS            ///
+	///////////////////////////////////////
+
 	/**
 	 * Process any KeyEvent encountered.
 	 * @param e KeyEvent to process
@@ -331,51 +475,58 @@ public abstract class GUI {
 			switch (e.getKeyCode()) {
 				//exit the game, the current game state will be lost, the next time the game is started, it will resume from the last unfinished level
 				case KeyEvent.VK_X:
-					System.out.println("x");
+					processToFile(true, true);
+					System.exit(0);
 					break;
-
 
 				//exit the game, saves the game state, game will resume next time the application will be started
 				case KeyEvent.VK_S:
-					System.out.println("s");
+					processToFile(true, false);
+					System.exit(0);
 					break;
-
 
 				//resume a saved game
 				case KeyEvent.VK_R:
-					System.out.println("r");
+					persistenceLoad(true);
+					gameStart();
 					break;
-
 
 				//start a new game at the last unfinished level
 				case KeyEvent.VK_P:
-					System.out.println("p");
-					break;
+					try {
+						persistenceLoad(getMaze().getLevelNumber(), false);
+						gameStart();
+					} catch (FileNotFoundException ignored) {
+						produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
+					}
 
+					break;
 
 				//start a new game at level 1
 				case KeyEvent.VK_1:
-					System.out.println("1");
+					try {
+						persistenceLoad(1, false);
+						gameStart();
+					} catch (FileNotFoundException ignored) {
+						produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
+					}
+
+					break;
+
+				default:
 					break;
 
 
 			}
 		} else {
-			switch (e.getKeyCode()) {
-				//pause the game
-				case KeyEvent.VK_ESCAPE:
-					togglePause(false);
-					break;
+			//pause the game
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				openPauseDialog();
+			}
 
-				//resume the game
-				case KeyEvent.VK_SPACE:
-					togglePause(true);
-					break;
-
-				//if not anything else, assume user is trying to move chap
-				default:
-					checkMove(e);
-					break;
+			//if not anything else, assume user is trying to move chap
+			else {
+				checkMove(e);
 			}
 		}
 	}
@@ -392,230 +543,6 @@ public abstract class GUI {
 				movePlayer(direction);
 			}
 		}
-	}
-
-	/**
-	 * Start the game process.
-	 */
-	public void gameStart() {
-		timeLeft = getMaze().getTimeAvailable();
-		gameTimer.start();
-		canMove = true;
-		setRecord(new Record());
-		pauseMenuItem.setEnabled(true);
-		timeCounter.setText(String.valueOf(timeLeft));
-	}
-
-	/**
-	 * Perform necessary actions on pause/play of game.
-	 */
-	public void togglePause() {
-		if (isPause) {
-			play();
-		}
-		else {
-			pause();
-		}
-	}
-
-	/**
-	 * Perform necessary actions on pause/play of game, with a predefined game state.
-	 */
-	public void togglePause(boolean toggle) {
-		if (!toggle) {
-			play();
-		}
-		else {
-			pause();
-		}
-	}
-
-	public void pause() {
-		gameTimer.stop();
-		isPause = true;
-		pauseMenuItem.setText("Play");
-		canMove = false;
-		gameSaveItem.setEnabled(true);
-	}
-
-	public void play() {
-
-		gameTimer.start();
-		isPause = false;
-		pauseMenuItem.setText("Pause");
-		canMove = true;
-		gameSaveItem.setEnabled(false);
-	}
-
-
-	/**
-	 *  Load the replay file and reset the replay object.
-	 */
-	public void replayLoad() {
-		JFileChooser chooser = new JFileChooser();
-		int choice = chooser.showOpenDialog(window);
-		if (choice == JFileChooser.APPROVE_OPTION) {
-			File toLoadFrom = chooser.getSelectedFile();
-			Replay replay = new Replay(toLoadFrom);
-			replay.loadFile(toLoadFrom);
-			setReplay(replay);
-		}
-		replayStartItem.setEnabled(true);
-	}
-
-	/**
-	 * Load the replay from a specified file.
-	 * @param file  File to load from.
-	 */
-	public void replayLoad(File file) {
-		Replay replay = new Replay(file);
-		replay.loadFile(file);
-		setReplay(replay);
-		replayStartItem.setEnabled(true);
-	}
-
-	/**
-	 * Load the level file to play from.
-	 * @param isState   If true, load a pre-played and saved level.
-	 *                  If false, load a fresh version of a level.
-	 */
-	public void persistenceLoad(boolean isState) {
-		JFileChooser chooser = new JFileChooser();
-		int choice = chooser.showOpenDialog(window);
-		if (choice == JFileChooser.APPROVE_OPTION) {
-			File toLoadFrom = chooser.getSelectedFile();
-			Maze maze;
-			if (isState) {
-				maze = Persistence.loadGameState(toLoadFrom);
-			} else {
-				maze = Levels.loadLevelFromFile(toLoadFrom);
-
-			}
-			if (maze != null) {
-				setMaze(maze);
-				window.remove(game);
-				game = new BoardRenderer(getMaze(), gamePanelDim);
-				window.add(game,0);
-				controller.remove(inventory);
-				inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
-				controller.add(inventory);
-				levelCounter.setText(String.valueOf(maze.getLevelNumber()));
-				timeLeft = maze.getTimeLeft();
-				repaintAll();
-			}
-			else {
-				produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
-			}
-		}
-	}
-
-	/**
-	 * Load the level file to play from.
-	 * @param levelNum Number of the level.
-	 */
-	public void persistenceLoad(int levelNum) throws FileNotFoundException {
-		Maze maze;
-		maze = Levels.loadLevel(levelNum);
-		setMaze(maze);
-		window.remove(game);
-		game = new BoardRenderer(getMaze(), gamePanelDim);
-		window.add(game,0);
-		controller.remove(inventory);
-		inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
-		controller.add(inventory);
-		levelCounter.setText(String.valueOf(maze.getLevelNumber()));
-	}
-
-
-	/**
-	 * Save the current game state to a file
-	 */
-	public void persistenceSave() {
-		JFileChooser chooser = new JFileChooser();
-		int choice = chooser.showSaveDialog(window);
-		if (choice == JFileChooser.APPROVE_OPTION) {
-			System.out.println(chooser.getCurrentDirectory());
-			File toSaveTo = chooser.getSelectedFile();
-			Persistence.saveGameState(getMaze(), toSaveTo);
-		}
-	}
-
-	/**
-	 * Helper method to move the player and repaint the renderer.
-	 * @param direction Direction to move player.
-	 */
-	public void movePlayer(Direction direction) {
-		getMaze().moveChap(direction);
-		if (getRecord() != null) { getRecord().addMove(direction); } // for tests
-		if (getMaze().getChapWin()) {
-			if (getMaze().getLevelNumber() < MAX_LEVEL) {
-				try {
-					persistenceLoad(getMaze().getLevelNumber()+1);
-				} catch (FileNotFoundException e) { e.printStackTrace(); }
-				gameStart();
-			}
-			else { gameStop("You win!", "Game won!"); }
-		}
-		repaintAll();
-	}
-
-	/**
-	 *  Runs the replay.
-	 */
-	public void runReplay() {
-		AtomicInteger moveNum = new AtomicInteger();
-		ActionListener replayListener = e -> {
-			switch (getReplay().processActionsJson().get(moveNum.get())) {
-				case "DOWN":
-					movePlayer(Direction.DOWN);
-					break;
-				case "RIGHT":
-					movePlayer(Direction.RIGHT);
-					break;
-				case "UP":
-					movePlayer(Direction.UP);
-					break;
-				case "LEFT":
-					movePlayer(Direction.LEFT);
-					break;
-			}
-			moveNum.getAndIncrement();
-			if (moveNum.get() >= getReplay().processActionsJson().size()) {
-				replayTimer.stop();
-			}
-		};
-		replayTimer = new Timer(500, replayListener);
-		Replay replay = getReplay();
-
-
-		if (replay != null) {
-			replayTimer.start();
-		}
-		else {
-			produceDialog("No active replay file loaded in!", "Please load replay!");
-		}
-	}
-
-	/**
-	 * Sets the visual details of elements in the controller.
-	 * @param label JLabel to set
-	 */
-	private void setControllerElementDetails(JLabel label) {
-		label.setPreferredSize(counterLabelDim);
-		label.setFont(controllerElementsFont);
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setForeground(textColorNormal);
-	}
-
-	/**
-	 * Sets the visual details of elements of the JMenuBar.
-	 * @param menu JComponent to set
-	 */
-	private void setMenuDetails (JComponent menu) {
-		menu.setForeground(textColorNormal);
-		menu.setBackground(barColorNormal);
-		menu.setFont(controllerElementsFont);
-		menu.setOpaque(true);
 	}
 
 	/**
@@ -648,6 +575,33 @@ public abstract class GUI {
 		return direction;
 	}
 
+
+	///////////////////////////////////////
+	///        STYLING + PAINTING       ///
+	///////////////////////////////////////
+
+	/**
+	 * Sets the visual details of elements in the controller.
+	 * @param label JLabel to set
+	 */
+	private void setControllerElementDetails(JLabel label) {
+		label.setPreferredSize(counterLabelDim);
+		label.setFont(controllerElementsFont);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setForeground(textColorNormal);
+	}
+
+	/**
+	 * Sets the visual details of elements of the JMenuBar.
+	 * @param menu JComponent to set
+	 */
+	private void setMenuDetails (JComponent menu) {
+		menu.setForeground(textColorNormal);
+		menu.setBackground(barColorNormal);
+		menu.setFont(controllerElementsFont);
+		menu.setOpaque(true);
+	}
+
 	/**
 	 * Update and repaint all components which tend to  change regularly, such as panel repainting and counter texts.
 	 */
@@ -663,10 +617,196 @@ public abstract class GUI {
 	}
 
 
+	///////////////////////////////////////
+	///          FILE HANDLING          ///
+	///////////////////////////////////////
+
 	/**
-	 *  Creates maze object.
+	 * Process the final game state to a final for next opening.
+	 * @param hasContent    True if something needs to be stored, false is not
+	 * @param freshLevel    True if opening new level, false if opening save
 	 */
-	protected abstract void createMaze();
+	public void processToFile(boolean hasContent, boolean freshLevel) {
+		File file = new File("../chapschallenge/status.txt");
+		StringBuilder b = new StringBuilder();
+
+		if (!hasContent) {
+			b.append("clean");
+		}
+		else if (freshLevel) {
+			b.append("level").append("\n");
+			b.append(getMaze().getLevelNumber());
+		}
+		else {
+			b.append("save").append("\n");
+			b.append(persistenceSaveClose());
+		}
+
+		try (FileWriter w = new FileWriter(file)) {
+			w.write(b.toString());
+		} catch (IOException e) {
+			produceDialog("There was an error writing to the file.\nPlease try again.", "File Error");
+		}
+		if (hasContent) {
+			produceDialog("Game preferences, ready on next application start", "Stored Preferences");
+		}
+	}
+
+	/**
+	 * Process the start file, status.txt, and process any actions it requires from the last
+	 * time the application was run.
+	 * @return  Returns true if new game is created, false if not.
+	 */
+	public boolean processStartFile() {
+		try (Scanner sc = new Scanner(new FileReader("../chapschallenge/status.txt"))) {
+			String initialLine = sc.nextLine();
+			switch (initialLine) {
+				case "level":
+					persistenceLoad(Integer.parseInt(sc.next()), true);
+					sc.close();
+					return true;
+				case "save":
+					File file = new File(sc.nextLine());
+					persistenceLoad(file);
+					sc.close();
+					return true;
+				default:
+					sc.close();
+					return false;
+			}
+
+		} catch (FileNotFoundException e) {
+			produceDialog("There was an error finding status.txt", "File Error");
+			return false;
+		}
+	}
+
+	/**
+	 *  Load the replay file and reset the replay object.
+	 */
+	public void replayLoad() {
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
+		int choice = chooser.showOpenDialog(window);
+		if (choice == JFileChooser.APPROVE_OPTION) {
+			File toLoadFrom = chooser.getSelectedFile();
+			Replay replay = new Replay(toLoadFrom);
+			replay.loadFile(toLoadFrom);
+			setReplay(replay);
+		}
+
+		replayStartItem.setEnabled(true);
+	}
+
+	/**
+	 * Load the replay from a specified file.
+	 * @param file  File to load from.
+	 */
+	public void replayLoad(File file) {
+		Replay replay = new Replay(file);
+		replay.loadFile(file);
+		setReplay(replay);
+		replayStartItem.setEnabled(true);
+	}
+
+	/**
+	 * Load the level file to play from.
+	 * @param isState   If true, load a pre-played and saved level.
+	 *                  If false, load a fresh version of a level.
+	 */
+	public void persistenceLoad(boolean isState) {
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
+		int choice = chooser.showOpenDialog(window);
+		if (choice == JFileChooser.APPROVE_OPTION) {
+			File toLoadFrom = chooser.getSelectedFile();
+			Maze maze;
+			if (isState) {
+				maze = Persistence.loadGameState(toLoadFrom);
+			} else {
+				maze = Levels.loadLevelFromFile(toLoadFrom);
+
+			}
+			if (maze != null) {
+				setMaze(maze);
+				window.remove(game);
+				game = new BoardRenderer(getMaze(), gamePanelDim);
+				window.add(game,0);
+				controller.remove(inventory);
+				inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
+				controller.add(inventory, controllerConst);
+				levelCounter.setText(String.valueOf(maze.getLevelNumber()));
+				timeLeft = maze.getTimeLeft();
+				repaintAll();
+			}
+			else {
+				produceDialog("There was an error reading the file.\nPlease try again.", "File Error");
+			}
+		}
+	}
+
+	/**
+	 * Load the level file to play from.
+	 * @param levelNum Number of the level.
+	 */
+	public void persistenceLoad(int levelNum, boolean startOfGame) throws FileNotFoundException {
+		Maze maze;
+		maze = Levels.loadLevel(levelNum);
+		setMaze(maze);
+		if (!startOfGame) {
+			window.remove(game);
+			game = new BoardRenderer(getMaze(), gamePanelDim);
+			window.add(game,0);
+			controller.remove(inventory);
+			inventory = new InventoryRenderer(getMaze(),controllerPanelDim.width-20);
+			controller.add(inventory, controllerConst);
+			levelCounter.setText(String.valueOf(maze.getLevelNumber()));
+		}
+	}
+
+	/**
+	 * Load a save from specific file.
+	 * @param file  File to load save from.
+	 */
+	public void persistenceLoad(File file){
+		Maze maze;
+		maze = Persistence.loadGameState(file);
+		if (maze != null) { setMaze(maze); }
+		else { produceDialog("There was an error reading the file.\nPlease try again.", "File Error"); }
+	}
+
+	/**
+	 * Save the current game state to a file
+	 */
+	public void persistenceSave() {
+		gameTimer.stop();
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
+		int choice = chooser.showSaveDialog(window);
+		if (choice == JFileChooser.APPROVE_OPTION) {
+			System.out.println(chooser.getCurrentDirectory());
+			File toSaveTo = chooser.getSelectedFile();
+			Persistence.saveGameState(getMaze(), toSaveTo);
+		}
+		gameTimer.start();
+	}
+
+	/**
+	 * Save the current game state to a file, used at window close with game save.
+	 */
+	public String persistenceSaveClose() {
+		gameTimer.stop();
+		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
+		int choice = chooser.showSaveDialog(window);
+		if (choice == JFileChooser.APPROVE_OPTION) {
+			System.out.println(chooser.getCurrentDirectory());
+			File toSaveTo = chooser.getSelectedFile();
+			Persistence.saveGameState(getMaze(), toSaveTo);
+			return chooser.getSelectedFile().getPath();
+		}
+		return null;
+	}
+
+	///////////////////////////////////////
+	///            OVERRIDES            ///
+	///////////////////////////////////////
 
 	/**
 	 *  Gets the record object.
@@ -675,7 +815,7 @@ public abstract class GUI {
 	protected abstract Record getRecord();
 
 	/**
-	 * Sets the replay object.
+	 * Sets the record object.
 	 * @param record    Record to set with.
 	 */
 	protected abstract void setRecord(Record record);

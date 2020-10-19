@@ -19,7 +19,7 @@ public class BoardRenderer extends JPanel {
     private final int BOARD_HEIGHT;
     private final int TILE_SIZE;
     private final Maze maze;
-    private Image level1_info;
+    private Image infoIcon;
 
     /**
      * Constructs a new renderer to display the current board.
@@ -33,16 +33,20 @@ public class BoardRenderer extends JPanel {
         BOARD_HEIGHT = maze.getBoard()[0].length;
         TILE_SIZE = size.width/DISPLAY_DIMENSION;
 
-        // Set as actual display size in case size parameter did not divide well. FIXME: good code style?
+        // Set as actual display size in case size parameter did not divide well.
         setPreferredSize(new Dimension(DISPLAY_DIMENSION * TILE_SIZE, DISPLAY_DIMENSION * TILE_SIZE));
         setLayout(null);
 
-        // Info display.
+        // Info display background.
         try {
-            level1_info = ImageIO.read(new File("./resources/level1_info.png"));
+            infoIcon = ImageIO.read(new File("./resources/info_scroll.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Display setup.
+        this.setFont(new Font("Calibri", Font.BOLD, 32));
+        this.setForeground(Color.white);
     }
 
     @Override
@@ -88,8 +92,25 @@ public class BoardRenderer extends JPanel {
         }
 
         // If chap is on info tile, display info.
-        if(maze.getTile(maze.getChapPosition().x, maze.getChapPosition().y) instanceof InfoTile){
-            g.drawImage(level1_info, 25, 300, 445, 165, null);
+        Tile chapTile = maze.getTile(maze.getChapPosition().x, maze.getChapPosition().y);
+        if(chapTile instanceof InfoTile){
+            g.drawImage(infoIcon, 25, 300, 445, 165, null);
+            drawMultilineString(g, ((InfoTile)chapTile).getInformation(), 75, 330);
+        }
+    }
+
+    /**
+     * Draws a string containing the \n character on multiple lines.
+     *
+     * @param g the graphics object to draw on.
+     * @param text the text to be drawn.
+     * @param x the x position where the text starts.
+     * @param y the y position of the top of the text.
+     */
+    void drawMultilineString(Graphics g, String text, int x, int y) {
+        int lineHeight = g.getFontMetrics().getHeight();
+        for (String line : text.split("\n")){
+            g.drawString(line, x, y += lineHeight);
         }
     }
 }
