@@ -35,6 +35,9 @@ public class SoundRenderer implements LineListener {
      * @param move the move that the sound is representing.
      */
     public void playSound(Moves move) {
+        if (true){
+            return; // TODO: for during testing, remove when working.
+        }
         String filepath = filenameMap.get(move);
 
         try {
@@ -45,18 +48,25 @@ public class SoundRenderer implements LineListener {
             Clip clip = (Clip) AudioSystem.getLine(info);
             clip.addLineListener(this);
             clip.open(audioStream);
+            long duration = clip.getMicrosecondLength()/1000; // Convert to milliseconds.
             clip.start();
 
             // Wait for sound to finish playing.
-            while (!playCompleted) {
+            try {
+                Thread.sleep(duration + 50);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            /*while (!playCompleted) {
                 try {
-                    Thread.sleep(1000); // TODO: check if this affects anything
+                    Thread.sleep(50); // TODO: check if this affects anything
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
-            }
+            }*/
 
             clip.close();
+            System.out.println("closed");
 
         } catch (UnsupportedAudioFileException ex) { // TODO: remove sout and merge catches?
             System.out.println("The specified audio file is not supported.");
