@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.entities;
 
 import com.google.common.base.Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Moves;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Icon;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
@@ -43,19 +44,14 @@ abstract public class Entity extends Icon {
    * @param isChap For checking if the entity being moved is Chap so the extra Chap logic is applied to entity.
    * @throws IllegalStateException If going to new direction will cause Chap to go out of bounds, will throw an IllegalStateException.
    * @throws IllegalArgumentException If the direction provided is not left, right, up or down, then is an invalid direction.
-   * @return True if Chap has reached the exit tile and won, false is not.
+   * @return The move that Chap has done.
    */
-  public boolean moveEntity(Direction direction, Entity entity, Maze maze, boolean isChap) throws IllegalStateException, IllegalArgumentException {
+  public Moves moveEntity(Direction direction, Entity entity, Maze maze, boolean isChap) throws IllegalStateException, IllegalArgumentException {
     //checking that parameters are not null.
     Preconditions.checkNotNull(maze);
     Preconditions.checkNotNull(entity);
     Preconditions.checkNotNull(maze.getBoard());
 
-    Chap chap = null;
-    /*if(isChap) {
-      Preconditions.checkArgument(entity instanceof Chap);  //make sure that entity is Chap
-      chap = (Chap)entity;
-    }*/
     Point entityLocation = entity.getEntityPosition();
     //get new position to move entity to
     Point position;
@@ -81,18 +77,20 @@ abstract public class Entity extends Icon {
       throw new IllegalStateException();
     }
 
-    maze.getBoard()[position.x][position.y].inMove(maze, position, isChap, entity, direction);
+    //do tile logic for the move
+    Moves move = maze.getBoard()[position.x][position.y].inMove(maze, position, isChap, entity, direction);
 
     //check if chap is on exit tile
     if(maze.getBoard()[position.x][position.y] instanceof ExitTile) {
-      return true;
+      maze.setChapWin(true);
+      move = Moves.CHAP_WIN;
     }
 
     assert(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);  //check that entity is not on an invalid tile
-    return false;
+    maze.setChapWin(false);
+
+    return move;
   }
-
-
 
   /**
    * For checking if entity can move to the new tile.

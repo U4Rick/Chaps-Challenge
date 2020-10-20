@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 //importing libraries needed
 import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Moves;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
@@ -41,6 +42,7 @@ public class Maze {
   private int treasuresPickedUp = 0;
   private int treasuresLeft;  //for postconditions check
 
+  private Moves chapCurrentMove;
   private boolean chapWin = false;  //checks that Chap is on exit tile
 
   static private Map<Colour, Image> keyImages = new HashMap<>();
@@ -98,7 +100,7 @@ public class Maze {
    * @param direction Direction specified.
    */
   public void moveChap(Direction direction) {
-      chapWin = chap.moveEntity(direction, chap, this, true);
+    chapCurrentMove = chap.moveEntity(direction, chap, this, true);
   }
 
   /**
@@ -114,17 +116,25 @@ public class Maze {
    * For dealing with logic of picking up an item.
    * @param location The tile to pick the item from.
    */
-  public void pickUpItem(Point location) {
+  public Moves pickUpItem(Point location) {
     Preconditions.checkState(board[location.x][location.y] instanceof  AccessibleTile );  //check that tile is an accessibletile
     AccessibleTile accessibleTile = (AccessibleTile)this.getBoard()[location.x][location.y];
     Preconditions.checkState(board[location.x][location.y] instanceof KeyTile || board[location.x][location.y] instanceof TreasureTile); //check that tile is a keytile or treasuretile
+
+    Moves move;
+
     if(accessibleTile instanceof KeyTile) {  //check if not on a treasure tile
+      move = Moves.KEY_PICKUP;
+
       Colour colour = ((KeyTile) accessibleTile).getKeyColour();
       int originalSize = chap.getKeyInventory().get(colour);
       chap.addToKeyInven(colour);
       board[location.x][location.y] = new FreeTile(); //change to free tile
       assert(chap.getKeyInventory().get(colour) == originalSize+1);  //check that value in map is incremented
+
     } else {  //if Chap is going to pick up treasure
+      move = Moves.TREASURE_PICKUP;
+
       treasuresPickedUp++;
       treasuresLeft--;
 
@@ -155,10 +165,11 @@ public class Maze {
         board[exitLocation.x][exitLocation.y] = new ExitTile();
       }
     }
+
+    return move;
   }
 
   //getters and setters
-
   /**
    * Gets the image that represents the key stated in the parameter.
    * @param colour The colour of the key that the image represents.
@@ -266,9 +277,15 @@ public class Maze {
    * Gets the boolean variable that checks if Chap has won.
    * @return The boolean variable that checks if Chap has won.
    */
-  public boolean getChapWin() {
+  public final boolean getChapWin() {
     return chapWin;
   }
+
+  /**
+   * Gets the boolean variable that checks if Chap has won.
+   * @param chapWin Variable that checks if Chap has won.
+   */
+  public void setChapWin(boolean chapWin) { this.chapWin = chapWin; }
 
   /**
    * Gets the list of NPCs for this level.
@@ -277,4 +294,10 @@ public class Maze {
   public List<NPC> getNpcs() {
     return Collections.unmodifiableList(npcs);
   }
+
+  /**
+   * Gets the current move that Chap did for this move.
+   * @return  Current move that Chap did.
+   */
+  public final Moves getChapCurrentMove() { return chapCurrentMove; }
 }

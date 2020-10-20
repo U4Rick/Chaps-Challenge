@@ -1,14 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Moves;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Icon;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
 
 /**
  * Represents a tile in the board.
@@ -27,6 +25,6 @@ public abstract class Tile extends Icon {
    * @param isChap For checking if the entity being moved is Chap so the extra Chap logic is applied to entity.
    * @param entity The entity to move.
    */
-  public abstract void inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction);
+  public abstract Moves inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction);
 }
 
