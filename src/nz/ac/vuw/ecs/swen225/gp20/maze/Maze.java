@@ -44,6 +44,7 @@ public class Maze {
 
   private Moves chapCurrentMove;
   private boolean chapWin = false;  //checks that Chap is on exit tile
+  private boolean chapLose = false; //checks that Chap has died
 
   static private Map<Colour, Image> keyImages = new HashMap<>();
 
@@ -283,10 +284,22 @@ public class Maze {
   }
 
   /**
-   * Gets the boolean variable that checks if Chap has won.
+   * Sets the boolean variable that checks if Chap has won.
    * @param chapWin Variable that checks if Chap has won.
    */
   public void setChapWin(boolean chapWin) { this.chapWin = chapWin; }
+
+  /**
+   * Gets the boolean variable that checks if Chap has lost.
+   * @return chapLose Variable that checks if Chap has lost.
+   */
+  public final boolean getChapLose() { return chapLose; }
+
+  /**
+   * Sets the boolean variable that checks if Chap has lost.
+   * @param chapLose Variable that checks if Chap has lost.
+   */
+  public void setChapLose(boolean chapLose) { this.chapLose = chapLose; }
 
   /**
    * Gets the list of NPCs for this level.

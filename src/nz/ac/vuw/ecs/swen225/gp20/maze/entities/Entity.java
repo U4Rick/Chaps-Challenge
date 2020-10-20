@@ -86,7 +86,6 @@ abstract public class Entity extends Icon {
     }
 
     assert(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);  //check that entity is not on an invalid tile
-    maze.setChapWin(false);
 
     return move;
   }

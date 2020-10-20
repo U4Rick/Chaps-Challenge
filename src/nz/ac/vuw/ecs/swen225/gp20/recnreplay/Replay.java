@@ -43,6 +43,13 @@ public class Replay{
 
             JsonReader reader = Json.createReader(fis);     //reads in json replay for the level and movements
             loadedActions = reader.readObject();
+
+            JsonArray tempArr = loadedActions.getJsonArray("levels");
+            for (JsonValue jsonLevel : tempArr) {
+                JsonObject levelArr = jsonLevel.asJsonObject(); //loads the level file name
+                currentLevel = levelArr.getInt("level");
+            }
+
             reader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -60,7 +67,7 @@ public class Replay{
 
         for (JsonValue jsonLevel : levelArray) {
             JsonObject levelArr = jsonLevel.asJsonObject(); //loads the level file name
-            currentLevel = levelArr.getInt("level");
+          //  currentLevel = levelArr.getInt("level");
         }
 
         for (JsonValue jsonMove : moves) {
