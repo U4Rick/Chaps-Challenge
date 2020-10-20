@@ -288,7 +288,10 @@ public abstract class GUI {
 
 		replayLoadItem.addActionListener(e -> replayLoad());
 
-		replaySlider.addChangeListener(e -> replayTimer = new Timer(1000/replaySlider.getValue(), replayListener));
+		replaySlider.addChangeListener(e -> {
+			replayTimer = new Timer(1000 / replaySlider.getValue(), replayListener);
+			replayTimer.start();
+		});
 
 		window.setLayout(new FlowLayout());
 		window.add(game);
@@ -391,7 +394,13 @@ public abstract class GUI {
 		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 		int replayChoice = chooser.showSaveDialog(window);
 		if (replayChoice == JFileChooser.APPROVE_OPTION) {
-			File replayFile = chooser.getSelectedFile();
+			File replayFile;
+			if (!chooser.getSelectedFile().toString().toLowerCase().endsWith(".json")) {
+				replayFile = new File(chooser.getSelectedFile().getPath() + ".json");
+			}
+			else {
+				replayFile = chooser.getSelectedFile();
+			}
 			getRecord().writeToFile(replayFile);
 			replayLoad(replayFile);
 		}
@@ -515,8 +524,6 @@ public abstract class GUI {
 
 				default:
 					break;
-
-
 			}
 		} else {
 			//pause the game
@@ -692,6 +699,11 @@ public abstract class GUI {
 			Replay replay = new Replay(toLoadFrom);
 			replay.loadFile(toLoadFrom);
 			setReplay(replay);
+			try {
+				persistenceLoad(replay.currentLevel, true);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 
 		replayStartItem.setEnabled(true);
@@ -705,6 +717,11 @@ public abstract class GUI {
 		Replay replay = new Replay(file);
 		replay.loadFile(file);
 		setReplay(replay);
+		try {
+			persistenceLoad(replay.currentLevel, true);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		replayStartItem.setEnabled(true);
 	}
 
@@ -781,8 +798,13 @@ public abstract class GUI {
 		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 		int choice = chooser.showSaveDialog(window);
 		if (choice == JFileChooser.APPROVE_OPTION) {
-			System.out.println(chooser.getCurrentDirectory());
-			File toSaveTo = chooser.getSelectedFile();
+			File toSaveTo;
+			if (!chooser.getSelectedFile().toString().toLowerCase().endsWith(".json")) {
+				toSaveTo = new File(chooser.getSelectedFile().getPath() + ".json");
+			}
+			else {
+				toSaveTo = chooser.getSelectedFile();
+			}
 			Persistence.saveGameState(getMaze(), toSaveTo);
 		}
 		gameTimer.start();

@@ -161,7 +161,7 @@ public class Levels {
       levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile(infoText);
 
       // make maze
-      return new Maze(levelNum, chapPos, exitPos, treasureTiles.length, levelTime, levelArray);
+      return new Maze(levelNum, chapPos, exitPos, treasureTiles.length, levelTime, levelArray, actors);
     } catch (FileNotFoundException e) {
       // file was not found - maybe display something to user?
     } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
