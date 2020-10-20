@@ -40,7 +40,7 @@ public class InventoryRenderer extends JPanel {
 
         try {
             // Background.
-            bg = ImageIO.read(new File("./resources/green.png"));
+            bg = ImageIO.read(new File("./resources/green.png")); // TODO: fill instead of using image?
             circle = ImageIO.read(new File("./resources/circle.png"));
         } catch (Exception e) {
             e.printStackTrace(); // TODO: throw an error?
@@ -59,31 +59,28 @@ public class InventoryRenderer extends JPanel {
 
         Map<Colour, Integer> inventory = chap.getKeyInventory(); // Get Chap's keys.
         for (Colour keyColour : inventory.keySet()) {
-            int xOffset;
+            int slot;
             Image icon = Maze.getKeyIcon(keyColour);
 
             // Have set inventory position for each key colour.
             switch(keyColour) {
                 case YELLOW:
-                    xOffset = 1;
+                    slot = 1;
                     break;
                 case GREEN:
-                    xOffset = 2;
+                    slot = 2;
                     break;
                 case BLUE:
-                    xOffset = 3;
+                    slot = 3;
                     break;
                 default:
-                    xOffset = 0; // RED key.
+                    slot = 0; // RED key.
             }
 
             int numKeys = inventory.get(keyColour);
             if(numKeys > 0){
-                g.drawImage(icon, xOffset * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
-                if(numKeys > 1){ // FIXME: always display number?
-                    // Display number of keys if more than one.
-                    g.drawString(String.valueOf(numKeys), (xOffset * TILE_SIZE) + (int) (0.3 * TILE_SIZE), (int) (0.75 * TILE_SIZE));
-                }
+                g.drawImage(icon, slot * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
+                g.drawString(String.valueOf(numKeys), (slot * TILE_SIZE) + (int) (0.3 * TILE_SIZE), (int) (0.75 * TILE_SIZE));
             }
         }
     }
