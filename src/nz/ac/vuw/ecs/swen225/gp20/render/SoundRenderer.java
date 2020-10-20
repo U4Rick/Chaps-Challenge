@@ -34,7 +34,7 @@ public class SoundRenderer implements LineListener {
      *
      * @param move the move that the sound is representing.
      */
-    private void playSound(Moves move) {
+    public void playSound(Moves move) {
         String filepath = filenameMap.get(move);
 
         try {

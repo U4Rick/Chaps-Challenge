@@ -8,6 +8,7 @@ import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Record;
 import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
 import nz.ac.vuw.ecs.swen225.gp20.render.InventoryRenderer;
+import nz.ac.vuw.ecs.swen225.gp20.render.SoundRenderer;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -26,7 +27,8 @@ import javax.swing.border.Border;
 public abstract class GUI {
 
 	private final JFrame window = new JFrame();
-	JFrame replayWindow;
+	private JFrame replayWindow;
+	private SoundRenderer sounds;
 
 	//Constant values, for designing the UI.
 	public final Dimension counterLabelDim = new Dimension(100, 40);
@@ -59,7 +61,6 @@ public abstract class GUI {
 	private int timeLeft;
 	private boolean canMove;
 	private int lastKeyPressed;
-	private int replaySpeed;
 
 
 	/**
@@ -87,6 +88,7 @@ public abstract class GUI {
 	 *  Builds the window with a JMenuBar, a Renderer panel and a Controller panel.
 	 */
 	public void buildWindow() {
+		sounds = new SoundRenderer();
 
 		JMenuBar menu = new JMenuBar();
 		menu.setBackground(barColorNormal);
@@ -302,6 +304,9 @@ public abstract class GUI {
 	}
 
 
+	/**
+	 * Build the replay controls window to control how the replay is run.
+	 */
 	public void buildReplayControls() {
 		try {
 			persistenceLoad(getReplay().currentLevel, false);
@@ -392,7 +397,6 @@ public abstract class GUI {
 		replayWindow.pack();
 		replayWindow.setLocationRelativeTo(null);
 		replayWindow.setVisible(true);
-
 	}
 
 
@@ -500,6 +504,7 @@ public abstract class GUI {
 	 */
 	public void movePlayer(Direction direction) {
 		getMaze().moveChap(direction);
+		sounds.playSound(getMaze().getChapCurrentMove());
 
 		if (getRecord() != null) { getRecord().addMove(direction); }
 
@@ -517,6 +522,15 @@ public abstract class GUI {
 		repaintAll();
 	}
 
+	/**
+	 * Perform a step in the replay, specified by the point and it's action.
+	 * Shuts down the controls window if finished.
+	 * @param auto If true, the replay is running on a timer, if false, no timer
+	 * @param action    The action to perform
+	 * @param step  The number of the step
+	 * @param size  Size of the original list of actions.
+	 * @return  Returns the position in original list post incrementation
+	 */
 	public int replayStep(boolean auto, String action, int step, int size) {
 		switch (action) {
 			case "DOWN":
