@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
 import com.google.common.base.Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Moves;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
@@ -24,7 +25,8 @@ abstract public class InaccessibleTile extends Tile {
   public boolean isAccessible() { return false; }
 
   @Override
-  public void inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction) {
+  public Moves inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction) {
     Preconditions.checkArgument(maze.getBoard()[position.x][position.y] instanceof InaccessibleTile);
+    return Moves.ERROR;
   }
 }
