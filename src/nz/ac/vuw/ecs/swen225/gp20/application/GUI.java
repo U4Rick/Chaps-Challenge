@@ -9,18 +9,14 @@ import nz.ac.vuw.ecs.swen225.gp20.recnreplay.Replay;
 import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
 import nz.ac.vuw.ecs.swen225.gp20.render.InventoryRenderer;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 /**
  * Builds the Graphic User Interface.
@@ -30,6 +26,7 @@ import javax.swing.*;
 public abstract class GUI {
 
 	private final JFrame window = new JFrame();
+	JFrame replayWindow;
 
 	//Constant values, for designing the UI.
 	public final Dimension counterLabelDim = new Dimension(100, 40);
@@ -52,14 +49,12 @@ public abstract class GUI {
 	private JLabel timeCounter;
 	private JMenuItem pauseMenuItem;
 	private JMenuItem replayStartItem;
-	private JSlider replaySlider;
 	private JPanel controller;
 	private GridBagConstraints controllerConst;
 	private BoardRenderer game;
 	private InventoryRenderer inventory;
 	private Timer gameTimer;
-	private Timer replayTimer;
-	private ActionListener replayListener;
+	Timer replayTimer;
 
 	private int timeLeft;
 	private boolean canMove;
@@ -139,15 +134,10 @@ public abstract class GUI {
 		JMenuItem replayLoadItem = new JMenuItem("Load");
 		setMenuDetails(replayLoadItem);
 
-		replaySlider = new JSlider(1, 20);
-		replaySlider.setValue(2);
-		replaySlider.setPaintLabels(true);
-		replaySlider.setPaintTicks(true);
-		replaySlider.setMinorTickSpacing(1);
+
 
 		replayMenu.add(replayStartItem);
 		replayMenu.add(replayLoadItem);
-		replayMenu.add(replaySlider);
 		JMenu helpMenu = new JMenu("Help");
 		setMenuDetails(helpMenu);
 		JMenu helpStartLoad = new JMenu("Start/Load");
@@ -284,14 +274,10 @@ public abstract class GUI {
 
 		quitMenuItem.addActionListener(e -> System.exit(0));
 
-		replayStartItem.addActionListener(e -> runReplay());
+		replayStartItem.addActionListener(e -> buildReplayControls());
 
 		replayLoadItem.addActionListener(e -> replayLoad());
 
-		replaySlider.addChangeListener(e -> {
-			replayTimer = new Timer(1000 / replaySlider.getValue(), replayListener);
-			replayTimer.start();
-		});
 
 		window.setLayout(new FlowLayout());
 		window.add(game);
@@ -313,6 +299,100 @@ public abstract class GUI {
 		window.pack();
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
+	}
+
+
+	public void buildReplayControls() {
+		try {
+			persistenceLoad(getReplay().currentLevel, false);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		replayWindow = new JFrame();
+		replayWindow.setLayout(new GridBagLayout());
+		JRadioButton stepRadioButton = new JRadioButton("Step-by-Step");
+		stepRadioButton.setEnabled(true);
+		JRadioButton autoRadioButton = new JRadioButton("Auto");
+		autoRadioButton.setSelected(true);
+		autoRadioButton.setEnabled(true);
+		ButtonGroup buttons = new ButtonGroup();
+		buttons.add(stepRadioButton);
+		buttons.add(autoRadioButton);
+
+		JButton stepButton = new JButton("Step");
+
+		JSlider replaySlider = new JSlider(1, 20);
+		replaySlider.setValue(2);
+		replaySlider.setPaintLabels(true);
+		replaySlider.setPaintTicks(true);
+		replaySlider.setMinorTickSpacing(1);
+
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		AtomicInteger moveNum = new AtomicInteger(0);
+		ArrayList<String> actions = (ArrayList<String>) getReplay().processActionsJson();
+
+		ActionListener replayListener = e -> moveNum.set(replayStep(true, actions.get(moveNum.get()), moveNum.get(), actions.size()));
+
+		replayTimer = new Timer(500, replayListener);
+		replayTimer.start();
+
+		stepRadioButton.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				replayWindow.add(stepButton, constraints);
+				replayWindow.revalidate();
+				replayWindow.repaint();
+			}
+			else if (e.getStateChange() == ItemEvent.DESELECTED) {
+				replayWindow.remove(stepButton);
+				replayWindow.revalidate();
+				replayWindow.repaint();
+			}
+		});
+
+		autoRadioButton.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				replayWindow.add(replaySlider, constraints);
+				replayWindow.revalidate();
+				replayWindow.repaint();
+				replayTimer.start();
+			}
+			else if (e.getStateChange() == ItemEvent.DESELECTED) {
+				replayWindow.remove(replaySlider);
+				replayWindow.revalidate();
+				replayWindow.repaint();
+				replayTimer.stop();
+			}
+		});
+
+		stepButton.addActionListener(e -> moveNum.set(replayStep(false, actions.get(moveNum.get()), moveNum.get(), actions.size())));
+
+		replaySlider.addChangeListener(e -> {
+			replayTimer.setDelay(1000 / replaySlider.getValue());
+			replayTimer.start();
+		});
+
+		constraints.insets = new Insets(10,10,10,10);
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		replayWindow.add(stepRadioButton, constraints);
+		constraints.gridx = 1;
+		replayWindow.add(autoRadioButton, constraints);
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridwidth = 2;
+		replayWindow.add(replaySlider, constraints);
+
+		replayWindow.setTitle("Replay Controls");
+		replayWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+
+		replayWindow.setResizable(false);
+		replayWindow.pack();
+		replayWindow.setLocationRelativeTo(null);
+		replayWindow.setVisible(true);
+
 	}
 
 
@@ -365,13 +445,19 @@ public abstract class GUI {
 		getMaze().setTimeLeft(timeLeft);
 		getMaze().moveNPCs();
 		repaintAll();
-		if (timeLeft <= 0) { gameStop("Game Over!", "You ran out of time!"); }
+		if (timeLeft <= 0) { gameStop("Game Over!", "You ran out of time!", true); }
 	}
 
 	/**
 	 * Start the game process.
 	 */
 	public void gameStart() {
+		//reload the level in case the game is mid-way
+		try {
+			persistenceLoad(getMaze().getLevelNumber(), false);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		timeLeft = getMaze().getTimeAvailable();
 		gameTimer.start();
 		canMove = true;
@@ -386,24 +472,25 @@ public abstract class GUI {
 	 * @param dialogMessage Message to be on JDialog.
 	 * @param dialogTitle   Title of the JDialog.
 	 */
-	public void gameStop(String dialogMessage, String dialogTitle) {
+	public void gameStop(String dialogMessage, String dialogTitle, boolean gameOver) {
 		canMove = false;
 		gameTimer.stop();
 
 		produceDialog(dialogMessage, dialogTitle);
 
-		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
-		int replayChoice = chooser.showSaveDialog(window);
-		if (replayChoice == JFileChooser.APPROVE_OPTION) {
-			File replayFile;
-			if (!chooser.getSelectedFile().toString().toLowerCase().endsWith(".json")) {
-				replayFile = new File(chooser.getSelectedFile().getPath() + ".json");
+		if (gameOver) {
+			JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
+			int replayChoice = chooser.showSaveDialog(window);
+			if (replayChoice == JFileChooser.APPROVE_OPTION) {
+				File replayFile;
+				if (!chooser.getSelectedFile().toString().toLowerCase().endsWith(".json")) {
+					replayFile = new File(chooser.getSelectedFile().getPath() + ".json");
+				} else {
+					replayFile = chooser.getSelectedFile();
+				}
+				getRecord().writeToFile(replayFile);
+				replayLoad(replayFile);
 			}
-			else {
-				replayFile = chooser.getSelectedFile();
-			}
-			getRecord().writeToFile(replayFile);
-			replayLoad(replayFile);
 		}
 	}
 
@@ -425,50 +512,35 @@ public abstract class GUI {
 
 				gameStart();
 			}
-			else { gameStop("You win!", "Game won!"); }
+			else { gameStop("You win!", "Game won!", true); }
 		}
 		repaintAll();
 	}
 
-	/**
-	 *  Runs the replay.
-	 */
-	public void runReplay() {
-		AtomicInteger moveNum = new AtomicInteger(0);
-		replayListener = e -> {
-			switch (getReplay().processActionsJson().get(moveNum.get())) {
-				case "DOWN":
-					movePlayer(Direction.DOWN);
-					break;
-				case "RIGHT":
-					movePlayer(Direction.RIGHT);
-					break;
-				case "UP":
-					movePlayer(Direction.UP);
-					break;
-				case "LEFT":
-					movePlayer(Direction.LEFT);
-					break;
-				default:
-					break;
-			}
-
-			moveNum.getAndIncrement();
-			if (moveNum.get() >= getReplay().processActionsJson().size()) {
-				replayTimer.stop();
-			}
-		};
-
-		replayTimer = new Timer(500, replayListener);
-		replaySlider.setEnabled(true);
-		Replay replay = getReplay();
-
-		if (replay != null) {
-			replayTimer.start();
+	public int replayStep(boolean auto, String action, int step, int size) {
+		switch (action) {
+			case "DOWN":
+				movePlayer(Direction.DOWN);
+				break;
+			case "RIGHT":
+				movePlayer(Direction.RIGHT);
+				break;
+			case "UP":
+				movePlayer(Direction.UP);
+				break;
+			case "LEFT":
+				movePlayer(Direction.LEFT);
+				break;
+			default:
+				break;
 		}
-		else {
-			produceDialog("No active replay file loaded in!", "Please load replay!");
+
+		step++;
+		if (step >= size) {
+			if (auto) { replayTimer.stop(); }
+			replayWindow.setVisible(false);
 		}
+		return step;
 	}
 
 
@@ -592,10 +664,12 @@ public abstract class GUI {
 	 * Sets the visual details of elements in the controller.
 	 * @param label JLabel to set
 	 */
-	private void setControllerElementDetails(JLabel label) {
+	private void setControllerElementDetails(JComponent label) {
 		label.setPreferredSize(counterLabelDim);
 		label.setFont(controllerElementsFont);
-		label.setHorizontalAlignment(SwingConstants.CENTER);
+		if (label instanceof JLabel) {
+			((JLabel) label).setHorizontalAlignment(SwingConstants.CENTER);
+		}
 		label.setForeground(textColorNormal);
 	}
 
@@ -700,13 +774,8 @@ public abstract class GUI {
 			Replay replay = new Replay(toLoadFrom);
 			replay.loadFile(toLoadFrom);
 			setReplay(replay);
-			try {
-				persistenceLoad(replay.currentLevel, false);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
 		}
-
+		gameStop("Replay process started, game stopped", "Game Stopped by User", false);
 		replayStartItem.setEnabled(true);
 	}
 
