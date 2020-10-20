@@ -38,18 +38,5 @@ public class GorillaTest {
             main.movePlayer(direction);
         }
     }
-
-    @Test
-    void exampleTimeDelayTest() {
-        for (int i = 0; i < 1_000; i++) {
-            try {
-                TimeUnit.MILLISECONDS.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Direction direction = monkeyAI.selectMove(main.getMaze());
-            main.movePlayer(direction);
-        }
-    }
 }
 

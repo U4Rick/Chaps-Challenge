@@ -38,18 +38,5 @@ public class CapuchinTest {
             main.movePlayer(direction);
         }
     }
-
-    @Test
-    void exampleTimeDelayTest() {
-        for (int i = 0; i < 10_000; i++) {
-            try {
-                TimeUnit.MILLISECONDS.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Direction direction = monkeyAI.selectMove(main.getMaze());
-            main.movePlayer(direction);
-        }
-    }
 }
 
