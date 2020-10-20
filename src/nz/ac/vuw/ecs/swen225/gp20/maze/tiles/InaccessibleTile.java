@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Moves;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
 
 import java.awt.*;
