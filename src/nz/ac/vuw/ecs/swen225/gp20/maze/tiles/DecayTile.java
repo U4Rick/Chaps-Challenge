@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
 import com.google.common.base.Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Moves;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
 
@@ -35,9 +36,10 @@ public class DecayTile extends AccessibleTile {
   }
 
   @Override
-  public void inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction) {
-    super.inMove(maze, position, isChap, entity, direction);
+  public Moves inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction) {
+    Moves move = super.inMove(maze, position, isChap, entity, direction);
     //if chap was originally on a decay tile, need to decrement decay value
     decayLevel--;
+    return move;
   }
 }

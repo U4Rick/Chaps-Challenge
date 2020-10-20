@@ -7,7 +7,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Icon;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.InaccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import javax.imageio.ImageIO;

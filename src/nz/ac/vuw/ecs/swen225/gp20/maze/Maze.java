@@ -163,6 +163,7 @@ public class Maze {
           }
         }
         board[exitLocation.x][exitLocation.y] = new ExitTile();
+        move = Moves.EXIT_UNLOCK;
       }
     }
 

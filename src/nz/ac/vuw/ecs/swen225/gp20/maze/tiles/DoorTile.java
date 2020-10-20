@@ -44,7 +44,7 @@ public class DoorTile extends InaccessibleTile {
     if(isChap) { //check that tile is a locked door
       Preconditions.checkArgument(entity instanceof Chap);  //make sure that entity is Chap
       ((Chap) entity).unlockDoor(position, maze);
-      move = Moves.EXIT_UNLOCK;
+      move = Moves.UNLOCK;
     }
     return move;
   }
