@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Testing suite for the Baboon model AI, which uses purely random movement to play the game.
  *
@@ -45,6 +47,19 @@ class BaboonTest {
                 Direction direction = monkeyAI.selectMove(main.getMaze());
                 main.movePlayer(direction);
             }
+        }
+    }
+
+    @Test
+    void visualTest() {
+        for (int i = 0; i < 100; i++) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Direction direction = monkeyAI.selectMove(main.getMaze());
+            main.movePlayer(direction);
         }
     }
 }

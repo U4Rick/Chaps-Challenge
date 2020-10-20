@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import javax.imageio.ImageIO;
@@ -79,7 +80,8 @@ public class BoardRenderer extends JPanel {
                 Image tileIcon = tile.getIcon();
                 g.drawImage(tileIcon, (xPos - startX) * TILE_SIZE, (yPos - startY) * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
 
-                if(tile.isAccessible()){ // Tile might have something on it
+                // TODO: remove if not using
+                /*if(tile.isAccessible()){ // Tile might have something on it
                     AccessibleTile accessibleTile = (AccessibleTile) tile;
 
                     if(accessibleTile.getEntityHere() != null){
@@ -87,11 +89,18 @@ public class BoardRenderer extends JPanel {
                         Image entityIcon = accessibleTile.getEntityHere().getIcon();
                         g.drawImage(entityIcon, (xPos - startX) * TILE_SIZE, (yPos - startY) * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
                     }
-                }
+                }*/
             }
         }
 
-        // If chap is on info tile, display info.
+        // TODO: check if always works
+        // Draw entities.
+        for (Entity e : maze.getNpcs()) {
+            g.drawImage(e.getIcon(), (e.getEntityPosition().x - startX) * TILE_SIZE, (e.getEntityPosition().y - startY) * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+        }
+        g.drawImage(maze.getChap().getIcon(), (maze.getChapPosition().x - startX) * TILE_SIZE, (maze.getChapPosition().y - startY) * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+
+        // If Chap is on info tile, display info.
         Tile chapTile = maze.getTile(maze.getChapPosition().x, maze.getChapPosition().y);
         if(chapTile instanceof InfoTile){
             g.drawImage(infoIcon, 25, 300, 445, 165, null);
