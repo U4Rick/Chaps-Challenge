@@ -363,6 +363,7 @@ public abstract class GUI {
 	public void onGameTimeTick() {
 		timeLeft--;
 		getMaze().setTimeLeft(timeLeft);
+		getMaze().moveNPCs();
 		repaintAll();
 		if (timeLeft <= 0) { gameStop("Game Over!", "You ran out of time!"); }
 	}
@@ -700,7 +701,7 @@ public abstract class GUI {
 			replay.loadFile(toLoadFrom);
 			setReplay(replay);
 			try {
-				persistenceLoad(replay.currentLevel, true);
+				persistenceLoad(replay.currentLevel, false);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -718,7 +719,7 @@ public abstract class GUI {
 		replay.loadFile(file);
 		setReplay(replay);
 		try {
-			persistenceLoad(replay.currentLevel, true);
+			persistenceLoad(replay.currentLevel, false);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
