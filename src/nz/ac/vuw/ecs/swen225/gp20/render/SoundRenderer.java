@@ -16,6 +16,7 @@ import javax.sound.sampled.*;
  */
 public class SoundRenderer {
     Map<Moves, File> fileMap = new HashMap<>();
+    // TODO: checkstyle?
 
     /**
      * A constructor that loads the .wav files into a map with the moves they represent.
@@ -33,7 +34,7 @@ public class SoundRenderer {
      * @param move the move that the sound is representing.
      */
     public void playSound(Moves move) {
-        try {
+        try { // TODO: try to fix lag with occasional pile up of moves.
             // Create a clip from the file.
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(fileMap.get(move));
             AudioFormat format = audioIn.getFormat();
