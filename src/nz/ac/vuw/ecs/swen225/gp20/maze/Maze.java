@@ -269,4 +269,12 @@ public class Maze {
   public boolean getChapWin() {
     return chapWin;
   }
+
+  /**
+   * Gets the list of NPCs for this level.
+   * @return  List of NPCs for this level.
+   */
+  public List<NPC> getNpcs() {
+    return Collections.unmodifiableList(npcs);
+  }
 }

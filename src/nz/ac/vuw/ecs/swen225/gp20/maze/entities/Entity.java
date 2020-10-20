@@ -38,7 +38,7 @@ abstract public class Entity extends Icon {
    * Moves Chap in the direction stated by one tile on the board.
    *
    * @param direction Represents the direction to move Chap.
-   * @param entity The entity to move, if is Chap can be null.
+   * @param entity The entity to move.
    * @param maze The maze where the entity is moved.
    * @param isChap For checking if the entity being moved is Chap so the extra Chap logic is applied to entity.
    * @throws IllegalStateException If going to new direction will cause Chap to go out of bounds, will throw an IllegalStateException.
@@ -52,10 +52,10 @@ abstract public class Entity extends Icon {
     Preconditions.checkNotNull(maze.getBoard());
 
     Chap chap = null;
-    if(isChap) {
+    /*if(isChap) {
       Preconditions.checkArgument(entity instanceof Chap);  //make sure that entity is Chap
       chap = (Chap)entity;
-    }
+    }*/
     Point entityLocation = entity.getEntityPosition();
     //get new position to move entity to
     Point position;
@@ -81,31 +81,7 @@ abstract public class Entity extends Icon {
       throw new IllegalStateException();
     }
 
-    if(!entity.canMove(maze.getBoard()[position.x][position.y])) {
-      Preconditions.checkArgument(maze.getBoard()[position.x][position.y] instanceof InaccessibleTile);
-      InaccessibleTile tile = (InaccessibleTile)maze.getBoard()[position.x][position.y];
-      if(isChap && tile.isLockedDoor()) { //check that tile is a locked door
-        chap.unlockDoor(position, maze);
-      }
-    }
-
-    else {    //if entity can move onto tile
-      Preconditions.checkArgument(maze.getBoard()[position.x][position.y] instanceof AccessibleTile);
-
-      //pick up item on tile if is an item tile
-      if(isChap && maze.getBoard()[position.x][position.y].isAccessible()) {
-        if(((AccessibleTile)maze.getBoard()[position.x][position.y]).isItem()) {
-          maze.pickUpItem(position);
-        }
-      }
-
-      //reassign entity to new tile
-      ((AccessibleTile)maze.getBoard()[entityLocation.x][entityLocation.y]).setEntityHere(null);
-      AccessibleTile accessibleTile = (AccessibleTile)maze.getBoard()[position.x][position.y];
-      accessibleTile.setEntityHere(entity);
-      entity.setEntityPosition(new Point(position));  //to keep track of entity's location
-      lastMove = direction; //update last move variable
-    }
+    maze.getBoard()[position.x][position.y].inMove(maze, position, isChap, entity, direction);
 
     //check if chap is on exit tile
     if(maze.getBoard()[position.x][position.y] instanceof ExitTile) {
