@@ -394,7 +394,13 @@ public abstract class GUI {
 		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 		int replayChoice = chooser.showSaveDialog(window);
 		if (replayChoice == JFileChooser.APPROVE_OPTION) {
-			File replayFile = chooser.getSelectedFile();
+			File replayFile;
+			if (!chooser.getSelectedFile().toString().toLowerCase().endsWith(".json")) {
+				replayFile = new File(chooser.getSelectedFile().getPath() + ".json");
+			}
+			else {
+				replayFile = chooser.getSelectedFile();
+			}
 			getRecord().writeToFile(replayFile);
 			replayLoad(replayFile);
 		}
@@ -792,8 +798,13 @@ public abstract class GUI {
 		JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 		int choice = chooser.showSaveDialog(window);
 		if (choice == JFileChooser.APPROVE_OPTION) {
-			System.out.println(chooser.getCurrentDirectory());
-			File toSaveTo = chooser.getSelectedFile();
+			File toSaveTo;
+			if (!chooser.getSelectedFile().toString().toLowerCase().endsWith(".json")) {
+				toSaveTo = new File(chooser.getSelectedFile().getPath() + ".json");
+			}
+			else {
+				toSaveTo = chooser.getSelectedFile();
+			}
 			Persistence.saveGameState(getMaze(), toSaveTo);
 		}
 		gameTimer.start();
