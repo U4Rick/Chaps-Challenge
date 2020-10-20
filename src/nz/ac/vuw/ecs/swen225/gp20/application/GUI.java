@@ -58,6 +58,7 @@ public abstract class GUI {
 	private BoardRenderer game;
 	private InventoryRenderer inventory;
 	private Timer gameTimer;
+	private Timer drawTimer;
 	private Timer replayTimer;
 	private ActionListener replayListener;
 
@@ -65,6 +66,8 @@ public abstract class GUI {
 	private boolean canMove;
 	private int lastKeyPressed;
 	private int replaySpeed;
+
+	private int moveTime = 1000;
 
 
 	/**
@@ -218,7 +221,11 @@ public abstract class GUI {
 
 		ActionListener timerListener = e -> onGameTimeTick();
 
+		ActionListener drawListener = e -> onGameRedraw();
+
 		gameTimer = new Timer(1000, timerListener);
+
+		drawTimer = new Timer(1000/60, drawListener);
 
 		JLabel levelLabel = new JLabel("Level");
 		setControllerElementDetails(levelLabel);
@@ -360,8 +367,14 @@ public abstract class GUI {
 	public void onGameTimeTick() {
 		timeLeft--;
 		getMaze().setTimeLeft(timeLeft);
-		repaintAll();
+
+		getMaze().moveNPCs();
 		if (timeLeft <= 0) { gameStop("Game Over!", "You ran out of time!"); }
+	}
+
+	public void onGameRedraw() {
+		getMaze().tickEntities();
+		repaintAll();
 	}
 
 	/**
@@ -370,6 +383,7 @@ public abstract class GUI {
 	public void gameStart() {
 		timeLeft = getMaze().getTimeAvailable();
 		gameTimer.start();
+		drawTimer.start();
 		canMove = true;
 		setRecord(new Record(getMaze().getLevelNumber()));
 		pauseMenuItem.setEnabled(true);

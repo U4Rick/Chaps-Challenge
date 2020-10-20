@@ -43,6 +43,8 @@ public class Maze {
 
   private boolean chapWin = false;  //checks that Chap is on exit tile
 
+  private float moveAmount = 0.0f;
+
   static private Map<Colour, Image> keyImages = new HashMap<>();
 
   /**
@@ -73,6 +75,7 @@ public class Maze {
     this.timeLeft = timeAvailable;
     TREASURES_NUM = treasuresNum;
     treasuresLeft = TREASURES_NUM;
+    this.npcs = npcs;
     //this.board = board;
     this.board = new Tile[board.length][board[0].length];
     for(int x = 0; x < board.length; x++) {
@@ -90,6 +93,15 @@ public class Maze {
     for (Colour c : Colour.values()) {
       Image icon = ImageIO.read(new File("./resources/" + c.toString() + "_key_item.png"));
       keyImages.put(c, icon);
+    }
+  }
+
+  public void tickEntities() {
+    if (chap.amount < 100) {
+      chap.amount += 5;
+    }
+    for (NPC npc : npcs) {
+      npc.amount += 5;
     }
   }
 

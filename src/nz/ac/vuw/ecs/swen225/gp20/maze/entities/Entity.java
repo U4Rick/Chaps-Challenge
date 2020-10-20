@@ -11,6 +11,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -25,6 +26,9 @@ abstract public class Entity extends Icon {
   private Direction lastMove = null; //the direction of the last move that the entity has done
   private Map<Direction, Image> iconMap = new HashMap<>();
 
+  public int amount;
+
+
   /**
    * Constructor for entity
    * @param entityPosition x,y coordinates of entity in the board.
@@ -32,6 +36,32 @@ abstract public class Entity extends Icon {
   public Entity(Point entityPosition) {
     Preconditions.checkNotNull(entityPosition);
     this.entityPosition = entityPosition;
+
+    amount = 0;
+  }
+
+  public double getActualX() {
+    if (lastMove == null) return entityPosition.x;
+    switch (lastMove) {
+      case LEFT:
+        return entityPosition.x + (1.0 - (double)amount/100.0);
+      case RIGHT:
+        return entityPosition.x - (1.0 - (double)amount/100.0);
+      default:
+        return entityPosition.x;
+    }
+  }
+
+  public double getActualY() {
+    if (lastMove == null) return entityPosition.y;
+    switch (lastMove) {
+      case UP:
+        return entityPosition.y + (1.0 - (double)amount/100.0);
+      case DOWN:
+        return entityPosition.y - (1.0 - (double)amount/100.0);
+      default:
+        return entityPosition.y;
+    }
   }
 
   /**
@@ -50,6 +80,8 @@ abstract public class Entity extends Icon {
     Preconditions.checkNotNull(maze);
     Preconditions.checkNotNull(entity);
     Preconditions.checkNotNull(maze.getBoard());
+
+    amount = 0;
 
     Chap chap = null;
     if(isChap) {

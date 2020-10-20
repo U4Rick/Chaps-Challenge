@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 
 import javax.imageio.ImageIO;
@@ -54,38 +55,47 @@ public class BoardRenderer extends JPanel {
         Tile[][] board = maze.getBoard();
 
         // Centre display around Chap.
-        int startX = maze.getChapPosition().x - (DISPLAY_DIMENSION-1)/2;
-        int startY = maze.getChapPosition().y - (DISPLAY_DIMENSION-1)/2;
+        double startX = maze.getChap().getActualX() - (DISPLAY_DIMENSION-1.0)/2.0;
+        double startY = maze.getChap().getActualY() - (DISPLAY_DIMENSION-1.0)/2.0;
 
         // Boundaries.
         if(startX < 0){
             startX = 0;
-        } else if(startX + DISPLAY_DIMENSION > BOARD_WIDTH){
-            startX = BOARD_WIDTH - DISPLAY_DIMENSION;
+        } else if(startX + DISPLAY_DIMENSION  > BOARD_WIDTH){
+            startX = BOARD_WIDTH - DISPLAY_DIMENSION-2;
         }
         if(startY < 0){
             startY = 0;
-        } else if(startY + DISPLAY_DIMENSION > BOARD_HEIGHT){
-            startY = BOARD_HEIGHT - DISPLAY_DIMENSION;
+        } else if(startY + DISPLAY_DIMENSION> BOARD_HEIGHT){
+            startY = BOARD_HEIGHT - DISPLAY_DIMENSION-2;
         }
 
         // TODO: use for animation?
 //        int xOffset = _0/1/-1_ * TILE_SIZE;
 //        int yOffset = _0/1/-1_ * TILE_SIZE;
 
-        for(int xPos = startX; xPos < startX + DISPLAY_DIMENSION; xPos++){
-            for(int yPos = startY; yPos < startY + DISPLAY_DIMENSION; yPos++){
-                Tile tile = board[xPos][yPos];
+        for(double xPos = startX; xPos < startX + DISPLAY_DIMENSION+1; xPos++){
+            for(double yPos = startY; yPos < startY + DISPLAY_DIMENSION+1; yPos++){
+                int xPosBoard = (int)xPos;
+                int yPosBoard = (int)yPos;
+                Tile tile = board[xPosBoard][yPosBoard];
                 Image tileIcon = tile.getIcon();
-                g.drawImage(tileIcon, (xPos - startX) * TILE_SIZE, (yPos - startY) * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+                //System.out.println((int) ((xPosBoard - startX) * TILE_SIZE));
+                //System.out.println((int) ((yPosBoard - startY) * TILE_SIZE));
+                g.drawImage(tileIcon, (int)((xPosBoard - startX) * TILE_SIZE), (int)((yPosBoard - startY) * TILE_SIZE), TILE_SIZE, TILE_SIZE, null);
 
                 if(tile.isAccessible()){ // Tile might have something on it
                     AccessibleTile accessibleTile = (AccessibleTile) tile;
 
                     if(accessibleTile.getEntityHere() != null){
                         // TODO: animate Chap
-                        Image entityIcon = accessibleTile.getEntityHere().getIcon();
-                        g.drawImage(entityIcon, (xPos - startX) * TILE_SIZE, (yPos - startY) * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+                        Entity ent = accessibleTile.getEntityHere();
+                        Image entityIcon = ent.getIcon();
+
+                        int entX = (int)((ent.getActualX() - startX) * TILE_SIZE);
+                        int entY = (int)((ent.getActualY() - startY) * TILE_SIZE);
+
+                        g.drawImage(entityIcon, entX, entY, TILE_SIZE, TILE_SIZE, null);
                     }
                 }
             }
