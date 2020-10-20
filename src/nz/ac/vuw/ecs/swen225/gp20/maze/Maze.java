@@ -53,7 +53,7 @@ public class Maze {
    * @param board The 2d array that represents the board for the level.
    * @throws IllegalStateException If chap is being set onto an inaccessible tile, then there is something wrong with the level.
    */
-  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, int timeAvailable, Tile[][] board/*, List<NPC> npcs*/) throws IllegalStateException, IOException {
+  public Maze(int levelNumber, Point chapLocation, Point exitLocation, int treasuresNum, int timeAvailable, Tile[][] board, List<NPC> npcs) throws IllegalStateException, IOException {
     //check that parameters are not null
     Preconditions.checkNotNull(chapLocation);
     Preconditions.checkNotNull(exitLocation);
@@ -73,7 +73,7 @@ public class Maze {
     this.timeLeft = timeAvailable;
     TREASURES_NUM = treasuresNum;
     treasuresLeft = TREASURES_NUM;
-    //this.board = board;
+    this.npcs = npcs;
     this.board = new Tile[board.length][board[0].length];
     for(int x = 0; x < board.length; x++) {
       System.arraycopy(board[x], 0, this.board[x], 0, board[0].length);
