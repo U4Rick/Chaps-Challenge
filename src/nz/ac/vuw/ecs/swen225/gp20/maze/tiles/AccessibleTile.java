@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.tiles;
 
 import com.google.common.base.Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Moves;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
@@ -52,16 +53,17 @@ abstract public class AccessibleTile extends Tile {
   public Item getItemHere() { return null; }
 
   @Override
-  public void inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction) {
+  public Moves inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction) {
     Preconditions.checkArgument(maze.getBoard()[position.x][position.y] instanceof AccessibleTile);
 
     Point entityLocation = entity.getEntityPosition();
+    Moves move = Moves.MOVE;
 
     //pick up item on tile if is an item tile
     if(isChap) {
       Preconditions.checkArgument(entity instanceof Chap);  //make sure that entity is Chap
       if(isItem()) {
-        maze.pickUpItem(position);
+        move = maze.pickUpItem(position);
       }
     }
 
@@ -70,5 +72,7 @@ abstract public class AccessibleTile extends Tile {
     ((AccessibleTile)maze.getBoard()[position.x][position.y]).setEntityHere(entity);
     entity.setEntityPosition(new Point(position));  //to keep track of entity's location
     entity.setLastMove(direction); //update last move variable
+
+    return move;
   }
 }
