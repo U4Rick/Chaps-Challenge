@@ -25,6 +25,7 @@ public class Graph {
 
                     //Add all neighbours to this node
                     addNodeNeighbours(board, i, boardLength, j, tilesLength, newNode);
+                    nodes.add(newNode);
                 }
             }
         }
