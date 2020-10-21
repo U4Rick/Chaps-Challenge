@@ -17,6 +17,7 @@ import javax.json.JsonValue;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
+import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
@@ -168,12 +169,25 @@ public class Persistence {
         .add("position", chapPosition)
         .add("inventory", chapInventoryArray)
         .build();
+    
+    JsonArrayBuilder actorArray = Json.createArrayBuilder();
+
+    for (NPC npc : maze.getNpcs()) {
+      JsonObject npcObj = Json.createObjectBuilder()
+        .add("x", npc.entityPosition.x)
+        .add("y", npc.entityPosition.y)
+        .add("pathIndex", npc.getCurrentMoveIndex())
+        .build();
+      
+      actorArray.add(npcObj);
+    }
 
     JsonObject level = Json.createObjectBuilder()
         .add("level_number", maze.getLevelNumber())
         .add("locked_doors", lockedDoorsBuilder.build())
         .add("keys", keysBuilder.build())
         .add("treasures", treasuresBuilder.build())
+        .add("actors", actorArray.build())
         .add("chap", chap)
         .add("time_left", maze.getTimeLeft())
         .build();
@@ -300,6 +314,21 @@ public class Persistence {
         for (int i=0;i<keyNum;i++) {
           chap.addToKeyInven(key);
         }
+      }
+      
+      JsonArray actors = gameState.getJsonArray("actors");
+      for (int i=0;i<actors.size();i++) {
+        JsonObject actorObj = actors.get(i).asJsonObject();
+        
+        int x = actorObj.getInt("x");
+        int y = actorObj.getInt("y");
+        
+        int pathIndex = actorObj.getInt("pathIndex");
+        
+        NPC npc = maze.getNpcs().get(i);
+        
+        npc.setEntityPosition(new Point(x, y));
+        npc.setCurrentMoveIndex(pathIndex);
       }
 
       int timeLeft = gameState.getInt("time_left");

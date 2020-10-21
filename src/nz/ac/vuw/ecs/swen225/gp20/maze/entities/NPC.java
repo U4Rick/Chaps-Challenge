@@ -24,6 +24,18 @@ abstract public class NPC extends Entity {
    * @return  The next move to do for the NPC.
    */
   abstract public Direction getNextMove();
+  
+  /**
+   * Gets the current index of the NPC's move list.
+   * @return The move index the NPC is currently on.
+   */
+  abstract public int getCurrentMoveIndex();
+  
+  /**
+   * Sets the current index of the NPC's move list.
+   * @param index the index to be set to.
+   */
+  abstract public void setCurrentMoveIndex(int index);
 
   @Override
   public final String toString() { return "npc"; }
