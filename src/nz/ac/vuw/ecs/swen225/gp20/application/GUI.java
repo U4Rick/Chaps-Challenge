@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
-import javax.swing.border.Border;
 
 /**
  * Builds the Graphic User Interface.
@@ -61,6 +60,8 @@ public abstract class GUI {
 	private int timeLeft;
 	private boolean canMove;
 	private int lastKeyPressed;
+	private boolean inReplay = false;
+	private boolean debugMode = false;
 
 
 	/**
@@ -308,6 +309,7 @@ public abstract class GUI {
 	 * Build the replay controls window to control how the replay is run.
 	 */
 	public void buildReplayControls() {
+		inReplay = true;
 		try {
 			persistenceLoad(getReplay().currentLevel, false);
 		} catch (FileNotFoundException e) {
@@ -404,17 +406,23 @@ public abstract class GUI {
 	 * Open the dialog for game pause and handle it closing.
 	 */
 	public void openPauseDialog() {
-		if (gameTimer != null) { gameTimer.stop(); }
+		if (!debugMode) {
+			if (gameTimer != null) {
+				gameTimer.stop();
+			}
 
-		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
-		option.setMessage("Game is paused.");
-		JDialog dialog = option.createDialog("Paused");
-		dialog.pack();
-		dialog.setVisible(true);
-		int choice = (Integer) option.getValue();
-		if (choice == JOptionPane.OK_OPTION || lastKeyPressed == KeyEvent.VK_ESCAPE) {
-			if (gameTimer != null) { gameTimer.start(); }
-			dialog.setVisible(false);
+			JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
+			option.setMessage("Game is paused.");
+			JDialog dialog = option.createDialog("Paused");
+			dialog.pack();
+			dialog.setVisible(true);
+			int choice = (Integer) option.getValue();
+			if (choice == JOptionPane.OK_OPTION || lastKeyPressed == KeyEvent.VK_ESCAPE) {
+				if (gameTimer != null) {
+					gameTimer.start();
+				}
+				dialog.setVisible(false);
+			}
 		}
 	}
 
@@ -424,15 +432,21 @@ public abstract class GUI {
 	 * @param title Title of the dialog.
 	 */
 	public void produceDialog(String message, String title) {
-		JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
-		option.setMessage(message);
-		JDialog dialog = option.createDialog(title);
-		dialog.pack();
-		dialog.setVisible(true);
-		int choice = (Integer) option.getValue();
-		if (choice == JOptionPane.OK_OPTION) {
-			dialog.setVisible(false);
+		if (!debugMode) {
+			JOptionPane option = new JOptionPane(JOptionPane.DEFAULT_OPTION);
+			option.setMessage(message);
+			JDialog dialog = option.createDialog(title);
+			dialog.pack();
+			dialog.setVisible(true);
+			int choice = (Integer) option.getValue();
+			if (choice == JOptionPane.OK_OPTION) {
+				dialog.setVisible(false);
+			}
 		}
+	}
+
+	public void setDebugMode(boolean debug) {
+		debugMode = debug;
 	}
 
 
@@ -482,7 +496,7 @@ public abstract class GUI {
 
 		produceDialog(dialogMessage, dialogTitle);
 
-		if (gameOver) {
+		if (gameOver && !debugMode) {
 			JFileChooser chooser = new JFileChooser("../chapschallenge/saves/");
 			int replayChoice = chooser.showSaveDialog(window);
 			if (replayChoice == JFileChooser.APPROVE_OPTION) {
@@ -508,7 +522,7 @@ public abstract class GUI {
 
 		if (getRecord() != null) { getRecord().addMove(direction); }
 
-		if (getMaze().getChapWin()) {
+		if (getMaze().getChapWin() && !inReplay) {
 			//if there's another level to progress to
 			if (getMaze().getLevelNumber() < MAX_LEVEL) {
 				try {
@@ -553,6 +567,7 @@ public abstract class GUI {
 		if (step >= size) {
 			if (auto) { replayTimer.stop(); }
 			replayWindow.setVisible(false);
+			inReplay = false;
 		}
 		return step;
 	}
