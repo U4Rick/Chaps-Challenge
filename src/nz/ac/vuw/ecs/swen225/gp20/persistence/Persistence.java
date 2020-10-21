@@ -41,7 +41,8 @@ public class Persistence {
    * @param colour      Whether the tileobject has colour.
    * @return An array of TileObjects.
    */
-  protected static TileObject[] getObjectValues(JsonObject levelObject, String levelKey, boolean colour) {
+  protected static TileObject[] getObjectValues(JsonObject levelObject, 
+      String levelKey, boolean colour) {
     // load keys
     JsonArray objects = levelObject.getJsonArray(levelKey);
 
@@ -82,7 +83,7 @@ public class Persistence {
       case "blue":
         return Colour.BLUE;
       default:
-        // invalid colour, throw error
+        // invalid colour, throw exception
         throw new InputMismatchException("Invalid colour");
     }
   }
@@ -105,7 +106,7 @@ public class Persistence {
       case BLUE:
         return "blue";
       default:
-        // invalid colour, throw error
+        // invalid colour, throw exception
         throw new InputMismatchException("Invalid colour");
     }
 
@@ -132,27 +133,38 @@ public class Persistence {
         if (board[i][j] instanceof DoorTile) {
           DoorTile lockedDoor = (DoorTile) board[i][j];
 
-          JsonObject lockedDoorJson = Json.createObjectBuilder().add("x", i).add("y", j)
-              .add("colour", getColourNameFromColour(lockedDoor.getDoorColour())).build();
+          JsonObject lockedDoorJson = Json.createObjectBuilder()
+              .add("x", i)
+              .add("y", j)
+              .add("colour", getColourNameFromColour(lockedDoor.getDoorColour()))
+              .build();
 
           lockedDoorsBuilder.add(lockedDoorJson);
         } else if (board[i][j] instanceof KeyTile) {
           KeyTile key = (KeyTile) board[i][j];
 
-          JsonObject keyJson = Json.createObjectBuilder().add("x", i).add("y", j)
-              .add("colour", getColourNameFromColour(key.getKeyColour())).build();
+          JsonObject keyJson = Json.createObjectBuilder()
+              .add("x", i)
+              .add("y", j)
+              .add("colour", getColourNameFromColour(key.getKeyColour()))
+              .build();
 
           keysBuilder.add(keyJson);
         } else if (board[i][j] instanceof TreasureTile) {
-          JsonObject treasureJson = Json.createObjectBuilder().add("x", i).add("y", j).build();
+          JsonObject treasureJson = Json.createObjectBuilder()
+              .add("x", i)
+              .add("y", j)
+              .build();
 
           treasuresBuilder.add(treasureJson);
         }
       }
     }
 
-    JsonObject chapPosition = Json.createObjectBuilder().add("x", maze.getChapPosition().getX())
-        .add("y", maze.getChapPosition().getY()).build();
+    JsonObject chapPosition = Json.createObjectBuilder()
+        .add("x", maze.getChapPosition().getX())
+        .add("y", maze.getChapPosition().getY())
+        .build();
 
     JsonArrayBuilder chapInventoryArray = Json.createArrayBuilder();
     for (Colour key : maze.getChap().getKeyInventory().keySet()) {
@@ -169,16 +181,16 @@ public class Persistence {
         .add("position", chapPosition)
         .add("inventory", chapInventoryArray)
         .build();
-    
+
     JsonArrayBuilder actorArray = Json.createArrayBuilder();
 
     for (NPC npc : maze.getNpcs()) {
       JsonObject npcObj = Json.createObjectBuilder()
-        .add("x", npc.entityPosition.x)
-        .add("y", npc.entityPosition.y)
-        .add("pathIndex", npc.getCurrentMoveIndex())
-        .build();
-      
+          .add("x", npc.entityPosition.x)
+          .add("y", npc.entityPosition.y)
+          .add("pathIndex", npc.getCurrentMoveIndex())
+          .build();
+
       actorArray.add(npcObj);
     }
 
@@ -187,8 +199,7 @@ public class Persistence {
         .add("locked_doors", lockedDoorsBuilder.build())
         .add("keys", keysBuilder.build())
         .add("treasures", treasuresBuilder.build())
-        .add("actors", actorArray.build())
-        .add("chap", chap)
+        .add("actors", actorArray.build()).add("chap", chap)
         .add("time_left", maze.getTimeLeft())
         .build();
 
@@ -199,41 +210,40 @@ public class Persistence {
 
       writer.close();
     } catch (FileNotFoundException e) {
-      // invalid file
-      e.printStackTrace();
+      // invalid file, so don't write the game state.
     }
   }
-  
+
   /**
-   * Loads a game state from the game state file, which contains which number level file to be used as a base.
+   * Loads a game state from the game state file which contains which number level
+   * file to be used as a base.
    * 
    * @param gameStateFile the state file to load.
    * @return the maze loaded from the game state.
    */
   public static Maze loadGameState(File gameStateFile) {
-    
-      JsonReader reader;
-      try {
-        reader = Json.createReader(new FileReader(gameStateFile));
-      
-        int levelNum = reader.readObject().getInt("level_number");
-        
-        File mazeFile = new File("levels/level" + levelNum + ".json");
-        
-        return loadGameState(gameStateFile, mazeFile);
-      } catch (FileNotFoundException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-      
-      return null;
+
+    JsonReader reader;
+    try {
+      reader = Json.createReader(new FileReader(gameStateFile));
+
+      int levelNum = reader.readObject().getInt("level_number");
+
+      File mazeFile = new File("levels/level" + levelNum + ".json");
+
+      return loadGameState(gameStateFile, mazeFile);
+    } catch (FileNotFoundException e) {
+      // file doesn't exist
+    }
+
+    return null;
   }
 
   /**
    * Loads a game state from the game state file and the base maze file.
    * 
    * @param gameStateFile the state file to load.
-   * @param baseMazeFile the base maze to be altered from.
+   * @param baseMazeFile  the base maze to be altered from.
    * @return the maze loaded from the game state.
    */
   public static Maze loadGameState(File gameStateFile, File baseMazeFile) {
@@ -268,7 +278,7 @@ public class Persistence {
       }
 
       int treasuresPickedUp = 0;
-      
+
       Maze maze = Levels.loadLevelFromFile(baseMazeFile);
 
       Tile[][] board = maze.getBoard();
@@ -311,22 +321,22 @@ public class Persistence {
       for (JsonValue keyValue : inventory) {
         Colour key = getColourFromString(keyValue.asJsonObject().getString("key_colour"));
         int keyNum = keyValue.asJsonObject().getInt("number");
-        for (int i=0;i<keyNum;i++) {
+        for (int i = 0; i < keyNum; i++) {
           chap.addToKeyInven(key);
         }
       }
-      
+
       JsonArray actors = gameState.getJsonArray("actors");
-      for (int i=0;i<actors.size();i++) {
+      for (int i = 0; i < actors.size(); i++) {
         JsonObject actorObj = actors.get(i).asJsonObject();
-        
+
         int x = actorObj.getInt("x");
         int y = actorObj.getInt("y");
-        
+
         int pathIndex = actorObj.getInt("pathIndex");
-        
+
         NPC npc = maze.getNpcs().get(i);
-        
+
         npc.setEntityPosition(new Point(x, y));
         npc.setCurrentMoveIndex(pathIndex);
       }
@@ -340,7 +350,6 @@ public class Persistence {
 
     } catch (FileNotFoundException e) {
       // error reading file
-      e.printStackTrace();
     }
     return null;
   }
