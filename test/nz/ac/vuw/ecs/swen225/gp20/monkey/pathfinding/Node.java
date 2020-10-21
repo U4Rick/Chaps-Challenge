@@ -45,4 +45,14 @@ public class Node {
     public void setShortestPath(LinkedList<Node> shortestPath) {
         this.shortestPath = shortestPath;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "nodeID='" + nodeID + '\'' +
+                ", shortestPath=" + shortestPath +
+                ", distance=" + distance +
+                ", adjacentNodes=" + adjacentNodes.size() +
+                '}' + "\n";
+    }
 }
