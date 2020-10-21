@@ -7,7 +7,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Icon;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -85,18 +84,10 @@ abstract public class Entity extends Icon {
       move = Moves.CHAP_WIN;
     }
 
+    entityLocation = entity.getEntityPosition();
     assert(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof AccessibleTile);  //check that entity is not on an invalid tile
 
     return move;
-  }
-
-  /**
-   * For checking if entity can move to the new tile.
-   * @param tile The tile to check if entity can move into.
-   */
-  public boolean canMove(Tile tile) {
-    Preconditions.checkNotNull(tile);
-    return tile.isAccessible();
   }
 
   /**
@@ -110,12 +101,6 @@ abstract public class Entity extends Icon {
    * @param newLocation The new x,y coordinates.
    */
   public void setEntityPosition(Point newLocation) { entityPosition = newLocation; }
-
-  /**
-   * Gets the direction of the last move done by this entity.
-   * @return  Direction of the last move done by this entity.
-   */
-  public Direction getLastMove() { return lastMove; }
 
   /**
    * Sets the direction of the last move done by this entity.

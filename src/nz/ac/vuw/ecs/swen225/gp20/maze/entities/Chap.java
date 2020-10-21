@@ -26,7 +26,7 @@ public class Chap extends Entity {
     super(chapsLocation);
     keyInventory = new HashMap<>();
 
-    //add the possible keys
+    //add all the possible keys
     for(Colour colour : Colour.values()) {
       keyInventory.put(colour, 0);
     }
