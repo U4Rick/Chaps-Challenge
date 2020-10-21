@@ -46,7 +46,7 @@ public class CapuchinTest {
         for (int i = 0; i < 10; i++) {
             main = new Main();
             main.setDebugMode(true);
-            for (int j = 0; j < 10_000; j++) {
+            for (int j = 0; j < 100_000; j++) {
                 if (main.getMaze().getChapWin()) {
                     break;
                 }

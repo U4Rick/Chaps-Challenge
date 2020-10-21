@@ -34,8 +34,6 @@ public class Gorilla extends MonkeyAI {
         //Add to blacklist if not accessible to prevent getting stuck in a loop
         if (!destinationTile.isAccessible()) {
             blacklistedTiles.add(destinationTile);
-/*            System.out.println("added" + destinationTile);
-            System.out.println(blacklistedTiles.size());*/
         }
 
         return direction;

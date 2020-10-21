@@ -98,7 +98,6 @@ public abstract class MonkeyAI {
     Tile getDestinationTile(Maze maze, Direction direction) {
         Point chapPosition = maze.getChapPosition();
 
-        //TODO add checks for out of bounds
         switch (direction) {
             case UP:
                 return maze.getTile(chapPosition.x, chapPosition.y - 1);
