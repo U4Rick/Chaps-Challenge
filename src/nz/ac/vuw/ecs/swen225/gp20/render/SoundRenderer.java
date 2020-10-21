@@ -34,8 +34,13 @@ public class SoundRenderer {
      * @param move the move that the sound is representing.
      */
     public void playSound(Moves move) {
+        if(move == Moves.MOVE || move == Moves.ERROR){
+            // Don't play sounds for these moves as they occur too often. // TODO: better way to do this?
+            return;
+        }
+
         try { // TODO: try to fix lag with occasional pile up of moves.
-            // Create a clip from the file.
+            // Create a clip from the file. // TODO: check if sound exists for file/move? e.g. if want to remove move sound
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(fileMap.get(move));
             AudioFormat format = audioIn.getFormat();
             DataLine.Info info = new DataLine.Info(Clip.class, format);
