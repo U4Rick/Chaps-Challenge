@@ -34,7 +34,7 @@ public class Replay{
     }
 
     /**
-     * Loads in a file to play a replay from.
+     * Loads in a file to play a replay from and gets the level number.
      * @param file containing replay json
      */
     public void loadFile(File file) {
@@ -55,20 +55,16 @@ public class Replay{
             e.printStackTrace();
         }
     }
+
     /**
      * Processes the actions of the loaded json file.
+     * @return list of String directions to move chap
      */
     public List<String> processActionsJson(){
         recordedMoves = new ArrayList<>();
         currentLevel = 0;
 
         JsonArray moves = loadedActions.getJsonArray("moves");      //load in json arrays
-        JsonArray levelArray = loadedActions.getJsonArray("levels");
-
-        for (JsonValue jsonLevel : levelArray) {
-            JsonObject levelArr = jsonLevel.asJsonObject(); //loads the level file name
-          //  currentLevel = levelArr.getInt("level");
-        }
 
         for (JsonValue jsonMove : moves) {
             JsonObject move = jsonMove.asJsonObject();
@@ -77,22 +73,6 @@ public class Replay{
         }
 
         return recordedMoves;
-    }
-
-    /**
-     * Get the delay speed for replaying actions.
-     * @return the delay
-     */
-    public int getPlaybackDelay() {
-        return playbackDelay;
-    }
-
-    /**
-     * Set the delay speed for replaying actions.
-     * @param playbackDelay the delay
-     */
-    public void setPlaybackDelay(int playbackDelay) {
-        this.playbackDelay = playbackDelay;
     }
 
 }

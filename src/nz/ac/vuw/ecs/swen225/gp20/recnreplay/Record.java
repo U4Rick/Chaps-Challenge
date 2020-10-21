@@ -29,7 +29,7 @@ public class Record {
     /**
      * Writes the movements made by the player out to a file.
      *
-     * @param replayFile
+     * @param replayFile is the file to write to
      */
     public void writeToFile(File replayFile) {
         try {
