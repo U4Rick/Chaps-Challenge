@@ -1,20 +1,23 @@
-
 package nz.ac.vuw.ecs.swen225.gp20.recnreplay;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-
-import javax.json.*;
-import javax.swing.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 
 /**
  * Class to create a replay of the movements made by the player for the previous level.
+ *
  * @author Ricky McLean
  */
-public class Replay{
+public class Replay {
 
     private List<String> recordedMoves;
     private JsonObject loadedActions;
@@ -24,7 +27,6 @@ public class Replay{
 
     /**
      * Constructs the replay with relevant maze.
-     *
      */
     public Replay(File file) {
         if (file != null) {
@@ -34,13 +36,14 @@ public class Replay{
 
     /**
      * Loads in a file to play a replay from and gets the level number.
+     *
      * @param file containing replay json
      */
     public void loadFile(File file) {
         try {
             InputStream fis = new FileInputStream(file);
 
-            JsonReader reader = Json.createReader(fis);     //reads in json replay for the level and movements
+            JsonReader reader = Json.createReader(fis); //reads in json for the level and movements
             loadedActions = reader.readObject();
 
             JsonArray tempArr = loadedActions.getJsonArray("levels");
@@ -57,9 +60,10 @@ public class Replay{
 
     /**
      * Processes the actions of the loaded json file.
+     *
      * @return list of String directions to move chap
      */
-    public List<String> processActionsJson(){
+    public List<String> processActionsJson() {
         recordedMoves = new ArrayList<>();
         currentLevel = 0;
 
