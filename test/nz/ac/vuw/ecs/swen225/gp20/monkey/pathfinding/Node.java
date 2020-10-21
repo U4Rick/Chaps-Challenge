@@ -47,6 +47,21 @@ public class Node {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+
+        return nodeID.equals(node.nodeID);
+    }
+
+    @Override
+    public int hashCode() {
+        return nodeID.hashCode();
+    }
+
+    @Override
     public String toString() {
         return "Node{" +
                 "nodeID='" + nodeID + '\'' +
