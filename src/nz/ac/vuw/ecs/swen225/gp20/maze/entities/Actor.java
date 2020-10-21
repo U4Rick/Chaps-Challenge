@@ -26,4 +26,14 @@ public class Actor extends NPC {
         pathIndex = (pathIndex + 1) % path.length;
         return dir;
     }
+
+    @Override
+    public int getCurrentMoveIndex() {
+      return pathIndex;
+    }
+
+    @Override
+    public void setCurrentMoveIndex(int index) {
+      pathIndex = index;
+    }
 }
