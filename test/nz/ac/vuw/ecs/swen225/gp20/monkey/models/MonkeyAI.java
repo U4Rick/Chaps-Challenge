@@ -183,8 +183,8 @@ public abstract class MonkeyAI {
      */
     private boolean checkMatchingKey(Chap chap, DoorTile doorTile) {
         Colour doorColour = doorTile.getDoorColour();
-        Integer integer = chap.getKeyInventory().get(doorColour);
+        int numberOfMatchingKeys = chap.getKeyInventory().get(doorColour);
 
-        return integer >= 1;
+        return numberOfMatchingKeys >= 1;
     }
 }
