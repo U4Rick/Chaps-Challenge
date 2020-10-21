@@ -31,7 +31,7 @@ public class GorillaTest {
     }
 
     @Test
-    void exampleTest() {
+    void inaccessibleTest() {
         for (int i = 0; i < 1_000_000; i++) {
             Direction direction = monkeyAI.selectMove(main.getMaze());
             main.movePlayer(direction);

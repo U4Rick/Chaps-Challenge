@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * Testing suite for the Lemur model AI, which avoids keys and treasures and tries to move through doors and the exit.
+ * Testing suite for the Lemur model AI, which avoids treasures and tries to move through the exit lock.
  *
  * @author Matt
  */
@@ -31,7 +31,7 @@ public class LemurTest {
     }
 
     @Test
-    void exampleTest() {
+    void exitLockTest() {
         for (int i = 0; i < 1_000_000; i++) {
             Direction direction = monkeyAI.selectMove(main.getMaze());
             main.movePlayer(direction);

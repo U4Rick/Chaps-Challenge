@@ -31,7 +31,7 @@ public class CapuchinTest {
     }
 
     @Test
-    void exampleTest() {
+    void singleLongGame() {
         for (int i = 0; i < 1_000_000; i++) {
             if (main.getMaze().getChapWin()) {
                 break;
