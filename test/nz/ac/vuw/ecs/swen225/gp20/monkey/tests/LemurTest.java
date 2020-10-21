@@ -29,6 +29,7 @@ public class LemurTest {
     @BeforeEach
     void setUp() {
         main = new Main();
+        main.setDebugMode(true);
     }
 
     @Test

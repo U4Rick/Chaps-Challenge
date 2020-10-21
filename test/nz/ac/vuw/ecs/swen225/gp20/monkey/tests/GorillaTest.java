@@ -29,6 +29,7 @@ public class GorillaTest {
     @BeforeEach
     void setUp() {
         main = new Main();
+        main.setDebugMode(true);
     }
 
     @Test
