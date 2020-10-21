@@ -173,6 +173,15 @@ public abstract class GUI {
 		helpGameplay.add(enemyRule);
 		JMenu helpReplay = new JMenu("Replay");
 		setMenuDetails(helpReplay);
+		JMenuItem endRule = new JMenuItem("<html>When you either finish the last level, or lose the game, <br> you will be prompted to save your play, which will be loaded for you!</html>");
+		setMenuDetails(endRule);
+		JMenuItem replayLoadRule = new JMenuItem("<html>You can load your own replay file through the Replay -> Load submenu! <br>If you were playing the game, your game will be stopped on load.</html>");
+		setMenuDetails(replayLoadRule);
+		JMenuItem replayRule = new JMenuItem("<html>When you click Replay -> Start, a new window with replay controls will open. <br>You can use those controls to adjust the replay, and the window will close on replay end.</html>");
+		setMenuDetails(replayRule);
+		helpReplay.add(endRule);
+		helpReplay.add(replayLoadRule);
+		helpReplay.add(replayRule);
 
 		helpMenu.add(helpStartLoad);
 		helpMenu.add(helpGameplay);
