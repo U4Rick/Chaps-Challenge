@@ -21,16 +21,15 @@ public class InventoryRenderer extends JPanel {
     private final int TILE_SIZE;
     private final Chap chap;
     private BufferedImage slotIcon;
-    // TODO: checkstyle?
 
     /**
      * Constructs a new renderer to display the inventory.
      *
      * @param importMaze the maze containing Chap.
-     * @param width the width of the panel in pixels.
+     * @param width      the width of the panel in pixels.
      */
-    public InventoryRenderer(Maze importMaze, int width){
-        TILE_SIZE = width/NUM_SLOTS;
+    public InventoryRenderer(Maze importMaze, int width) {
+        TILE_SIZE = width / NUM_SLOTS;
         Dimension size = new Dimension(width, TILE_SIZE);
         setPreferredSize(size);
         setLayout(null);
@@ -39,14 +38,14 @@ public class InventoryRenderer extends JPanel {
         try {
             slotIcon = ImageIO.read(new File("./resources/slot_icon.png"));
         } catch (Exception e) {
-            e.printStackTrace(); // TODO: throw an error?
+            e.printStackTrace();
         }
 
         this.setFont(new Font("Calibri", Font.BOLD, 32));
     }
 
     @Override
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         // Draw inventory slots.
         for (int i = 0; i < NUM_SLOTS; i++) {
             g.drawImage(slotIcon, i * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
@@ -58,7 +57,7 @@ public class InventoryRenderer extends JPanel {
 
             // Have set inventory position for each key colour.
             int slot;
-            switch(keyColour) {
+            switch (keyColour) {
                 case YELLOW:
                     slot = 1;
                     break;
@@ -73,9 +72,9 @@ public class InventoryRenderer extends JPanel {
             }
 
             int numKeys = entry.getValue();
-            if(numKeys > 0){
+            if (numKeys > 0) {
                 g.drawImage(icon, slot * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
-                if(numKeys > 1){
+                if (numKeys > 1) {
                     g.drawString(String.valueOf(numKeys), (slot * TILE_SIZE) + (int) (0.3 * TILE_SIZE), (int) (0.75 * TILE_SIZE));
                 }
             }
