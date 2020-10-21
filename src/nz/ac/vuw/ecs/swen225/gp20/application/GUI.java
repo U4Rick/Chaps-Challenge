@@ -561,7 +561,7 @@ public abstract class GUI {
 	 */
 	public void movePlayer(Direction direction) {
 		getMaze().moveChap(direction);
-		sounds.playSound(getMaze().getChapCurrentMove());
+		if (!debugMode) { sounds.playSound(getMaze().getChapCurrentMove());}
 
 		if (getRecord() != null) { getRecord().addMove(direction); }
 
