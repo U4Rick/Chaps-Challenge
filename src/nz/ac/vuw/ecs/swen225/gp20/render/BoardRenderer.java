@@ -7,6 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
@@ -20,7 +21,7 @@ public class BoardRenderer extends JPanel {
     private final int BOARD_HEIGHT;
     private final int TILE_SIZE;
     private final Maze maze;
-    private Image infoIcon;
+    private BufferedImage infoIcon;
     // TODO: checkstyle?
 
     /**
