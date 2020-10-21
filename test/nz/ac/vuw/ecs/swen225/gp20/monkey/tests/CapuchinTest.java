@@ -40,5 +40,20 @@ public class CapuchinTest {
             main.movePlayer(direction);
         }
     }
+
+    @Test
+    void multipleShortGames() {
+        for (int i = 0; i < 10; i++) {
+            main = new Main();
+            main.setDebugMode(true);
+            for (int j = 0; j < 10_000; j++) {
+                if (main.getMaze().getChapWin()) {
+                    break;
+                }
+                Direction direction = monkeyAI.selectMove(main.getMaze());
+                main.movePlayer(direction);
+            }
+        }
+    }
 }
 
