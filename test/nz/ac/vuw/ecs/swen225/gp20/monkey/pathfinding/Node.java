@@ -1,22 +1,48 @@
 package nz.ac.vuw.ecs.swen225.gp20.monkey.pathfinding;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 import nz.ac.vuw.ecs.swen225.gp20.monkey.utilities.TileType;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 public class Node {
 
-    private final TileType tileType;
-    private final LinkedList<Node> shortestPath;
-    private final Integer distance;
-    private final Map<Node, Integer> adjacentNodes;
+    private final String nodeID;
+    private LinkedList<Node> shortestPath;
+    private Integer distance;
+    private Map<Node, Integer> adjacentNodes;
 
-    public Node(TileType tileType) {
-        this.tileType = tileType;
+    public Node(Tile tile, int xPos, int yPos) {
+        this.nodeID = tile.getClass().getSimpleName() + "_" + xPos + "_" + yPos;
         this.shortestPath = new LinkedList<>();
         this.distance = Integer.MAX_VALUE;
         this.adjacentNodes = new HashMap<>();
+    }
+
+    public void addAdjacentNode(Node destination, int distance) {
+        adjacentNodes.put(destination, distance);
+    }
+
+    public Map<Node, Integer> getAdjacentNodes() {
+        return adjacentNodes;
+    }
+
+    public Integer getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
+    }
+
+    public LinkedList<Node> getShortestPath() {
+        return shortestPath;
+    }
+
+    public void setShortestPath(LinkedList<Node> shortestPath) {
+        this.shortestPath = shortestPath;
     }
 }
