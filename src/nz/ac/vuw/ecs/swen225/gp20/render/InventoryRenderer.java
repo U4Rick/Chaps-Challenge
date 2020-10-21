@@ -7,6 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class InventoryRenderer extends JPanel {
     private static final int NUM_SLOTS = 4;
     private final int TILE_SIZE;
     private final Chap chap;
-    private Image slotIcon;
+    private BufferedImage slotIcon;
     // TODO: checkstyle?
 
     /**
@@ -71,10 +72,12 @@ public class InventoryRenderer extends JPanel {
                     slot = 0; // RED key slot.
             }
 
-            int numKeys = entry.getValue(); // TODO: remove local variable if no if statement for >1 key
+            int numKeys = entry.getValue();
             if(numKeys > 0){
                 g.drawImage(icon, slot * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE, null);
-                g.drawString(String.valueOf(numKeys), (slot * TILE_SIZE) + (int) (0.3 * TILE_SIZE), (int) (0.75 * TILE_SIZE));
+                if(numKeys > 1){
+                    g.drawString(String.valueOf(numKeys), (slot * TILE_SIZE) + (int) (0.3 * TILE_SIZE), (int) (0.75 * TILE_SIZE));
+                }
             }
         }
     }
