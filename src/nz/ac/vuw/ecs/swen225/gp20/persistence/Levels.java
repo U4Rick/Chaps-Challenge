@@ -119,6 +119,7 @@ public class Levels {
       List<NPC> actors = new ArrayList<NPC>();
       NPC actorBase = loadActor(levelNum);
       if (actorBase != null) {
+        @SuppressWarnings("unchecked")
         Constructor<NPC> actorConstruct = (Constructor<NPC>) actorBase.getClass()
             .getConstructor(Point.class, Direction[].class);
 
@@ -161,21 +162,20 @@ public class Levels {
       levelArray[infoTile.getInt("x")][infoTile.getInt("y")] = new InfoTile(infoText);
 
       // make maze
-      return new Maze(levelNum, chapPos, exitPos, treasureTiles.length, levelTime, levelArray, actors);
+      return new Maze(levelNum, chapPos, exitPos, 
+          treasureTiles.length, levelTime, levelArray, actors);
     } catch (FileNotFoundException e) {
-      // file was not found - maybe display something to user?
-    } catch (ClassCastException | NullPointerException | InputMismatchException | JsonParsingException e) {
+      // file was not found
+    } catch (ClassCastException | NullPointerException
+        | InputMismatchException | JsonParsingException e) {
       // error in the file
-      e.printStackTrace();
-    } catch (InstantiationException | IllegalStateException | IllegalAccessException | InvocationTargetException
-        | NoSuchMethodException e) {
+    } catch (InstantiationException | IllegalStateException | IllegalAccessException 
+        | InvocationTargetException | NoSuchMethodException e) {
       // reflection error, most likely an issue with the NPC
-      e.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      // input/output exception
     }
-    // if error, return null
+    // if exception, return null
     return null;
   }
   
