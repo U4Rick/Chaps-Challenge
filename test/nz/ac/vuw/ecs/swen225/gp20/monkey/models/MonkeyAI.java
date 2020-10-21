@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
+import nz.ac.vuw.ecs.swen225.gp20.monkey.utilities.TileType;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -185,12 +186,5 @@ public abstract class MonkeyAI {
         Integer integer = chap.getKeyInventory().get(doorColour);
 
         return integer >= 1;
-    }
-
-    /**
-     * Enum representation of the Tile class names, used for the assignReward function.
-     */
-    private enum TileType {
-        DOORTILE, EXITLOCKTILE, EXITTILE, FREETILE, INFOTILE, KEYTILE, TREASURETILE, WALLTILE
     }
 }
