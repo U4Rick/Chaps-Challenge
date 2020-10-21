@@ -5,6 +5,8 @@ import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 
 import javax.json.*;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class Record {
      */
     public void writeToFile(File replayFile) {
         try {
-            PrintWriter pw = new PrintWriter(replayFile);
+            PrintWriter pw = new PrintWriter(replayFile, StandardCharsets.UTF_8);
 
             JsonObjectBuilder jsonObject = Json.createObjectBuilder();  // creates main json object
 
@@ -65,7 +67,7 @@ public class Record {
 
             pw.write(JsonObjectMain.toString());    //writes out level and moves
             pw.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
