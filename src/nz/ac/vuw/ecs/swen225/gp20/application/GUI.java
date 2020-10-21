@@ -167,8 +167,6 @@ public abstract class GUI {
 		JMenuItem replayLoadItem = new JMenuItem("Load");
 		setMenuDetails(replayLoadItem);
 
-
-
 		replayMenu.add(replayStartItem);
 		replayMenu.add(replayLoadItem);
 		JMenu helpMenu = new JMenu("Help");
@@ -184,6 +182,7 @@ public abstract class GUI {
 		helpStartLoad.add(startRule);
 		helpStartLoad.add(loadRule);
 		helpStartLoad.add(saveRule);
+
 		JMenu helpGameplay = new JMenu("Gameplay");
 		setMenuDetails(helpGameplay);
 		JMenuItem timeRule = new JMenuItem("Complete the level by finding the golden lily-pad before time's up!");
@@ -201,6 +200,7 @@ public abstract class GUI {
 		helpGameplay.add(fishRule);
 		helpGameplay.add(infoRule);
 		helpGameplay.add(enemyRule);
+
 		JMenu helpReplay = new JMenu("Replay");
 		setMenuDetails(helpReplay);
 		JMenuItem endRule = new JMenuItem("<html>When you either finish the last level, or lose the game, <br> you will be prompted to save your play, which will be loaded for you!</html>");
@@ -216,14 +216,11 @@ public abstract class GUI {
 		helpMenu.add(helpStartLoad);
 		helpMenu.add(helpGameplay);
 		helpMenu.add(helpReplay);
-
-
 		menu.add(gameMenu);
 		menu.add(pauseMenuItem);
 		menu.add(quitMenuItem);
 		menu.add(replayMenu);
 		menu.add(helpMenu);
-
 
 		game = new BoardRenderer(getMaze(), gamePanelDim);
 		window.addKeyListener(new KeyListener() {
@@ -319,7 +316,6 @@ public abstract class GUI {
 		replayStartItem.addActionListener(e -> buildReplayControls());
 
 		replayLoadItem.addActionListener(e -> replayLoad());
-
 
 		window.setLayout(new FlowLayout());
 		window.add(game);
@@ -432,9 +428,8 @@ public abstract class GUI {
 
 		replayWindow.setTitle("Replay Controls");
 		replayWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
-
 		replayWindow.setResizable(false);
+
 		replayWindow.pack();
 		replayWindow.setLocationRelativeTo(null);
 		replayWindow.setVisible(true);
@@ -832,7 +827,6 @@ public abstract class GUI {
 					sc.close();
 					return false;
 			}
-
 		} catch (FileNotFoundException e) {
 			produceDialog("There was an error finding status.txt", "File Error");
 			return false;
@@ -886,7 +880,6 @@ public abstract class GUI {
 				maze = Persistence.loadGameState(toLoadFrom);
 			} else {
 				maze = Levels.loadLevelFromFile(toLoadFrom);
-
 			}
 			if (maze != null) {
 				setMaze(maze);
