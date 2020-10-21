@@ -1,12 +1,16 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnreplay;
 
-
-import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
-
-import javax.json.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 
 /**
  * Class to create a record and write out the players movements.
@@ -29,11 +33,11 @@ public class Record {
     /**
      * Writes the movements made by the player out to a file.
      *
-     * @param replayFile
+     * @param replayFile is the file to write to
      */
     public void writeToFile(File replayFile) {
         try {
-            PrintWriter pw = new PrintWriter(replayFile);
+            PrintWriter pw = new PrintWriter(replayFile, StandardCharsets.UTF_8);
 
             JsonObjectBuilder jsonObject = Json.createObjectBuilder();  // creates main json object
 
@@ -50,8 +54,8 @@ public class Record {
                     case RIGHT:
                     case DOWN:
                     case LEFT:
-                    case UP:
-                        moves.add(Json.createObjectBuilder()    //sort through movements and create individual objects
+                    case UP:    //sort through movements and create individual objects
+                        moves.add(Json.createObjectBuilder()
                                 .add("move", action.toString())
                                 .build());
                         break;
@@ -61,11 +65,11 @@ public class Record {
             }
 
             jsonObject.add("moves", moves);     //add movement array to main object
-            JsonObject JsonObjectMain = jsonObject.build();     //builds main object
+            JsonObject jsonObjectMain = jsonObject.build();     //builds main object
 
-            pw.write(JsonObjectMain.toString());    //writes out level and moves
+            pw.write(jsonObjectMain.toString());    //writes out level and moves
             pw.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

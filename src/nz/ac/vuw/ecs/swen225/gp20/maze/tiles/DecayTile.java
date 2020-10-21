@@ -15,7 +15,7 @@ import java.awt.*;
  */
 public class DecayTile extends AccessibleTile {
 
-  int decayLevel; //current state of decay level of this tile, if it becomes
+  int decayLevel; //current state of decay level of this tile, if it becomes equal to 0, it becomes a wall tile
 
   /**
    * Constructor for the DecayTile object.
@@ -42,4 +42,10 @@ public class DecayTile extends AccessibleTile {
     decayLevel--;
     return move;
   }
+
+  /**
+   * Returns the decay level of this tile.
+   * @return  The decay level of this tile.
+   */
+  public int getDecayLevel() { return decayLevel; }
 }
