@@ -8,8 +8,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * Testing suite for the Lemur model AI, which avoids keys and treasures and tries to move through doors and the exit.
