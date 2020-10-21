@@ -576,6 +576,9 @@ public abstract class GUI {
 			}
 			else { gameStop("You win!", "Game won!", true); }
 		}
+		else if (getMaze().getChapLose() && !inReplay) {
+			gameStop("Game over! You died!", "Game over!", true);
+		}
 		repaintAll();
 	}
 
@@ -1007,6 +1010,4 @@ public abstract class GUI {
 	 * @param maze  Maze to set with.
 	 */
 	protected abstract void setMaze(Maze maze);
-
-
 }
