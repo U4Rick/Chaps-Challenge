@@ -35,5 +35,4 @@ public class Actor extends NPC {
     @Override
     public void setCurrentMoveIndex(int index) {
       pathIndex = index;
-    }
-}
+    }}
