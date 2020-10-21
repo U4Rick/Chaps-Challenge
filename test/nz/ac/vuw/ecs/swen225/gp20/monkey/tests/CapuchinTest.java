@@ -29,11 +29,15 @@ public class CapuchinTest {
     @BeforeEach
     void setUp() {
         main = new Main();
+        main.setDebugMode(true);
     }
 
     @Test
     void exampleTest() {
         for (int i = 0; i < 1_000_000; i++) {
+            if (main.getMaze().getChapWin()) {
+                break;
+            }
             Direction direction = monkeyAI.selectMove(main.getMaze());
             main.movePlayer(direction);
         }

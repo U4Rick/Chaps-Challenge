@@ -36,7 +36,7 @@ public class InventoryRenderer extends JPanel {
         chap = importMaze.getChap();
 
         try {
-            slotIcon = ImageIO.read(new File("./resources/circle.png"));
+            slotIcon = ImageIO.read(new File("./resources/slot_icon.png"));
         } catch (Exception e) {
             e.printStackTrace(); // TODO: throw an error?
         }
