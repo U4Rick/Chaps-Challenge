@@ -592,6 +592,7 @@ public abstract class GUI {
 	 * @return  Returns the position in original list post incrementation
 	 */
 	public int replayStep(boolean auto, String action, int step, int size) {
+		getMaze().moveNPCs();
 		switch (action) {
 			case "DOWN":
 				movePlayer(Direction.DOWN);
