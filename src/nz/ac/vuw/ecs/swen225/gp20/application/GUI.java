@@ -10,13 +10,43 @@ import nz.ac.vuw.ecs.swen225.gp20.render.BoardRenderer;
 import nz.ac.vuw.ecs.swen225.gp20.render.InventoryRenderer;
 import nz.ac.vuw.ecs.swen225.gp20.render.SoundRenderer;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 /**
  * Builds the Graphic User Interface.
@@ -454,6 +484,10 @@ public abstract class GUI {
 		}
 	}
 
+	/**
+	 * Enable or disable debug mode, no dialogs will be produced while in debug mode.
+	 * @param debug State of the mode.
+	 */
 	public void setDebugMode(boolean debug) {
 		debugMode = debug;
 	}
