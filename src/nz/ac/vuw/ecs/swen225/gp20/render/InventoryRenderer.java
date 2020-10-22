@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * A renderer to visually display the player's inventory.
  *
- * @author Cherie
+ * @author Cherie Deng 300477224
  */
 public class InventoryRenderer extends JPanel {
     private static final int NUM_SLOTS = 4;

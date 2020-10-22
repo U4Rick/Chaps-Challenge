@@ -11,23 +11,25 @@ import java.util.Map;
 /**
  * A class to handle playing game sounds.
  *
- * @author Cherie
+ * @author Cherie Deng 300477224
  */
 public class SoundRenderer {
     Map<Moves, File> fileMap = new HashMap<>();
 
     /**
      * A constructor that loads the .wav files into a map with the moves they represent.
-     *
-     * Creative commons sounds from freesound.org:
-     * TREASURE_PICKUP: "Coins 1" by ProjectsU012 (https://freesound.org/people/ProjectsU012/).
-     * CHAP_WIN: "Electro win sound" by Mativve (https://freesound.org/people/Mativve/).
-     * EXIT_UNLOCK: "Success Jingle" by JustInvoke (https://freesound.org/people/JustInvoke/).
-     *
-     * All others made by Keely Haskett using Bfxr (https://www.bfxr.net/).
      */
-    public SoundRenderer(){
-        for(Moves move : Moves.values()){
+    public SoundRenderer() {
+        /*
+         * Creative commons sounds from freesound.org:
+         * TREASURE_PICKUP: "Coins 1" by ProjectsU012 (https://freesound.org/people/ProjectsU012/).
+         * EXIT_UNLOCK: "Success Jingle" by JustInvoke (https://freesound.org/people/JustInvoke/).
+         * CHAP_WIN: "Electro win sound" by Mativve (https://freesound.org/people/Mativve/).
+         *
+         * All others made by Keely Haskett using Bfxr (https://www.bfxr.net/).
+         */
+
+        for (Moves move : Moves.values()) {
             fileMap.put(move, new File("resources/sounds/" + move.toString() + ".wav"));
         }
     }
@@ -38,7 +40,7 @@ public class SoundRenderer {
      * @param move the move that the sound is representing.
      */
     public void playSound(Moves move) {
-        if(move == Moves.MOVE || move == Moves.ERROR){
+        if (move == Moves.MOVE || move == Moves.ERROR) {
             // Don't play sounds for these moves as they occur too often.
             return;
         }
@@ -53,7 +55,7 @@ public class SoundRenderer {
             clip.open(audioIn);
             clip.start(); // Play the clip.
             clip.addLineListener(event -> {
-                if (event.getType() == LineEvent.Type.STOP){
+                if (event.getType() == LineEvent.Type.STOP) {
                     clip.close(); // Prevent memory leak.
                 }
             });

@@ -1,0 +1,6 @@
+Creative commons sounds from freesound.org:
+TREASURE_PICKUP: "Coins 1" by ProjectsU012 (https://freesound.org/people/ProjectsU012/)
+EXIT_UNLOCK: "Success Jingle" by JustInvoke (https://freesound.org/people/JustInvoke/)
+CHAP_WIN: "Electro win sound" by Mativve (https://freesound.org/people/Mativve/)
+
+All others made by Keely Haskett using Bfxr (https://www.bfxr.net/)
