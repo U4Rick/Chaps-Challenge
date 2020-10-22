@@ -14,12 +14,6 @@ import java.awt.*;
  * @author Vic
  */
 abstract public class InaccessibleTile extends Tile {
-  /**
-   * Checks if the tile is a locked door.
-   * @return true if the tile is a locked door.
-   */
-  abstract public boolean isLockedDoor();
-
   @Override
   public boolean isAccessible() { return false; }
 

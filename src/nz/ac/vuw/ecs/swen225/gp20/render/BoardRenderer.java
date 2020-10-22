@@ -14,7 +14,7 @@ import java.io.File;
 /**
  * A renderer to visually display the state of the game board.
  *
- * @author Cherie
+ * @author Cherie Deng 300477224
  */
 public class BoardRenderer extends JPanel {
     private static final int DISPLAY_DIMENSION = 9; // Should be odd so Chap can be centred.
