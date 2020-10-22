@@ -8,8 +8,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * Testing suite for the Capuchin model AI, which tries to play the game properly.
@@ -33,13 +31,28 @@ public class CapuchinTest {
     }
 
     @Test
-    void exampleTest() {
+    void singleLongGame() {
         for (int i = 0; i < 1_000_000; i++) {
             if (main.getMaze().getChapWin()) {
                 break;
             }
             Direction direction = monkeyAI.selectMove(main.getMaze());
             main.movePlayer(direction);
+        }
+    }
+
+    @Test
+    void multipleShortGames() {
+        for (int i = 0; i < 10; i++) {
+            main = new Main();
+            main.setDebugMode(true);
+            for (int j = 0; j < 100_000; j++) {
+                if (main.getMaze().getChapWin()) {
+                    break;
+                }
+                Direction direction = monkeyAI.selectMove(main.getMaze());
+                main.movePlayer(direction);
+            }
         }
     }
 }
