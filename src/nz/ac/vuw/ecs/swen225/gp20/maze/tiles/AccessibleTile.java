@@ -6,7 +6,6 @@ import nz.ac.vuw.ecs.swen225.gp20.commons.Moves;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 
 import java.awt.*;
 
@@ -45,12 +44,6 @@ abstract public class AccessibleTile extends Tile {
   public Entity getEntityHere() {
     return entityHere;
   }
-
-  /**
-   * Gets the item located in this tile, usually would be null unless tile represents a tile with an item on it. Then would return the item.
-   * @return The item in this tile.
-   */
-  public Item getItemHere() { return null; }
 
   @Override
   public Moves inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction) {

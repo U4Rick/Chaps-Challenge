@@ -26,9 +26,6 @@ public class DoorTile extends InaccessibleTile {
     this.doorColour = doorColour;
   }
 
-  @Override
-  public boolean isLockedDoor() { return true; }
-
   /**
    * Gets the colour of the door, associated with a key on the level.
    * @return The colour of the door.
