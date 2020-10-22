@@ -39,7 +39,7 @@ public class Chap extends Entity {
    * @param location  x,y coordinates of door.
    * @param maze The level in this maze.
    */
-  public void unlockDoor(Point location, Maze maze) {
+  public boolean unlockDoor(Point location, Maze maze) {
     Preconditions.checkArgument(maze.getBoard()[location.x][location.y] instanceof DoorTile);
 
     //check if have correct key for door
@@ -52,7 +52,9 @@ public class Chap extends Entity {
       keyInventory.replace(colour, keyInventory.get(colour) - 1);  //remove key
       assert(keyInventory.get(colour) >= 0); //check that there are not less than 0 keys
       assert (keyInventory.get(colour) == originalValue-1); //check that number of keys is smaller by one
+      return true;
     }
+    return false;
   }
 
   /**

@@ -2,9 +2,10 @@ package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 
 import nz.ac.vuw.ecs.swen225.gp20.commons.Colour;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
-import nz.ac.vuw.ecs.swen225.gp20.maze.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
-import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -13,7 +14,7 @@ import java.util.Random;
 /**
  * Abstract class representing the contractual requirements of MonkeyAI players.
  *
- * @author Matt
+ * @author Matthew Hill 300507607
  */
 public abstract class MonkeyAI {
 

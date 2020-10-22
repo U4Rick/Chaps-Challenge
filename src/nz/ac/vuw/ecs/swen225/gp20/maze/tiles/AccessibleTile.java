@@ -6,7 +6,6 @@ import nz.ac.vuw.ecs.swen225.gp20.commons.Moves;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Entity;
-import nz.ac.vuw.ecs.swen225.gp20.maze.items.Item;
 
 import java.awt.*;
 
@@ -46,12 +45,6 @@ abstract public class AccessibleTile extends Tile {
     return entityHere;
   }
 
-  /**
-   * Gets the item located in this tile, usually would be null unless tile represents a tile with an item on it. Then would return the item.
-   * @return The item in this tile.
-   */
-  public Item getItemHere() { return null; }
-
   @Override
   public Moves inMove(Maze maze, Point position, boolean isChap, Entity entity, Direction direction) {
     Preconditions.checkArgument(maze.getBoard()[position.x][position.y] instanceof AccessibleTile);
@@ -67,6 +60,13 @@ abstract public class AccessibleTile extends Tile {
       }
     }
 
+
+    //check if NPC is in new tile
+    if (((AccessibleTile) maze.getBoard()[position.x][position.y]).getEntityHere() != null) {
+      maze.setChapLose(true);
+      move = Moves.DEATH;
+    }
+
     //reassign entity to new tile
     ((AccessibleTile)maze.getBoard()[entityLocation.x][entityLocation.y]).setEntityHere(null);
     ((AccessibleTile)maze.getBoard()[position.x][position.y]).setEntityHere(entity);
@@ -77,12 +77,6 @@ abstract public class AccessibleTile extends Tile {
     if(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof DecayTile) {
       if(((DecayTile)maze.getBoard()[entityLocation.x][entityLocation.y]).getDecayLevel() == 0) {
         maze.getBoard()[entityLocation.x][entityLocation.y] = new WallTile();
-      }
-    } else {
-      //check if NPC is in new tile
-      if (((AccessibleTile) maze.getBoard()[entityLocation.x][entityLocation.y]).getEntityHere() != null) {
-        maze.setChapLose(true);
-        move = Moves.DEATH;
       }
     }
 
