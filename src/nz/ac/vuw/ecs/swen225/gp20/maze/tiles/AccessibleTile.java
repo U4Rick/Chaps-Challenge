@@ -67,6 +67,13 @@ abstract public class AccessibleTile extends Tile {
       }
     }
 
+
+    //check if NPC is in new tile
+    if (((AccessibleTile) maze.getBoard()[position.x][position.y]).getEntityHere() != null) {
+      maze.setChapLose(true);
+      move = Moves.DEATH;
+    }
+
     //reassign entity to new tile
     ((AccessibleTile)maze.getBoard()[entityLocation.x][entityLocation.y]).setEntityHere(null);
     ((AccessibleTile)maze.getBoard()[position.x][position.y]).setEntityHere(entity);
@@ -77,12 +84,6 @@ abstract public class AccessibleTile extends Tile {
     if(maze.getBoard()[entityLocation.x][entityLocation.y] instanceof DecayTile) {
       if(((DecayTile)maze.getBoard()[entityLocation.x][entityLocation.y]).getDecayLevel() == 0) {
         maze.getBoard()[entityLocation.x][entityLocation.y] = new WallTile();
-      }
-    } else {
-      //check if NPC is in new tile
-      if (((AccessibleTile) maze.getBoard()[entityLocation.x][entityLocation.y]).getEntityHere() != null) {
-        maze.setChapLose(true);
-        move = Moves.DEATH;
       }
     }
 
