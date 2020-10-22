@@ -14,7 +14,7 @@ import java.io.IOException;
 import static nz.ac.vuw.ecs.swen225.gp20.commons.Colour.GREEN;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TileTest {
+class MazeTest {
 
     private Main main;
 
