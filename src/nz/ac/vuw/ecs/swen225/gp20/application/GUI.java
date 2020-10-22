@@ -80,6 +80,7 @@ public abstract class GUI {
 	private JLabel timeCounter;
 	private JMenuItem pauseMenuItem;
 	private JMenuItem replayStartItem;
+	private JMenuItem replayLoadItem;
 	private JMenuItem gameStartItem;
 	private JPanel controller;
 	private GridBagConstraints controllerConst;
@@ -166,7 +167,7 @@ public abstract class GUI {
 		setMenuDetails(replayStartItem);
 		replayStartItem.setEnabled(false);
 
-		JMenuItem replayLoadItem = new JMenuItem("Load");
+		replayLoadItem = new JMenuItem("Load");
 		setMenuDetails(replayLoadItem);
 
 		replayMenu.add(replayStartItem);
@@ -347,6 +348,8 @@ public abstract class GUI {
 	 * Build the replay controls window to control how the replay is run.
 	 */
 	public void buildReplayControls() {
+		replayStartItem.setEnabled(false);
+		replayLoadItem.setEnabled(false);
 		inReplay = true;
 		try {
 			persistenceLoad(getReplay().currentLevel, false);
@@ -367,11 +370,12 @@ public abstract class GUI {
 
 		JButton stepButton = new JButton("Step");
 
-		JSlider replaySlider = new JSlider(1, 20);
+		JSlider replaySlider = new JSlider(2, 20);
 		replaySlider.setValue(2);
 		replaySlider.setPaintLabels(true);
 		replaySlider.setPaintTicks(true);
 		replaySlider.setMinorTickSpacing(1);
+		replaySlider.setMajorTickSpacing(3);
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -610,6 +614,8 @@ public abstract class GUI {
 			replayWindow.setVisible(false);
 			inReplay = false;
 			gameStartItem.setEnabled(true);
+			replayStartItem.setEnabled(true);
+			replayLoadItem.setEnabled(true);
 		}
 		return step;
 	}
