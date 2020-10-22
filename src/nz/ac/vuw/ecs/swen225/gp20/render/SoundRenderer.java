@@ -18,6 +18,13 @@ public class SoundRenderer {
 
     /**
      * A constructor that loads the .wav files into a map with the moves they represent.
+     *
+     * Creative commons sounds from freesound.org:
+     * TREASURE_PICKUP: "Coins 1" by ProjectsU012 (https://freesound.org/people/ProjectsU012/).
+     * CHAP_WIN: "Electro win sound" by Mativve (https://freesound.org/people/Mativve/).
+     * EXIT_UNLOCK: "Success Jingle" by JustInvoke (https://freesound.org/people/JustInvoke/).
+     *
+     * All others made by Keely Haskett using Bfxr (https://www.bfxr.net/).
      */
     public SoundRenderer(){
         for(Moves move : Moves.values()){
