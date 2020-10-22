@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Testing suite for the Capuchin model AI, which tries to play the game properly.
  *
- * @author Matt
+ * @author Matthew Hill 300507607
  */
 public class CapuchinTest {
 

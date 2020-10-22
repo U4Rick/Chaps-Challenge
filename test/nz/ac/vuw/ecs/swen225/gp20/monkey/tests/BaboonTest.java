@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Testing suite for the Baboon model AI, which uses purely random movement to play the game.
  *
- * @author Matt
+ * @author Matthew Hill 300507607
  */
 class BaboonTest {
 

@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * An AI that plays based on purely random inputs.
  *
- * @author Matt
+ * @author Matthew Hill 300507607
  */
 public class Baboon extends MonkeyAI {
 

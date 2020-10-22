@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Testing suite for the Gorilla model AI, which tries to push through doors and walls.
  *
- * @author Matt
+ * @author Matthew Hill 300507607
  */
 public class GorillaTest {
 

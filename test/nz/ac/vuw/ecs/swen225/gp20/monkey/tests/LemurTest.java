@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Testing suite for the Lemur model AI, which avoids treasures and tries to move through the exit lock.
  *
- * @author Matt
+ * @author Matthew Hill 300507607
  */
 public class LemurTest {
 

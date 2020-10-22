@@ -14,7 +14,7 @@ import java.util.Random;
 /**
  * Abstract class representing the contractual requirements of MonkeyAI players.
  *
- * @author Matt
+ * @author Matthew Hill 300507607
  */
 public abstract class MonkeyAI {
 

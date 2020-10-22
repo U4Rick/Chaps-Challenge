@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.monkey.models;
 /**
  * An AI that tries to play the game intelligently.
  *
- * @author Matt
+ * @author Matthew Hill 300507607
  */
 public class Capuchin extends MonkeyAI {
 
