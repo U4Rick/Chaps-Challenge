@@ -21,6 +21,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DecayTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitLockTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.KeyTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.Tile;
@@ -165,6 +167,8 @@ public class Persistence {
               .add("y", j)
               .add("current_value", ((DecayTile)board[i][j]).getDecayLevel())
               .build();
+          
+          decaysBuilder.add(decayJson);
         }
       }
     }
@@ -360,14 +364,18 @@ public class Persistence {
         int pathIndex = actorObj.getInt("pathIndex");
 
         NPC npc = maze.getNpcs().get(i);
-
+        
+        //moves npc to the correct tile
+        ((AccessibleTile)board[npc.getEntityPosition().x][npc.getEntityPosition().y]).setEntityHere(null);
         npc.setEntityPosition(new Point(x, y));
+        ((AccessibleTile)board[npc.getEntityPosition().x][npc.getEntityPosition().y]).setEntityHere(npc);
+        
         npc.setCurrentMoveIndex(pathIndex);
       }
 
       int timeLeft = gameState.getInt("time_left");
       maze.setTimeLeft(timeLeft);
-
+      
       maze.setTreasuresPickedUp(treasuresPickedUp);
 
       return maze;

@@ -261,7 +261,21 @@ public class Maze {
    * Sets the int number of treasures currently picked up by Chap.
    * @param treasuresPickedUp Number of treasures currently picked up by Chap.
    */
-  public void setTreasuresPickedUp(int treasuresPickedUp) { this.treasuresPickedUp = treasuresPickedUp; }
+  public void setTreasuresPickedUp(int treasuresPickedUp) { 
+    this.treasuresPickedUp = treasuresPickedUp; 
+    
+    if(treasuresPickedUp == TREASURES_NUM) {  //check if picked up all the treasures to unlock the exit
+      //find all exit locks and change them into free tiles once all treasures have been picked up.
+      for(int x = 0; x < board.length; x++) {
+        for(int y = 0; y < board[0].length; y++) {
+          if(board[x][y] instanceof ExitLockTile) {
+            board[x][y] = new FreeTile();
+          }
+        }
+      }
+      board[exitLocation.x][exitLocation.y] = new ExitTile();
+    }
+   }
 
   /**
    * Gets the int number of treasures currently picked up by Chap.
