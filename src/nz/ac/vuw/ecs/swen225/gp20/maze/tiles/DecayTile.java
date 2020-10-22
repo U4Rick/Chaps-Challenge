@@ -60,13 +60,14 @@ public class DecayTile extends AccessibleTile {
     if(iconMap.isEmpty()){
       // Load icons on first call.
       try{
+        iconMap.put(0, ImageIO.read(new File("./resources/" + toString() + "1" + ".png")));
         iconMap.put(1, ImageIO.read(new File("./resources/" + toString() + "1" + ".png")));
         iconMap.put(2, ImageIO.read(new File("./resources/" + toString() + "2" + ".png")));
         iconMap.put(3, ImageIO.read(new File("./resources/" + toString() + "3" + ".png")));
       } catch (IOException e) {
         e.printStackTrace();
       }
-      return iconMap.get(1);
+      return iconMap.get(3);
     } else {
       return iconMap.get(decayLevel);
     }
