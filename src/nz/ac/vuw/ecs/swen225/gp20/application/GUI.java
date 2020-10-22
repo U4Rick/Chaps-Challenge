@@ -513,12 +513,6 @@ public abstract class GUI {
 	 * Start the game process.
 	 */
 	public void gameStart() {
-		//reload the level in case the game is mid-way
-		try {
-			persistenceLoad(getMaze().getLevelNumber(), false);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 		timeLeft = getMaze().getTimeAvailable();
 		gameTimer.start();
 		canMove = true;
