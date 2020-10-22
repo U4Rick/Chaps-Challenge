@@ -322,6 +322,7 @@ public abstract class GUI {
 		window.add(controller);
 
 		window.setTitle("Chap's Challenge");
+		window.setIconImage(getMaze().getChap().getIcon());
 		window.setJMenuBar(menu);
 		window.getContentPane().setBackground(mainColor);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
