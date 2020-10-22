@@ -80,12 +80,13 @@ public abstract class GUI {
 	private JLabel timeCounter;
 	private JMenuItem pauseMenuItem;
 	private JMenuItem replayStartItem;
+	private JMenuItem gameStartItem;
 	private JPanel controller;
 	private GridBagConstraints controllerConst;
 	private BoardRenderer game;
 	private InventoryRenderer inventory;
 	private Timer gameTimer;
-	Timer replayTimer;
+	private Timer replayTimer;
 
 	private int timeLeft;
 	private boolean canMove;
@@ -128,7 +129,8 @@ public abstract class GUI {
 
 		JMenu gameMenu = new JMenu("Game");
 		setMenuDetails(gameMenu);
-		JMenuItem gameStartItem = new JMenuItem("Start");
+
+		gameStartItem = new JMenuItem("Start");
 		setMenuDetails(gameStartItem);
 
 		JMenu gameLoad = new JMenu("Load");
@@ -380,6 +382,8 @@ public abstract class GUI {
 
 		replayTimer = new Timer(500, replayListener);
 		replayTimer.start();
+		gameStartItem.setEnabled(false);
+		pauseMenuItem.setEnabled(false);
 
 		stepRadioButton.addItemListener(e -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -611,6 +615,7 @@ public abstract class GUI {
 			if (auto) { replayTimer.stop(); }
 			replayWindow.setVisible(false);
 			inReplay = false;
+			gameStartItem.setEnabled(true);
 		}
 		return step;
 	}
