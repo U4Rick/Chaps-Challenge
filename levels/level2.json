@@ -740,6 +740,42 @@
         {
             "x": 15,
             "y": 10
+        },
+        {
+            "x": 10,
+            "y": 5
+        },
+        {
+            "x": 11,
+            "y": 5
+        },
+        {
+            "x": 12,
+            "y": 5
+        },
+        {
+            "x": 11,
+            "y": 6
+        },
+        {
+            "x": 11,
+            "y": 7
+        },
+        {
+            "x": 12,
+            "y": 7
+        },
+        {
+            "x": 10,
+            "y": 6
+        },
+        {
+            "x": 10,
+            "y": 7
+        },
+        {
+            "x": 12,
+            "y": 6
         }
     ],
     "locked_doors": [
@@ -747,11 +783,6 @@
             "x": 6,
             "y": 8,
             "colour": "red"
-        },
-        {
-            "x": 13,
-            "y": 4,
-            "colour": "yellow"
         },
         {
             "x": 12,
@@ -766,24 +797,31 @@
     ],
     "keys": [
         {
-            "x": 12,
-            "y": 6,
-            "colour": "blue"
-        },
-        {
             "x": 2,
             "y": 6,
             "colour": "green"
         },
         {
-            "x": 4,
-            "y": 16,
-            "colour": "yellow"
-        },
-        {
             "x": 17,
             "y": 16,
             "colour": "red"
+        },
+        {
+            "x": 13,
+            "y": 4,
+            "colour": "blue"
+        }
+    ],
+    "decays": [
+        {
+            "x": 13,
+            "y": 6,
+            "value": 3
+        },
+        {
+            "x": 9,
+            "y": 15,
+            "value": 2
         }
     ],
     "exit": {
@@ -791,16 +829,16 @@
         "y": 2
     },
     "starting_position": {
-        "x": 9,
-        "y": 8
+        "x": 8,
+        "y": 9
     },
     "exit_lock": {
         "x": 14,
         "y": 2
     },
     "info": {
-        "x": 11,
-        "y": 8
+        "x": 10,
+        "y": 9
     },
     "treasures": [
         {
@@ -810,10 +848,6 @@
         {
             "x": 2,
             "y": 10
-        },
-        {
-            "x": 2,
-            "y": 12
         },
         {
             "x": 8,
@@ -826,23 +860,66 @@
         {
             "x": 18,
             "y": 15
+        },
+        {
+            "x": 2,
+            "y": 14
         }
     ],
     "actors": [
         {
             "x": 5,
             "y": 12,
-            "path": ["right", "right", "down", "down", "down", "down", "left", "left", "up", "up", "up", "up"]
+            "path": [
+                "right",
+                "right",
+                "down",
+                "down",
+                "down",
+                "down",
+                "left",
+                "left",
+                "up",
+                "up",
+                "up",
+                "up"
+            ]
         },
         {
             "x": 3,
             "y": 7,
-            "path": ["left", "left", "up", "up", "right", "right", "down", "down"]
+            "path": [
+                "left",
+                "left",
+                "up",
+                "up",
+                "right",
+                "right",
+                "down",
+                "down"
+            ]
         },
         {
             "x": 14,
             "y": 14,
-            "path": ["left", "left", "down", "down", "right", "right", "up", "up", "up", "up", "right", "right", "down", "down", "left", "left"]
+            "path": [
+                "left",
+                "left",
+                "down",
+                "down",
+                "right",
+                "right",
+                "up",
+                "up",
+                "up",
+                "up",
+                "right",
+                "right",
+                "down",
+                "down",
+                "left",
+                "left"
+            ]
         }
     ]
 }

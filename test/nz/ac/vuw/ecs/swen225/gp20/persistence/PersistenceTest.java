@@ -11,6 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * Testing for saving/loading game state.
+ * @author Tristan
+ *
+ */
 class PersistenceTest {
 
     @Test

@@ -23,6 +23,7 @@ import javax.json.stream.JsonParsingException;
 import nz.ac.vuw.ecs.swen225.gp20.commons.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DecayTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitLockTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.ExitTile;
@@ -113,6 +114,19 @@ public class Levels {
 
       for (TileObject treasure : treasureTiles) {
         levelArray[treasure.x][treasure.y] = new TreasureTile();
+      }
+      
+      JsonArray decayTiles = level.getJsonArray("decays");
+      
+      for (JsonValue decayValue : decayTiles) {
+        JsonObject decayObj = decayValue.asJsonObject();
+
+        int x = decayObj.getInt("x"); 
+        int y = decayObj.getInt("y"); 
+        
+        int decayAmount = decayObj.getInt("value");
+        
+        levelArray[x][y] = new DecayTile(decayAmount);
       }
 
       // load actors

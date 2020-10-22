@@ -19,6 +19,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.Chap;
 import nz.ac.vuw.ecs.swen225.gp20.maze.entities.NPC;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.AccessibleTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DecayTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.DoorTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.FreeTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.tiles.KeyTile;
@@ -125,6 +126,7 @@ public class Persistence {
     JsonArrayBuilder lockedDoorsBuilder = Json.createArrayBuilder();
     JsonArrayBuilder keysBuilder = Json.createArrayBuilder();
     JsonArrayBuilder treasuresBuilder = Json.createArrayBuilder();
+    JsonArrayBuilder decaysBuilder = Json.createArrayBuilder();
 
     Tile[][] board = maze.getBoard();
 
@@ -157,6 +159,12 @@ public class Persistence {
               .build();
 
           treasuresBuilder.add(treasureJson);
+        } else if (board[i][j] instanceof DecayTile) {
+          JsonObject decayJson = Json.createObjectBuilder()
+              .add("x", i)
+              .add("y", j)
+              .add("current_value", ((DecayTile)board[i][j]).getDecayLevel())
+              .build();
         }
       }
     }
@@ -199,6 +207,7 @@ public class Persistence {
         .add("locked_doors", lockedDoorsBuilder.build())
         .add("keys", keysBuilder.build())
         .add("treasures", treasuresBuilder.build())
+        .add("decays", decaysBuilder.build())
         .add("actors", actorArray.build()).add("chap", chap)
         .add("time_left", maze.getTimeLeft())
         .build();
@@ -255,6 +264,7 @@ public class Persistence {
       Map<Point, TreasureTile> treasures = new HashMap<>();
       Map<Point, KeyTile> keys = new HashMap<>();
       Map<Point, DoorTile> doors = new HashMap<>();
+      Map<Point, DecayTile> decays = new HashMap<>();
 
       // load treasures still on map
       TileObject[] treasureTiles = getObjectValues(gameState, "treasures", false);
@@ -275,6 +285,14 @@ public class Persistence {
 
       for (TileObject door : doorTiles) {
         doors.put(new Point(door.x, door.y), new DoorTile(door.colour));
+      }
+      
+      JsonArray decayArray = gameState.getJsonArray("decays");
+      
+      for (JsonValue decayValue : decayArray) {
+        JsonObject decayObj = decayValue.asJsonObject();
+        decays.put(new Point(decayObj.getInt("x"), decayObj.getInt("y")),
+            new DecayTile(decayObj.getInt("current_value")));
       }
 
       int treasuresPickedUp = 0;
@@ -298,6 +316,12 @@ public class Persistence {
           } else if (board[x][y] instanceof DoorTile) {
             if (!doors.containsKey(new Point(x, y))) {
               board[x][y] = new FreeTile();
+            }
+          } else if (board[x][y] instanceof DecayTile) {
+            if (!decays.containsKey(new Point(x, y))) {
+              board[x][y] = new FreeTile();
+            } else {
+              board[x][y] = decays.get(new Point(x, y));
             }
           }
         }
