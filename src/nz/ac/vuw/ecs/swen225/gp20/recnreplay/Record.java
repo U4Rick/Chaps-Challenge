@@ -24,6 +24,7 @@ public class Record {
 
     /**
      * Constructs a record object.
+     * @param levelNum number of the level for the recording
      */
     public Record(int levelNum) {
         this.moves = new ArrayList<>();
