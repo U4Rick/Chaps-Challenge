@@ -43,7 +43,7 @@ public class CapuchinTest {
 
     @Test
     void multipleShortGames() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             main = new Main();
             main.setDebugMode(true);
             for (int j = 0; j < 100_000; j++) {

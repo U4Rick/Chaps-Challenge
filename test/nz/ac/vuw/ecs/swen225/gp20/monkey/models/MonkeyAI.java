@@ -148,6 +148,7 @@ public abstract class MonkeyAI {
         switch (tileType) {
             case FREETILE:
             case INFOTILE:
+            case DECAYTILE:
                 return freeReward;
             case KEYTILE:
                 return keyReward;
@@ -191,6 +192,6 @@ public abstract class MonkeyAI {
      * Enum representation of the Tile class names, used for the assignReward function.
      */
     private enum TileType {
-        DOORTILE, EXITLOCKTILE, EXITTILE, FREETILE, INFOTILE, KEYTILE, TREASURETILE, WALLTILE
+        DOORTILE, EXITLOCKTILE, EXITTILE, FREETILE, INFOTILE, KEYTILE, TREASURETILE, WALLTILE, DECAYTILE
     }
 }
